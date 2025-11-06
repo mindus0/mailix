@@ -1,0 +1,2 @@
+# mailix
+mailix for developpers
