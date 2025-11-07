@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mailix | Déploiement Statique</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/7Gn3toV.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <script>
+        // Vérifie le localStorage pour 'theme' ou la préférence système, et applique la classe 'dark' à <html>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark'); // Normalise l'état dans localStorage
+        } else if (theme === 'light') {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <style>
+        /* Configuration de la police Inter pour tout le corps */
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        
+        /* Styles de base de la barre de navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #ffffff; /* light: white */
+            border-bottom: 1px solid #e5e7eb; /* light: gray-200 */
+        }
+        /* Styles de la barre de navigation en mode sombre */
+        .dark .navbar {
+            background-color: #1f2937; /* dark: gray-800 */
+            border-bottom: 1px solid #374151; /* dark: gray-700 */
+        }
+
+        .navbar-links a {
+            margin-left: 1.5rem;
+            color: #4b5563; /* light: gray-600 */
+            transition: color 0.2s;
+        }
+        .navbar-links a:hover {
+            color: #111827; /* light: gray-900 */
+        }
+        .dark .navbar-links a {
+            color: #d1d5db; /* dark: gray-300 */
+        }
+        .dark .navbar-links a:hover {
+            color: #f9fafb; /* dark: gray-50 */
+        }
+        
+        /* Rendre la navigation verticale sur les petits écrans (Responsive) */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-bottom: 0.5rem;
+            }
+            .navbar-links {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+            .navbar-links a {
+                margin: 0.5rem 0;
+                padding: 0.5rem 0;
+                width: 100%;
+                text-align: left;
+                border-top: 1px solid #f3f4f6; /* light: gray-100 */
+            }
+            .dark .navbar-links a {
+                 border-top: 1px solid #374151; /* dark: gray-700 */
+            }
+        }
+        
+        /* Masquer le input de type file par défaut, il est déclenché par le dropzone */
+        #file-input {
+            display: none;
+        }
+
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
+
+    <header>
+        <nav class="navbar shadow-md">
+            <div class="font-bold text-xl text-blue-600 dark:text-blue-400">Mailix</div>
+            <div class="flex items-center space-x-4">
+                <div class="navbar-links hidden md:flex">
+                    <a href="dashboard.html" class="hover:text-blue-600 dark:hover:text-blue-400">Dashboard</a>
+                    <a href="api_key.html" class="hover:text-blue-600 dark:hover:text-blue-400">API Key</a>
+                    <a href="profile.html" class="hover:text-blue-600 dark:hover:text-blue-400">Profile</a>
+                    <a href="api_logs.html" class="hover:text-blue-600 dark:hover:text-blue-400">API Logs</a>
+                    <a href="tarifs.html" class="hover:text-blue-600 dark:hover:text-blue-400">Tarifs</a>
+                    <a href="statut.html" class="hover:text-blue-600 dark:hover:text-blue-400">Statut</a>
+                </div>
+
+                <button id="theme-toggle" type="button" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                    <span id="sun-icon" class="material-symbols-rounded hidden text-xl" style="font-size: 24px;">light_mode</span>
+                    <span id="moon-icon" class="material-symbols-rounded hidden text-xl" style="font-size: 24px;">dark_mode</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">Déploiement Statique</h1>
+
+        <div id="status-message" class="hidden mb-4 p-3 rounded-lg text-center font-medium" role="alert"></div>
+
+        <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 mb-8 transition-colors duration-300">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Importer vos Fichiers Statiques</h2>
+            
+            <form id="upload-form" onsubmit="return false;" class="space-y-6">
+
+                <div id="dropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 p-10 rounded-lg text-center cursor-pointer transition-colors duration-300 hover:border-blue-500 dark:hover:border-blue-400">
+                    <input type="file" id="file-input" name="files" multiple>
+                    <span class="material-symbols-rounded text-6xl text-gray-400 dark:text-gray-500 mb-2">cloud_upload</span>
+                    <p class="text-gray-600 dark:text-gray-400 font-medium">Glissez & Déposez vos fichiers ici, ou <span class="text-blue-600 dark:text-blue-400 font-bold">cliquez pour sélectionner</span>.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-medium mb-3 text-gray-700 dark:text-gray-200">Fichiers à Téléverser (<span id="file-count">0</span>)</h3>
+                    <div id="files-table-container" class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg" style="max-height: 300px; overflow-y: auto;">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-700 sticky top-0">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-3/4">Nom du Fichier</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-1/4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="files-list" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                <tr id="no-files-row">
+                                    <td colspan="2" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 text-center italic">Aucun fichier sélectionné.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="progress-container" class="hidden">
+                    <label id="progress-label" class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Téléversement en cours... 0%</label>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <button id="commit-button" type="submit" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900 transition-colors duration-200 disabled:opacity-50" disabled>
+                    <span id="commit-text">Commit Changes & Déployer</span>
+                    <span id="commit-spinner" class="hidden animate-spin h-5 w-5 ml-3 border-4 border-white border-t-transparent rounded-full"></span>
+                </button>
+            </form>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 transition-colors duration-300">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700 dark:text-gray-200">URL du Site Déployé</h2>
+            <div id="url-display-card" class="p-4 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-center">
+                <p id="deployment-url-text" class="text-gray-500 dark:text-gray-400 italic break-words">Le lien de votre site web généré apparaîtra ici après un déploiement réussi.</p>
+                <a id="deployment-url-link" href="#" target="_blank" class="hidden text-blue-600 dark:text-blue-400 hover:underline font-medium mt-2 break-words"></a>
+                <button id="copy-url-button" class="hidden mt-3 inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-gray-900 transition">
+                    <span class="material-symbols-rounded mr-1 text-base">content_copy</span> Copier le Lien
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // URL de base de votre backend Hugging Face (requise)
+        const BACKEND_URL = "https://ernestmindres-mailix.hf.space";
+        // Endpoint d'API pour le téléversement (assumé)
+        const API_ENDPOINT = `${BACKEND_URL}/api/deploy`; 
+
+        // --- 1. LOGIQUE DU MODE SOMBRE/CLAIR ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+
+        // Met à jour les icônes selon le thème actuel
+        function updateThemeIcons() {
+            if (document.documentElement.classList.contains('dark')) {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        // Gestion du clic pour changer de thème
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateThemeIcons();
+        });
+
+        // Initialisation de l'icône au chargement de la page
+        updateThemeIcons();
+
+
+        // --- 2. LOGIQUE DE GESTION DES FICHIERS ---
+
+        const fileInput = document.getElementById('file-input');
+        const dropzone = document.getElementById('dropzone');
+        const filesListBody = document.getElementById('files-list');
+        const fileCountSpan = document.getElementById('file-count');
+        const noFilesRow = document.getElementById('no-files-row');
+        const commitButton = document.getElementById('commit-button');
+        
+        // DataTransfer est utilisé pour gérer la liste de fichiers de manière dynamique (ajout/suppression)
+        let selectedFiles = new DataTransfer(); 
+
+        // Fonction pour ajouter des fichiers à la liste
+        function handleFiles(files) {
+            for (const file of files) {
+                // Vérification simple anti-doublon par nom de fichier
+                let isDuplicate = false;
+                for (let i = 0; i < selectedFiles.items.length; i++) {
+                    if (selectedFiles.items[i].getAsFile().name === file.name) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+                
+                if (!isDuplicate) {
+                    selectedFiles.items.add(file);
+                }
+            }
+            updateFilesList();
+        }
+
+        // Met à jour l'affichage de la liste des fichiers dans le tableau
+        function updateFilesList() {
+            filesListBody.innerHTML = ''; // Nettoyer le contenu
+            const filesArray = Array.from(selectedFiles.files);
+
+            if (filesArray.length === 0) {
+                filesListBody.appendChild(noFilesRow);
+                commitButton.disabled = true; // Désactive le bouton s'il n'y a pas de fichiers
+            } else {
+                filesArray.forEach((file) => {
+                    const row = document.createElement('tr');
+                    row.classList.add('hover:bg-gray-50', 'dark:hover:bg-gray-700/50');
+                    row.innerHTML = `
+                        <td class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">${file.name}</td>
+                        <td class="px-6 py-2 whitespace-nowrap text-right text-sm font-medium">
+                            <button type="button" data-file-name="${file.name}" class="remove-file-btn text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 font-bold p-1 rounded-full hover:bg-red-100 dark:hover:bg-gray-700 transition">
+                                <span class="material-symbols-rounded" style="font-size: 18px;">close</span>
+                            </button>
+                        </td>
+                    `;
+                    filesListBody.appendChild(row);
+                });
+                commitButton.disabled = false; // Active le bouton
+            }
+
+            fileCountSpan.textContent = filesArray.length;
+            fileInput.files = selectedFiles.files; // Met à jour le FileList de l'input caché
+        }
+
+        // Événement pour retirer un fichier
+        filesListBody.addEventListener('click', (event) => {
+            const button = event.target.closest('.remove-file-btn');
+            if (button) {
+                const fileNameToRemove = button.dataset.fileName;
+                
+                // Crée une nouvelle liste DataTransfer sans le fichier à supprimer
+                const newFilesDT = new DataTransfer();
+                for (let i = 0; i < selectedFiles.items.length; i++) {
+                    const file = selectedFiles.items[i].getAsFile();
+                    if (file.name !== fileNameToRemove) {
+                        newFilesDT.items.add(file);
+                    }
+                }
+                selectedFiles = newFilesDT; // Remplace la liste
+                updateFilesList();
+            }
+        });
+
+        // Gère la sélection via la boîte de dialogue
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // Logique de Dropzone (Glisser-Déposer)
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, () => dropzone.classList.add('border-blue-600', 'dark:border-blue-400', 'bg-blue-50/50', 'dark:bg-blue-900/50'), false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, () => dropzone.classList.remove('border-blue-600', 'dark:border-blue-400', 'bg-blue-50/50', 'dark:bg-blue-900/50'), false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+            handleFiles(files);
+        }, false);
+
+        dropzone.addEventListener('click', () => {
+            fileInput.click(); // Ouvre la boîte de dialogue de sélection au clic
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+
+        // --- 3. LOGIQUE D'UPLOAD ET API ---
+        
+        const uploadForm = document.getElementById('upload-form');
+        const progressBar = document.getElementById('progress-bar');
+        const progressContainer = document.getElementById('progress-container');
+        const progressLabel = document.getElementById('progress-label');
+        const statusMessage = document.getElementById('status-message');
+        const commitText = document.getElementById('commit-text');
+        const commitSpinner = document.getElementById('commit-spinner');
+        const deploymentUrlText = document.getElementById('deployment-url-text');
+        const deploymentUrlLink = document.getElementById('deployment-url-link');
+        const copyUrlButton = document.getElementById('copy-url-button');
+
+
+        function setStatusMessage(message, type = 'info') {
+            statusMessage.textContent = message;
+            statusMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-yellow-100', 'text-yellow-700', 'dark:bg-red-900', 'dark:text-red-300', 'dark:bg-green-900', 'dark:text-green-300', 'dark:bg-yellow-900', 'dark:text-yellow-300');
+            
+            // Applique les classes Tailwind pour le style de l'alerte
+            if (type === 'error') {
+                statusMessage.classList.add('bg-red-100', 'text-red-700', 'dark:bg-red-900', 'dark:text-red-300');
+            } else if (type === 'success') {
+                statusMessage.classList.add('bg-green-100', 'text-green-700', 'dark:bg-green-900', 'dark:text-green-300');
+            } else { // info/loading
+                statusMessage.classList.add('bg-yellow-100', 'text-yellow-700', 'dark:bg-yellow-900', 'dark:text-yellow-300');
+            }
+        }
+
+        // Cache les infos d'URL précédentes
+        function resetDeploymentInfo() {
+            deploymentUrlText.textContent = 'Le lien de votre site web généré apparaîtra ici après un déploiement réussi.';
+            deploymentUrlText.classList.remove('hidden');
+            deploymentUrlLink.classList.add('hidden');
+            deploymentUrlLink.href = '#';
+            copyUrlButton.classList.add('hidden');
+            statusMessage.classList.add('hidden');
+        }
+
+        // Met à jour la barre de progression
+        function updateProgress(percent) {
+            progressBar.style.width = `${percent}%`;
+            progressLabel.textContent = `Téléversement en cours... ${percent}%`;
+        }
+
+        // Gestion du téléversement vers l'API
+        async function handleUpload(e) {
+            e.preventDefault();
+            
+            if (selectedFiles.files.length === 0) {
+                setStatusMessage("Veuillez sélectionner au moins un fichier à téléverser.", 'error');
+                return;
+            }
+
+            // A. Préparation de l'état de chargement de l'interface
+            commitButton.disabled = true;
+            commitText.textContent = "Déploiement en cours...";
+            commitSpinner.classList.remove('hidden');
+            progressContainer.classList.remove('hidden');
+            updateProgress(0);
+            resetDeploymentInfo();
+            setStatusMessage("Connexion au serveur et envoi des fichiers...", 'info');
+            
+            // B. Création du FormData pour l'envoi de fichiers
+            const formData = new FormData();
+            for (const file of selectedFiles.files) {
+                // S'assurer que le nom du champ ('files') correspond à celui attendu par votre backend Flask (request.files.getlist('files'))
+                formData.append('files', file); 
+            }
+            // Ajoutez tout autre champ nécessaire (ex: un token d'utilisateur, un ID de projet, etc.)
+            // formData.append('user_token', 'Votre_Token_Utilisateur'); 
+
+            // C. Utilisation de XMLHttpRequest (XHR) pour suivre la progression (plus facile que fetch)
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', API_ENDPOINT, true);
+            
+            // Optionnel : ajouter un en-tête d'autorisation si vous utilisez des tokens
+            // xhr.setRequestHeader('Authorization', 'Bearer ' + 'Votre_Token_Utilisateur');
+
+            // Événement de suivi de la progression (0% à 90%)
+            xhr.upload.addEventListener('progress', function(e) {
+                if (e.lengthComputable) {
+                    // On garde de 0% à 90% pour le téléversement (les 10% restants sont pour le traitement backend)
+                    const percent = Math.round((e.loaded / e.total) * 90); 
+                    updateProgress(percent);
+                }
+            });
+
+            // Événement à la fin de la requête (succès ou échec)
+            xhr.onload = function() {
+                // Rétablir l'état initial des boutons
+                commitButton.disabled = false;
+                commitText.textContent = "Commit Changes & Déployer";
+                commitSpinner.classList.add('hidden');
+                
+                // Afficher 100% pour signifier la fin du traitement
+                updateProgress(100);
+                setTimeout(() => progressContainer.classList.add('hidden'), 500);
+
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        
+                        if (response.success && response.deployment_url) {
+                            // D. Traitement du succès
+                            setStatusMessage("Déploiement réussi ! Le lien a été généré.", 'success');
+                            
+                            // Afficher l'URL et le bouton Copier
+                            const generatedUrl = response.deployment_url; // Assumer que l'API renvoie ce champ
+                            deploymentUrlText.classList.add('hidden');
+                            deploymentUrlLink.textContent = generatedUrl;
+                            deploymentUrlLink.href = generatedUrl;
+                            deploymentUrlLink.classList.remove('hidden');
+                            copyUrlButton.classList.remove('hidden');
+
+                            // Réinitialiser la liste de fichiers pour un nouvel upload
+                            selectedFiles = new DataTransfer();
+                            updateFilesList();
+
+                        } else {
+                             // Erreur métier (ex: pas le bon format de fichier, quota dépassé)
+                             setStatusMessage(`Erreur de l'API : ${response.message || "Une erreur inconnue s'est produite lors du traitement."}`, 'error');
+                        }
+                    } catch (e) {
+                         setStatusMessage("Erreur : Réponse du serveur invalide (JSON mal formé).", 'error');
+                    }
+                } else {
+                    // Erreur HTTP (4xx, 5xx)
+                    setStatusMessage(`Erreur de connexion : Le serveur a retourné le code ${xhr.status}.`, 'error');
+                }
+            };
+
+            // Événement en cas d'erreur réseau
+            xhr.onerror = function() {
+                commitButton.disabled = false;
+                commitText.textContent = "Commit Changes & Déployer";
+                commitSpinner.classList.add('hidden');
+                progressContainer.classList.add('hidden');
+                setStatusMessage("Erreur de réseau : Impossible de joindre le serveur backend.", 'error');
+            };
+
+            // Envoi de la requête
+            xhr.send(formData);
+        }
+
+        uploadForm.addEventListener('submit', handleUpload);
+
+        // --- 4. LOGIQUE DE COPIE DU LIEN ---
+        copyUrlButton.addEventListener('click', () => {
+            const url = deploymentUrlLink.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const originalText = copyUrlButton.textContent;
+                copyUrlButton.textContent = 'Lien Copié!';
+                setTimeout(() => {
+                    copyUrlButton.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Erreur de copie:', err);
+                alert('Impossible de copier le lien. Veuillez le copier manuellement.');
+            });
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus | Statut de l'API</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/7Gn3toV.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+<style>
+    /* Configuration de la police Inter */
+    body { font-family: 'Inter', sans-serif; }
+    
+    /* Définition des variables de thème (Ajoutées pour le style) */
+    :root {
+        /* Couleurs de base (exemple - ajustez si nécessaire) */
+        --page-var: #f8fafc; /* light - slate-50 */
+        --color-var: #0f172a; /* light - slate-900 */
+        --secondary-var: #64748b; /* light - slate-500 */
+        --card-var: #ffffff; /* light - white */
+        --sidebar-var: #e2e8f0; /* light - slate-200 */
+        --sidebar-active-var: #cbd5e1; /* light - slate-300 */
+        --input-var: #f1f5f9; /* light - slate-100 */
+        --primary-color-var: #4f46e5; /* indigo-600 */
+        --primary-hover-var: #4338ca; /* indigo-700 */
+        --error-var: #fef2f2; /* red-50 */
+        --success-var: #f0fdf4; /* green-50 */
+        --warning-var: #fcd34d; /* amber-400 */
+    }
+
+    .dark {
+        --page-var: #18181b; /* dark - zinc-900 (Gris très foncé pour l'arrière-plan de la page) */
+        --color-var: #f4f4f5; /* dark - zinc-100 (Texte clair) */
+        --secondary-var: #a1a1aa; /* dark - zinc-400 (Texte secondaire) */
+        --card-var: #27272a; /* dark - zinc-800 (Gris foncé pour les cartes et la sidebar) */
+        --sidebar-var: #27272a; /* dark - zinc-800 */
+        --sidebar-active-var: #3f3f46; /* dark - zinc-700 (Gris un peu plus clair pour l'actif) */
+        --input-var: #18181b; /* dark - zinc-900 (Fond de champ de saisie) */
+        --primary-color-var: #6366f1; /* indigo-500 (Couleur primaire inchangée) */
+        --primary-hover-var: #4f46e5; /* indigo-600 */
+        --error-var: #450a0a; /* red-950 */
+        --success-var: #052e16; /* green-950 */
+        --warning-var: #b45309; /* amber-800 */
+    }
+
+    /* Transition pour un effet doux des couleurs */
+    .transition-colors-theme { transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+    
+    /* Style et positionnement du bouton de Thème */
+    .theme-switch {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        transition: color 0.2s;
+        position: fixed; /* Reste fixe même si le reste défile */
+        top: 1rem;
+        right: 1rem;
+        z-index: 50; /* Doit être au-dessus du reste */
+    }
+
+    /* Style pour la sidebar responsive */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 40;
+        transform: translateX(-100%);
+    }
+    
+    /* Styles pour le mode desktop/large screen */
+    @media (min-width: 1024px) {
+        .sidebar {
+            transform: translateX(0);
+        }
+        .main-content {
+            margin-left: 16rem; /* 64px width */
+        }
+    }
+    
+    /* Styles pour le mode mobile/tablet */
+    @media (max-width: 1023px) {
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+    }
+    
+    /* Ajout des styles pour les variables CSS dans Tailwind */
+    .bg-page-var { background-color: var(--page-var); }
+    .text-color-var { color: var(--color-var); }
+    .text-secondary-var { color: var(--secondary-var); }
+    .bg-card-var { background-color: var(--card-var); }
+    .bg-sidebar-var { background-color: var(--sidebar-var); }
+    .border-sidebar-var { border-color: var(--sidebar-var); }
+    .bg-sidebar-active-var { background-color: var(--sidebar-active-var); }
+    .bg-input-var { background-color: var(--input-var); }
+    .border-input-var { border-color: var(--input-var); }
+    .text-primary-color-var { color: var(--primary-color-var); }
+    .focus\:ring-primary-color-var:focus { --tw-ring-color: var(--primary-color-var); }
+    .focus\:border-primary-color-var:focus { border-color: var(--primary-color-var); }
+    .bg-primary-color-var { background-color: var(--primary-color-var); }
+    .hover\:bg-primary-hover-var:hover { background-color: var(--primary-hover-var); }
+    .hover\:bg-sidebar-active-var:hover { background-color: var(--sidebar-active-var); }
+    .hover\:bg-sidebar-active-var\/80:hover { background-color: color-mix(in srgb, var(--sidebar-active-var) 80%, transparent); }
+    
+    /* Correction pour les messages flash pour utiliser les variables */
+    .bg-red-900\/20 { background-color: color-mix(in srgb, var(--error-var) 20%, transparent); } /* Approximation des couleurs spécifiques */
+    .text-red-500 { color: #ef4444; } /* Laissez le rouge spécifique pour les erreurs */
+    .border-red-900 { border-color: #7f1d1d; } /* Laissez le rouge spécifique pour les erreurs */
+    .bg-green-900\/20 { background-color: color-mix(in srgb, var(--success-var) 20%, transparent); } /* Approximation des couleurs spécifiques */
+    .text-green-500 { color: #22c55e; } /* Laissez le vert spécifique pour le succès */
+    .border-green-900 { border-color: #064e3b; } /* Laissez le vert spécifique pour le succès */
+    .hover\:text-link-hover-var:hover { color: var(--secondary-var); } /* Ajout d'une pseudo-variable pour le hover de l'icône de thème (simple fallback) */
+
+    /* Nouveaux styles pour le statut de l'API */
+    .status-bar {
+        height: 1.5rem; /* 6px */
+        border-radius: 0.375rem; /* rounded-md */
+        transition: width 0.5s ease-out; /* Animation douce pour le changement de statut */
+        display: flex;
+        align-items: center;
+        padding-left: 0.75rem;
+        font-weight: 600;
+        color: white; /* Texte blanc par défaut pour la barre de statut */
+    }
+
+    /* Couleurs spécifiques pour le statut */
+    .status-green { background-color: #22c55e; } /* green-500 */
+    .status-yellow { background-color: #f59e0b; } /* amber-500 */
+    .status-red { background-color: #ef4444; } /* red-500 */
+    
+</style>
+</head>
+
+<body class="bg-page-var text-color-var min-h-screen transition-colors-theme">
+    
+    <button id="theme-switch" class="theme-switch text-color-var hover:text-link-hover-var transition-colors-theme">
+        <span class="material-symbols-rounded">dark_mode</span>
+    </button>
+    
+ <aside id="sidebar" class="sidebar w-64 bg-sidebar-var border-r border-sidebar-var p-6 flex flex-col lg:block transition-colors-theme">
+    
+    <div class="flex items-center mb-6 shrink-0">
+        <img src="https://i.imgur.com/7Gn3toV.png" alt="Nexus Pro Logo" class="h-8">
+        <span class="text-xl font-bold text-color-var ml-2 transition-colors-theme">Nexus Pro</span>
+    </div>
+    
+    <div class="flex-grow overflow-y-auto pr-2" id="scrollable-nav-container">
+        <nav class="space-y-3 pb-4"> 
+            <a href="{{ url_for('user_bp.dashboard') }}" class="flex items-center p-3 text-secondary-var hover:text-color-var hover:bg-sidebar-active-var rounded-lg transition duration-150 transition-colors-theme">
+                <span class="material-symbols-rounded">dashboard</span>
+                <span class="ml-3">Dashboard</span>
+            </a>
+            <a href="{{ url_for('user_bp.api_key') }}" class="flex items-center p-3 text-secondary-var hover:text-color-var hover:bg-sidebar-active-var rounded-lg transition duration-150 transition-colors-theme">
+                <span class="material-symbols-rounded">key</span>
+                <span class="ml-3">Clés API</span>
+            </a>
+            <a href="{{ url_for('user_bp.profile') }}" class="flex items-center p-3 text-secondary-var hover:text-color-var hover:bg-sidebar-active-var rounded-lg transition duration-150 transition-colors-theme">
+                <span class="material-symbols-rounded">person</span>
+                <span class="ml-3">Profil</span>
+            </a>
+            <a href="{{ url_for('user_bp.embed_forms') }}" class="flex items-center p-3 text-secondary-var hover:text-color-var hover:bg-sidebar-active-var rounded-lg transition duration-150 transition-colors-theme">
+                <span class="material-symbols-rounded">code</span>
+                <span class="ml-3">Formulaires Embarqués</span>
+            </a>
+            <a href="/api_logs" class="flex items-center p-3 text-secondary-var hover:text-color-var hover:bg-sidebar-active-var rounded-lg transition duration-150 transition-colors-theme">
+                <span class="material-symbols-rounded">list_alt</span>
+                <span class="ml-3">Logs d'API</span>
+            </a>
+            <a href="/tarifs" class="flex items-center p-3 text-secondary-var hover:text-color-var hover:bg-sidebar-active-var rounded-lg transition duration-150 transition-colors-theme">
+                <span class="material-symbols-rounded">payments</span>
+                <span class="ml-3">Tarifs</span>
+            </a>
+            <a href="/statut" class="flex items-center p-3 bg-sidebar-active-var text-color-var rounded-lg transition duration-150 transition-colors-theme">
+                <span class="material-symbols-rounded">monitor_heart</span>
+                <span class="ml-3">Statut de l'API</span>
+            </a>
+            <a href="{{ url_for('user_bp.deconnexion') }}" id="logout-button-sidebar" class="flex items-center p-3 text-red-500 hover:text-red-400 hover:bg-sidebar-active-var rounded-lg transition duration-150 transition-colors-theme">
+                <span class="material-symbols-rounded">logout</span>
+                <span class="ml-3">Déconnexion</span>
+            </a>
+        </nav>
+    </div>
+    
+    <div class="mt-auto pt-4 text-xs text-secondary-var transition-colors-theme border-t border-sidebar-var/50 shrink-0">
+        <p>Connecté en tant que: <span class="font-semibold text-color-var transition-colors-theme">{{ user.email if user and user.email else 'Chargement...' }}</span></p>
+        <p>Plan: <span class="font-semibold text-color-var transition-colors-theme">{{ (user.plan | upper) if user and user.plan else 'GRATUIT' }}</span></p>
+    </div>
+    
+</aside>
+
+    <div id="main-content" class="main-content p-8 transition-colors-theme">
+        
+        <header class="lg:hidden flex justify-between items-center mb-8">
+            <div class="flex items-center">
+                 <img src="https://i.imgur.com/7Gn3toV.png" alt="Nexus Pro Logo" class="h-8">
+                <span class="text-xl font-bold text-color-var ml-2 transition-colors-theme">Nexus Pro</span>
+            </div>
+            <button id="sidebar-toggle" class="p-2 rounded-lg bg-sidebar-active-var hover:bg-sidebar-active-var/80 transition-colors-theme">
+                 <span class="material-symbols-rounded text-color-var">menu</span>
+            </button>
+        </header>
+
+        <h1 class="text-3xl font-bold mb-8 text-color-var transition-colors-theme">Statut de l'API Nexus</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="p-4 mb-4 text-sm rounded-lg border border-transparent 
+                          {{ 'bg-red-900/20 text-red-500 border-red-900' if category == 'error' or category == 'danger' or category == 'warning' else 'bg-green-900/20 text-green-500 border-green-900' }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="bg-card-var p-6 rounded-lg shadow-xl border border-sidebar-var transition-colors-theme mb-8">
+            <h2 class="text-xl font-semibold mb-4 flex items-center text-color-var transition-colors-theme">
+                <span class="material-symbols-rounded mr-2 text-primary-color-var">cloud_queue</span>
+                État Global du Service
+            </h2>
+            <div id="overall-status-display" class="p-4 rounded-lg text-lg font-bold text-white transition duration-300 shadow-md">
+                <p id="overall-status-text">Chargement du statut...</p>
+            </div>
+        </div>
+
+        <div class="bg-card-var p-6 rounded-lg shadow-xl border border-sidebar-var transition-colors-theme mb-8">
+            <h2 class="text-xl font-semibold mb-6 flex items-center text-color-var transition-colors-theme">
+                <span class="material-symbols-rounded mr-2 text-primary-color-var">bar_chart</span>
+                Statut des Composants API
+            </h2>
+            
+            <div class="space-y-6">
+                
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-sidebar-var pb-4">
+                    <span class="text-lg font-medium text-color-var w-full md:w-1/3 mb-2 md:mb-0 transition-colors-theme">Service d'Authentification</span>
+                    <div class="w-full md:w-2/3">
+                        <div id="auth-status-bar" data-status="{{ api_status.auth }}" class="status-bar" style="width: 100%;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                            {{ api_status.auth_display if api_status and api_status.auth_display else 'Chargement...' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-sidebar-var pb-4">
+                    <span class="text-lg font-medium text-color-var w-full md:w-1/3 mb-2 md:mb-0 transition-colors-theme">Traitement des Données (Endpoints V1)</span>
+                    <div class="w-full md:w-2/3">
+                        <div id="data-status-bar" data-status="{{ api_status.data_v1 }}" class="status-bar" style="width: 100%;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                            {{ api_status.data_v1_display if api_status and api_status.data_v1_display else 'Chargement...' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+                    <span class="text-lg font-medium text-color-var w-full md:w-1/3 mb-2 md:mb-0 transition-colors-theme">Base de Données Principale</span>
+                    <div class="w-full md:w-2/3">
+                        <div id="db-status-bar" data-status="{{ api_status.database }}" class="status-bar" style="width: 100%;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                            {{ api_status.database_display if api_status and api_status.database_display else 'Chargement...' }}
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <p class="mt-8 text-sm text-secondary-var">Dernière mise à jour: <span id="last-updated">{{ api_status.last_updated if api_status and api_status.last_updated else 'N/A' }}</span></p>
+
+        </div>
+        
+        <div class="bg-card-var p-6 rounded-lg shadow-xl border border-sidebar-var transition-colors-theme">
+            <h2 class="text-xl font-semibold mb-4 flex items-center text-color-var transition-colors-theme">
+                <span class="material-symbols-rounded mr-2 text-primary-color-var">history</span>
+                Historique des Incidents
+            </h2>
+            
+            {% if incidents %}
+                <ul class="space-y-4">
+                    {% for incident in incidents %}
+                    <li class="border-l-4 p-4 rounded-r-lg shadow-sm 
+                        {% if incident.status == 'resolved' %} border-green-500 bg-green-900/20 text-green-500
+                        {% elif incident.status == 'monitoring' %} border-yellow-500 bg-yellow-900/20 text-yellow-500
+                        {% elif incident.status == 'investigating' %} border-red-500 bg-red-900/20 text-red-500
+                        {% else %} border-secondary-var bg-input-var text-secondary-var 
+                        {% endif %}">
+                        <p class="font-bold">{{ incident.title }} - 
+                            <span class="text-sm font-normal uppercase">[{{ incident.status_display }}]</span></p>
+                        <p class="text-sm mt-1">{{ incident.description }}</p>
+                        <p class="text-xs mt-2 opacity-75">Date: {{ incident.date }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-secondary-var italic">Aucun incident récent à signaler. Le service est stable.</p>
+            {% endif %}
+            
+        </div>
+        
+    </div>
+    
+    <script>
+    
+        // Fonction utilitaire pour appliquer le thème
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+            // Mettre à jour l'icône du switch si nécessaire
+            const icon = document.querySelector('#theme-switch .material-symbols-rounded');
+            if (icon) {
+                // S'assurer que l'icône reflète le mode ACTIF
+                icon.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
+            }
+        }
+
+        // 1. Initialisation du thème au chargement
+        // Récupérer le thème sauvé ou utiliser 'dark' comme défaut
+        const savedTheme = localStorage.getItem('theme') || 'dark'; 
+        applyTheme(savedTheme);
+
+        // 2. Logique du switch de thème
+        document.getElementById('theme-switch').addEventListener('click', () => {
+            // Vérifier si la classe 'dark' est présente sur l'élément racine
+            const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        });
+        
+        // 3. Logique de bascule de la sidebar pour mobile/tablette
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open'); 
+            });
+        }
+
+        // 4. Fermeture de la sidebar lors du clic sur un lien (pour mobile)
+        if (sidebar) {
+            const sidebarLinks = sidebar.querySelectorAll('a');
+            if (sidebarLinks) {
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        // Fermer la sidebar uniquement sur les petits écrans
+                        if (window.innerWidth < 1024) {
+                            sidebar.classList.remove('open');
+                        }
+                    });
+                });
+            }
+        }
+
+        // 5. Logique de Déconnexion (Conservée)
+        const logoutHandler = async (e) => {
+            e.preventDefault(); 
+            // La déconnexion est gérée par la route Flask directe
+            window.location.href = document.getElementById('logout-button-sidebar').href;
+        };
+        // On attache l'événement à la déconnexion dans la sidebar.
+        const logoutButtonSidebar = document.getElementById('logout-button-sidebar');
+        if (logoutButtonSidebar) {
+            logoutButtonSidebar.addEventListener('click', logoutHandler);
+        }
+
+        // 6. Logique de Mise à Jour du Statut de l'API (Simulée pour l'exemple)
+        function updateStatusBar(elementId, status) {
+            const bar = document.getElementById(elementId);
+            if (!bar) return;
+            
+            // Réinitialiser les classes de couleur
+            bar.classList.remove('status-green', 'status-yellow', 'status-red');
+            
+            let colorClass = 'status-green';
+            let statusText = 'Opérationnel';
+            
+            // Le statut peut venir de Jinja (comme 'operational', 'degraded', 'outage')
+            switch (status) {
+                case 'operational':
+                    colorClass = 'status-green';
+                    statusText = 'Opérationnel';
+                    bar.style.width = '100%'; 
+                    break;
+                case 'degraded':
+                    colorClass = 'status-yellow';
+                    statusText = 'Performance Dégradée';
+                    bar.style.width = '80%'; // Visuel de barre partielle
+                    break;
+                case 'outage':
+                    colorClass = 'status-red';
+                    statusText = 'Panne Majeure';
+                    bar.style.width = '20%'; // Visuel de barre presque vide
+                    break;
+                default:
+                    colorClass = 'bg-secondary-var';
+                    statusText = 'Indisponible / Inconnu';
+                    bar.style.width = '100%';
+            }
+
+            bar.classList.add(colorClass);
+            // S'assurer que le texte est à jour (seulement si non fourni par Jinja)
+            if (bar.textContent.trim() === 'Chargement...') {
+                bar.textContent = statusText;
+            }
+            bar.setAttribute('aria-valuenow', bar.style.width.replace('%', ''));
+        }
+        
+        function updateOverallStatus(authStatus, dataStatus, dbStatus) {
+            const display = document.getElementById('overall-status-display');
+            const text = document.getElementById('overall-status-text');
+            if (!display || !text) return;
+            
+            display.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-secondary-var');
+            
+            // Logique de statut général
+            if (authStatus === 'outage' || dataStatus === 'outage' || dbStatus === 'outage') {
+                display.classList.add('bg-red-500');
+                text.textContent = 'PANNE MAJEURE - Nous enquêtons sur un problème.';
+            } else if (authStatus === 'degraded' || dataStatus === 'degraded' || dbStatus === 'degraded') {
+                display.classList.add('bg-yellow-500');
+                text.textContent = 'PERFORMANCE DÉGRADÉE - Certains services sont affectés.';
+            } else if (authStatus === 'operational' && dataStatus === 'operational' && dbStatus === 'operational') {
+                display.classList.add('bg-green-500');
+                text.textContent = 'TOUT EST OPÉRATIONNEL - L\'API fonctionne normalement.';
+            } else {
+                display.classList.add('bg-secondary-var');
+                text.textContent = 'Statut Indéterminé.';
+            }
+        }
+        
+        // Fonction pour lire les statuts depuis les attributs de données (simulant le backend)
+        function initializeStatus() {
+            // Lecture des données Jinja2 pré-remplies (simulées)
+            const authStatus = document.getElementById('auth-status-bar').dataset.status || 'operational';
+            const dataStatus = document.getElementById('data-status-bar').dataset.status || 'operational';
+            const dbStatus = document.getElementById('db-status-bar').dataset.status || 'operational';
+            
+            // Mise à jour visuelle
+            updateStatusBar('auth-status-bar', authStatus);
+            updateStatusBar('data-status-bar', dataStatus);
+            updateStatusBar('db-status-bar', dbStatus);
+            updateOverallStatus(authStatus, dataStatus, dbStatus);
+            
+            // ** Simulation d'une mise à jour en temps réel (Animation) **
+            // Dans une application réelle, cette fonction appellerait une API / WebSocket.
+            // Pour l'exemple, nous allons animer les barres après le chargement initial.
+            
+            setTimeout(() => {
+                // Le backend peut ajuster la largeur pour montrer la "santé" (par exemple, 90% pour opé)
+                // Ici, nous utilisons juste les couleurs/texte basés sur le statut simple (operational/degraded/outage)
+                document.getElementById('auth-status-bar').style.width = authStatus === 'operational' ? '100%' : (authStatus === 'degraded' ? '80%' : '20%');
+                document.getElementById('data-status-bar').style.width = dataStatus === 'operational' ? '100%' : (dataStatus === 'degraded' ? '80%' : '20%');
+                document.getElementById('db-status-bar').style.width = dbStatus === 'operational' ? '100%' : (dbStatus === 'degraded' ? '80%' : '20%');
+            }, 100); // Petite pause pour l'effet de chargement initial.
+        }
+
+        // 7. Initialisation du statut au chargement de la page
+        document.addEventListener('DOMContentLoaded', initializeStatus);
+
+    </script>
+</body>
+</html>

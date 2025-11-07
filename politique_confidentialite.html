@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politique de Confidentialité - Nexus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.21.0/tocbot.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Styles pour un noir très foncé et le mode clair */
+        /* Mode Sombre (Défaut, ajusté pour un noir très foncé) */
+        :root {
+            /* Couleurs par défaut (sombre) - Ajustées pour être plus noires que le gris/bleu de Tailwind */
+            --bg-page: #0A0A0A; /* Noir très foncé pour le fond principal */
+            --bg-card: #151515; /* Noir foncé pour les éléments/conteneurs */
+            --text-main: #E5E7EB; /* Gris très clair pour le texte principal (gray-200) */
+            --text-secondary: #9CA3AF; /* Gris moyen pour le texte secondaire (gray-400) */
+            --border-color: #374151; /* Gris foncé pour les bordures (gray-700) */
+            --blue-main: #3B82F6; /* Bleu Vif (blue-500) */
+            --blue-light: #60A5FA; /* Bleu Clair (blue-400) */
+        }
+
+        /* Mode Clair */
+        html.light {
+            --bg-page: #F3F4F6; /* Gris très clair pour le fond principal (gray-100) */
+            --bg-card: #FFFFFF; /* Blanc pour les éléments/conteneurs */
+            --text-main: #1F2937; /* Gris très foncé pour le texte principal (gray-800) */
+            --text-secondary: #4B5563; /* Gris foncé pour le texte secondaire (gray-600) */
+            --border-color: #D1D5DB; /* Gris clair pour les bordures (gray-300) */
+            --blue-main: #2563EB; /* Bleu Vif (blue-600) */
+            --blue-light: #1D4ED8; /* Bleu Clair (blue-700) */
+        }
+
+        /* Application des variables aux éléments de base */
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Remplacement des classes Tailwind par des variables CSS */
+        .bg-gray-900 { background-color: var(--bg-page) !important; }
+        .bg-gray-800\/50, .bg-gray-800 { background-color: var(--bg-card) !important; }
+        .text-white { color: var(--text-main) !important; }
+        .text-gray-400 { color: var(--text-secondary) !important; }
+        .text-gray-300 { color: var(--text-secondary) !important; }
+        .border-gray-700 { border-color: var(--border-color) !important; }
+        .border-gray-800 { border-color: var(--border-color) !important; }
+        .border-blue-500\/50 { border-color: var(--blue-main) !important; }
+        .text-blue-500 { color: var(--blue-main) !important; }
+        .text-blue-400 { color: var(--blue-light) !important; }
+        
+        /* Style pour les boutons carrés */
+        .btn-square {
+            border-radius: 0; /* Supprime l'arrondi */
+        }
+        
+        /* Styles personnalisés pour intégrer Tocbot au thème "chat-like" */
+        .toc-list { 
+            list-style: none; 
+            padding-left: 0; 
+            margin: 0; 
+        }
+        .toc-list-item { 
+            margin-bottom: 0.25rem; 
+        }
+        .toc-list-item a { 
+            display: block; 
+            padding: 0.5rem 0.75rem; 
+            color: var(--text-secondary); /* gray-400 */
+            border-left: 2px solid transparent; 
+            transition: all 0.2s; 
+            font-size: 0.9rem;
+        }
+        .toc-list-item a:hover { 
+            color: var(--text-main); /* white */
+            border-left-color: var(--blue-main); /* blue-500 */
+        }
+        .is-active-link { 
+            font-weight: 700; 
+            color: var(--blue-main) !important; /* blue-500 */
+            border-left-color: var(--blue-main) !important; 
+            background-color: var(--bg-card); /* gray-800 */
+            border-radius: 0; /* Style carré */
+        }
+        
+        /* Style du bouton theme-switch (Étape 2) */
+        .theme-switch {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-main);
+            font-size: 28px; /* Rendu légèrement plus grand */
+            transition: color 0.2s;
+            margin-left: 1rem;
+        }
+        .theme-switch:hover {
+            color: var(--blue-main);
+        }
+
+        /* Fixer la barre latérale pour la rendre moins large (verticalement) et la cacher sur mobile */
+        /* Ajustement de la largeur de la barre latérale (lg:w-1/4 est conservé pour la structure) */
+        .lg\:w-1\/4 { 
+            max-width: 300px; /* Limiter la largeur réelle de la barre latérale sur grand écran */
+            width: 100%; /* S'assurer qu'il utilise l'espace disponible */
+        }
+        @media (max-width: 1023px) {
+            .js-toc-container { display: none; }
+        }
+
+        /* Ajustement pour l'en-tête fixe */
+        .header-fixed {
+            background-color: var(--bg-page);
+            z-index: 50;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    
+    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <header class="header-fixed fixed top-0 w-full flex flex-col sm:flex-row justify-between items-center py-4 border-b border-blue-500/50 mb-8">
+            <div class="flex justify-between items-center w-full sm:w-auto">
+                <a href="/" class="text-4xl font-extrabold text-blue-500 tracking-wider mb-4 sm:mb-0">
+                    NEXUS
+                </a>
+                <nav class="flex items-center space-x-4">
+                    <a href="/support" class="px-6 py-3 bg-teal-600 text-white font-bold hover:bg-teal-700 transition duration-300 btn-square shadow-md">
+                        Contacter le Support
+                    </a>
+                    <button id="theme-toggle" class="theme-switch" aria-label="Basculer le thème">
+                        <span class="material-symbols-rounded">light_mode</span>
+                    </button>
+                </nav>
+            </div>
+        </header>
+        
+        <div class="pt-28"> 
+
+            <main class="flex flex-col lg:flex-row lg:space-x-8">
+
+                <div class="lg:w-3/4 js-toc-content">
+                    
+                    <h1 class="text-4xl font-extrabold text-white mb-6">
+                        Politique de Confidentialité
+                    </h1>
+                    <p class="text-gray-400 text-lg mb-10 border-l-4 border-blue-500 pl-4 italic">
+                        Dernière mise à jour : 15 Octobre 2024. Veuillez lire attentivement avant d'utiliser la plateforme Nexus.
+                    </p>
+
+                    <h2 id="champ-application" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                        1. Champ d'Application
+                    </h2>
+                    <p class="text-gray-300 mb-6">
+                        La présente Politique de Confidentialité régit la manière dont Nexus collecte, utilise, maintient et divulgue les informations collectées auprès des utilisateurs (chacun, un "Utilisateur") du site web, de l'application et de l'API Nexus (la "Plateforme"). Elle s'applique à la Plateforme et à tous les produits et services proposés par Nexus.
+                    </p>
+
+                    <h2 id="collecte-donnees" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                        2. Collecte des Données Personnelles
+                    </h2>
+                    <p class="text-gray-300 mb-4">
+                        Nous collectons des informations d'identification personnelle auprès des Utilisateurs de diverses manières, y compris, mais sans s'y limiter, lorsque les Utilisateurs visitent notre site, s'inscrivent sur la Plateforme, passent une commande d'API, remplissent un formulaire, et en relation avec d'autres activités, services, fonctionnalités ou ressources que nous mettons à disposition.
+                    </p>
+                    
+                    <h3 id="donnees-fournies" class="text-2xl font-semibold text-white mt-8 mb-3 pt-2">
+                        2.1. Données que vous nous fournissez directement
+                    </h3>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2 ml-4 mb-6">
+                        <li>Informations de Compte : Nom, adresse e-mail, mot de passe chiffré.</li>
+                        <li>Informations de Facturation : Adresse de facturation, informations de paiement (traitées par un prestataire tiers sécurisé et non stockées par Nexus).</li>
+                        <li>Communications : Enregistrements de correspondance lorsque vous contactez notre support.</li>
+                    </ul>
+
+                    <h3 id="donnees-automatiques" class="text-2xl font-semibold text-white mt-8 mb-3 pt-2">
+                        2.2. Données collectées automatiquement (Logs API)
+                    </h3>
+                    <p class="text-gray-300 mb-6">
+                        Lors de l'utilisation de notre API, nous enregistrons automatiquement des informations dans nos logs serveurs pour la sécurité, le dépannage et la facturation.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2 ml-4 mb-6">
+                        <li>Adresses IP des requêtes.</li>
+                        <li>Horodatage, méthode et statut de l'appel API.</li>
+                        <li>Erreurs et avertissements générés.</li>
+                        <li>Clé API partiellement masquée (pour l'identification du compte).</li>
+                    </ul>
+
+                    <h2 id="utilisation-donnees" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                        3. Comment nous utilisons les informations collectées
+                    </h2>
+                    <p class="text-gray-300 mb-4">
+                        Nexus utilise les données collectées aux fins suivantes :
+                    </p>
+                    <ul class="list-decimal list-inside text-gray-300 space-y-2 ml-4 mb-6">
+                        <li>Pour fournir et maintenir le service : Assurer le bon fonctionnement de l'API et du Dashboard.</li>
+                        <li>Pour la facturation : Calculer et traiter les frais d'utilisation de l'API.</li>
+                        <li>Pour la sécurité : Détecter et prévenir les fraudes et les abus.</li>
+                        <li>Pour l'amélioration : Améliorer nos produits et services API en fonction des données d'utilisation agrégées.</li>
+                        <li>Pour la communication : Envoyer des notifications de service importantes et des informations de sécurité.</li>
+                    </ul>
+
+                    <h2 id="protection-donnees" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                        4. Protection et Partage des Données
+                    </h2>
+                    <h3 id="mesures-securite" class="text-2xl font-semibold text-white mt-8 mb-3 pt-2">
+                        4.1. Mesures de Sécurité
+                    </h3>
+                    <p class="text-gray-300 mb-6">
+                        Nous adoptons des pratiques de collecte, de stockage et de traitement des données et des mesures de sécurité appropriées pour protéger contre l'accès non autorisé, la modification, la divulgation ou la destruction de vos informations personnelles et des données stockées sur notre Plateforme. Les informations sensibles et privées sont échangées via un canal de communication sécurisé SSL et sont chiffrées.
+                    </p>
+
+                    <h3 id="partage-tiers" class="text-2xl font-semibold text-white mt-8 mb-3 pt-2">
+                        4.2. Partage avec des Tiers
+                    </h3>
+                    <p class="text-gray-300 mb-6">
+                        Nous ne vendons, n'échangeons ni ne louons les informations d'identification personnelle des Utilisateurs à des tiers. Nous pouvons partager des informations démographiques agrégées et génériques non liées à des informations d'identification personnelle concernant les visiteurs et les Utilisateurs avec nos partenaires commerciaux, affiliés de confiance et annonceurs à des fins de marketing. Nous utilisons des fournisseurs de services tiers pour nous aider à exploiter notre activité (ex: traitement des paiements), mais ils sont contractuellement obligés de garder vos informations confidentielles.
+                    </p>
+
+                    <h2 id="droits-utilisateur" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                        5. Droits des Utilisateurs (RGPD et autres)
+                    </h2>
+                    <p class="text-gray-300 mb-6">
+                        Conformément aux réglementations applicables (comme le RGPD), vous disposez de droits concernant vos données personnelles :
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2 ml-4 mb-6">
+                        <li>Droit d'accès : Demander une copie des données que nous détenons sur vous.</li>
+                        <li>Droit de rectification : Demander la correction de données inexactes.</li>
+                        <li>Droit à l'oubli : Demander la suppression de vos données dans certaines conditions.</li>
+                        <li>Droit à la limitation : Demander la limitation du traitement.</li>
+                    </ul>
+                    <p class="text-gray-300 mb-6">
+                        Pour exercer l'un de ces droits, veuillez nous contacter via notre page de support. Nous répondrons à votre demande dans un délai légal.
+                    </p>
+
+                    <h2 id="modifications-politique" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                        6. Modifications de cette politique
+                    </h2>
+                    <p class="text-gray-300 mb-6">
+                        Nexus a la discrétion de mettre à jour cette politique de confidentialité à tout moment. Lorsque nous le ferons, nous réviserons la date de "Dernière mise à jour" au début de cette page. Nous encourageons les Utilisateurs à consulter fréquemment cette page pour tout changement. Vous reconnaissez et acceptez qu'il est de votre responsabilité de consulter périodiquement cette politique de confidentialité et de prendre connaissance des modifications.
+                    </p>
+                    
+                    <div class="mt-12 text-center">
+                        <a href="/" class="px-6 py-3 bg-blue-600 text-white text-lg font-bold hover:bg-blue-700 transition duration-300 btn-square shadow-xl">
+                            Retour à l'Accueil
+                        </a>
+                    </div>
+
+                    </div>
+
+                <div class="lg:w-1/4 pt-4 sticky top-0 h-full lg:h-screen lg:overflow-y-auto js-toc-container">
+                    <div class="lg:sticky lg:top-24 p-4 border border-gray-700 bg-gray-800/50">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-500">Navigation Rapide</h3>
+                        <div class="js-toc"></div>
+                    </div>
+                </div>
+
+            </main>
+
+        </div>
+        
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.21.0/tocbot.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            tocbot.init({
+                tocSelector: '.js-toc',
+                contentSelector: '.js-toc-content',
+                headingSelector: 'h2, h3',
+                hasSmoothScroll: true,
+                headingsOffset: 120, // Ajusté pour le header fixe
+                scrollSmoothOffset: -120, // Ajusté pour le header fixe
+            });
+        });
+
+        // Étape 3 : Logique de bascule du mode sombre/clair
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const iconElement = themeToggle.querySelector('.material-symbols-rounded');
+
+        // Charger le thème depuis le localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            htmlElement.classList.add('light');
+            iconElement.textContent = 'dark_mode'; // Afficher l'icône sombre
+        } else {
+            // Thème sombre par défaut
+            iconElement.textContent = 'light_mode'; // Afficher l'icône claire
+            if (!savedTheme) {
+                // S'assurer que le mode sombre est appliqué au chargement si aucun thème n'est sauvegardé
+                htmlElement.classList.remove('light');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.classList.contains('light')) {
+                // Passer au mode sombre
+                htmlElement.classList.remove('light');
+                localStorage.setItem('theme', 'dark');
+                iconElement.textContent = 'light_mode'; // Afficher l'icône claire
+            } else {
+                // Passer au mode clair
+                htmlElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                iconElement.textContent = 'dark_mode'; // Afficher l'icône sombre
+            }
+        });
+    </script>
+
+<footer class="mt-16 border-t border-gray-700">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 text-sm">
+            
+            <div class="col-span-2 lg:col-span-1">
+                <a href="/" class="text-3xl font-extrabold text-blue-500 tracking-wider">NEXUS</a>
+                <p class="mt-3 text-gray-400">
+                    L'infrastructure API qui propulse votre avenir technologique.
+                </p>
+                <div class="mt-4 flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-blue-500 transition duration-200">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.014 4.85.07c3.275.146 4.47 1.583 4.61 4.85.056 1.266.07 1.646.07 4.85s-.014 3.584-.07 4.85c-.14 3.267-1.335 4.704-4.61 4.85-1.266.056-1.646.07-4.85.07s-3.584-.014-4.85-.07c-3.275-.146-4.47-1.583-4.61-4.85-.056-1.266-.07-1.646-.07-4.85s.014-3.584.07-4.85c.14-3.267 1.335-4.704 4.61-4.85 1.266-.056 1.646-.07 4.85-.07zM12 0c-3.784 0-4.285.016-5.773.083-4.722.211-6.755 2.24-6.965 6.965C.016 7.715 0 8.216 0 12s.016 4.285.083 5.773c.21 4.721 2.239 6.755 6.965 6.965 1.488.067 1.99.083 5.773.083s4.285-.016 5.773-.083c4.721-.21 6.755-2.239 6.965-6.965.067-1.488.083-1.99.083-5.773s-.016-4.285-.083-5.773c-.21-4.722-2.239-6.755-6.965-6.965C16.285.016 15.784 0 12 0zm0 14.5c-1.381 0-2.5-1.119-2.5-2.5s1.119-2.5 2.5-2.5 2.5 1.119 2.5 2.5-1.119 2.5-2.5 2.5z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-semibold text-white mb-4">Plateforme</h3>
+                <ul class="space-y-3 text-gray-400">
+                    <li><a href="/tarifs" class="hover:text-blue-500 transition duration-200">Tarifs</a></li>
+                    <li><a href="/documentation" class="hover:text-blue-500 transition duration-200">Documentation</a></li>
+                    <li><a href="/connexion" class="hover:text-blue-500 transition duration-200">Connexion</a></li>
+                    <li><a href="/support" class="hover:text-blue-500 transition duration-200">Support</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-semibold text-white mb-4">Légal</h3>
+                <ul class="space-y-3 text-gray-400">
+                    <li><a href="/politique-confidentialite" class="hover:text-blue-500 transition duration-200">Politique de Confidentialité</a></li>
+                    <li><a href="/mentions-legales" class="hover:text-blue-500 transition duration-200">Mentions Légales</a></li>
+                    <li><a href="/conditions-utilisation" class="hover:text-blue-500 transition duration-200">Conditions d'Utilisation</a></li>
+                    <li><a href="/a-propos" class="hover:text-blue-500 transition duration-200">À Propos</a></li>
+                </ul>
+            </div>
+
+            <div class="col-span-2 md:col-span-1">
+                <h3 class="text-lg font-semibold text-white mb-4">Ressources</h3>
+                <ul class="space-y-3 text-gray-400">
+                    <li><a href="mailto:support@nexus.com" class="hover:text-blue-500 transition duration-200">Contact Email</a></li>
+                    <li><a href="/dashboard" class="hover:text-blue-500 transition duration-200">Espace Client</a></li>
+                    <li><a href="/api-logs" class="hover:text-blue-500 transition duration-200">Statut API</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="mt-10 pt-6 border-t border-gray-800 text-center text-gray-500 text-sm">
+            &copy; 2025 Nexus. Tous droits réservés. Construit pour l'ère des microservices.
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

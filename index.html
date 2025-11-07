@@ -1,0 +1,1102 @@
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/7Gn3toV.png">
+    <title>GitForge | La Plateforme DevOps Ultime</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/7Gn3toV.png">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* PHASE 1 : Configuration et Base du Style (Dark Mode Exclusif & Pro) */
+        /* Suppression de toute la logique du mode clair. */
+        :root {
+            --bg-body: #0A0A0A; /* Noir Profond */
+            --bg-card: #141414; /* Plus foncé que l'interface pour le contraste subtil */
+            --bg-section: #141414; 
+            --bg-code: #141414;
+            --border-color: #4b5563; /* Gris très foncé pour les bordures */ 
+            --color-accent: #3b82f6; /* Bleu Vif - Remplacement du Vert */
+            --text-color: #ffffff;
+            --text-secondary: #d1d5db; /* gray-300 */
+            --text-muted: #9ca3af; /* gray-400 */
+            --text-blue: var(--color-accent); /* Remplacer le vert par le bleu accent partout */
+            --shadow-color: rgba(0, 0, 0, 0.5); 
+            --original-green: #4ade80; /* Garder pour référence si besoin */
+        }
+
+        /* Application des variables aux styles existants et aux nouveaux éléments */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-color);
+            min-height: 100vh;
+            /* Suppression de la transition car le mode clair est supprimé */
+        }
+
+        /* Fix pour le header qui est maintenant sticky */
+        .header-border { border-color: var(--border-color); }
+        .bg-header { background-color: var(--bg-body); }
+        
+        .code-block {
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            background-color: var(--bg-code);
+        }
+
+        /* Suppression du style pour theme-switch (mode clair supprimé) */
+
+        /* Adaptation Tailwind pour les autres éléments */
+        .section-bg {
+            background-color: var(--bg-section);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
+        }
+        
+        /* PHASE 1.3/4.1 : Cartes et Contraste (Border Subtile) */
+        .card-bg { 
+            background-color: var(--bg-card); 
+            border: 1px solid var(--border-color);
+        }
+        
+        .text-blue-500-var { color: var(--text-blue); }
+        .text-gray-300-var { color: var(--text-secondary); }
+        .text-gray-400-var { color: var(--text-muted); }
+        
+        /* Ajustements spécifiques pour les éléments non couverts par une classe personnalisée */
+        .tab-button { border-bottom-color: var(--border-color); }
+        /* Mise à jour de la couleur d'accent pour l'onglet actif (Bleu) */
+        .tab-button.border-blue-500 { border-bottom-color: var(--color-accent) !important; color: var(--color-accent) !important; background-color: var(--bg-code) !important; }
+        .tab-button.hover\:text-white:hover { color: var(--text-color) !important; }
+        .tab-button.hover\:bg-gray-800:hover { background-color: var(--bg-card) !important; }
+        
+        /* Remplacement du vert par le bleu pour les boutons CTA */
+        .btn-primary {
+            background-color: var(--color-accent); 
+            color: var(--bg-body) !important; /* Texte noir sur bleu */
+            font-weight: bold;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3), 0 2px 4px -2px rgba(59, 130, 246, 0.3); /* Ombre Bleue */
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        /* Remplacement de la classe bg-green-900/40 par son équivalent en bleu */
+        .bg-blue-900\/40 { 
+            background-color: rgba(59, 130, 246, 0.15); /* Couleur basée sur --color-accent (Bleu) avec transparence */
+        } 
+        
+        /* Bouton secondaire (bordure/texte bleu) */
+        .btn-secondary {
+            border: 2px solid var(--color-accent); 
+            color: var(--color-accent) !important;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .btn-secondary:hover {
+            background-color: var(--color-accent);
+            color: var(--bg-body) !important; /* Texte noir sur bleu au survol */
+        }
+
+
+        /* NOUVELLE RÈGLE CSS : Défilement Infini des Témoignages (Accéléré) */
+        @keyframes scroll-rtl {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
+
+        .testimonial-container {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .testimonials-track {
+            display: flex;
+            animation: scroll-rtl 25s linear infinite; /* ACCÉLÉRÉ: 40s à 25s */
+        }
+
+        .testimonials-track:hover {
+            animation-play-state: paused;
+        }
+
+        /* PHASE 4.1 : Témoignages (Carte avec bordure fine et fond subtil - COINS CARRÉS) */
+        .testimonial-card {
+            flex-shrink: 0;
+            width: 300px;
+            margin-right: 1.5rem;
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 4px 6px -1px var(--shadow-color);
+            background-color: var(--bg-card);
+            /* Suppression de rounded-lg pour des coins carrés */
+        }
+
+        /* Style pour les FAQ (Menu Déroulant) */
+        .faq-item summary {
+            cursor: pointer;
+            list-style: none; /* Cache le marqueur par défaut */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            font-weight: 600;
+        }
+
+        .faq-item summary::-webkit-details-marker {
+            display: none; /* Cache le marqueur pour Chrome/Safari */
+        }
+
+        /* Rotation de l'icône FAQ */
+        .faq-icon {
+            transition: transform 0.2s ease;
+        }
+        /* Changement de couleur de l'icône FAQ en Bleu */
+        .faq-item[open] .faq-icon {
+            transform: rotate(45deg); /* Tourne l'icône en croix */
+        }
+
+    /* CSS Spécifique au Carrousel de Logos */
+    @keyframes scroll-logos {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); } 
+    }
+
+    .logo-container {
+        overflow: hidden;
+        width: 100%;
+        padding: 2rem 0; /* Ajout d'un padding vertical pour l'esthétique */
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+    }
+
+    .logos-track {
+        display: flex;
+        animation: scroll-logos 20s linear infinite; /* Défilement rapide */
+        width: max-content; /* S'assure que la piste est assez large */
+    }
+
+    .logos-track:hover {
+        animation-play-state: paused;
+    }
+
+    .logo-item {
+        flex-shrink: 0;
+        width: 120px; /* Taille fixe pour le logo */
+        height: 120px;
+        margin: 0 1.5rem; /* Espace entre les logos */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.9; /* Légèrement transparent pour le mode sombre */
+        transition: opacity 0.3s, transform 0.3s; /* Ajout de la transition de transformation */
+    }
+    .logo-item:hover {
+        opacity: 1;
+        transform: scale(1.05); /* Petit zoom au survol pour un effet professionnel */
+    }
+    .logo-item img {
+        max-width: 100%;
+        max-height: 80px; /* Taille du logo en gros */
+        /* REMOVE FILTER: Le filtre a été retiré pour afficher les logos en couleur */
+    }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <script>
+        const translations = {
+            "site-name": { "fr": "GitForge", "en": "GitForge", "es": "GitForge", "zh": "GitForge", "de": "GitForge" },
+            "nav-doc": { "fr": "Documentation", "en": "Documentation", "es": "Documentación", "zh": "文档", "de": "Dokumentation" },
+            "nav-pricing": { "fr": "Tarifs", "en": "Pricing", "es": "Precios", "zh": "定价", "de": "Preise" },
+            "nav-enterprise": { "fr": "Enterprise", "en": "Enterprise", "es": "Empresarial", "zh": "企业版", "de": "Unternehmen" },
+            "nav-support": { "fr": "Support", "en": "Support", "es": "Soporte", "zh": "支持", "de": "Support" },
+            "btn-login": { "fr": "Connexion", "en": "Login", "es": "Iniciar Sesión", "zh": "登录", "de": "Anmelden" },
+            "btn-signup": { "fr": "Inscription", "en": "Sign Up", "es": "Registrarse", "zh": "注册", "de": "Registrieren" },
+            "title-slogan": { "fr": "Le SDLC Simplifié. Du Code Source au Déploiement Cloud.", "en": "The SDLC Simplified. From Source Code to Cloud Deployment.", "es": "SDLC Simplificado. De Código Fuente a Despliegue en la Nube.", "zh": "SDLC 简化。从源代码到云部署。", "de": "Der SDLC Vereinfacht. Vom Quellcode zur Cloud-Bereitstellung." },
+            "slogan-description": { "fr": "Hébergez vos dépôts Git, automatisez votre CI/CD et gérez vos projets sur une seule plateforme unifiée et ultra-rapide. Le futur du développement logiciel.", "en": "Host your Git repositories, automate your CI/CD, and manage your projects on a single, unified, ultra-fast platform. The future of software development.", "es": "Aloje sus repositorios Git, automatice su CI/CD y gestione sus proyectos en una única plataforma unificada y ultrarrápida. El futuro del desarrollo de software.", "zh": "在一个统一、超快的平台上托管您的 Git 存储库、自动化您的 CI/CD 并管理您的项目。软件开发的未来。", "de": "Hosten Sie Ihre Git-Repositories, automatisieren Sie Ihre CI/CD und verwalten Sie Ihre Projekte auf einer einzigen, ultraschnellen, einheitlichen Plattform. Die Zukunft der Softwareentwicklung." },
+            "email-signup-placeholder": { "fr": "Entrez votre email pour démarrer un essai gratuit", "en": "Enter your email to start a free trial", "es": "Ingrese su correo electrónico para comenzar una prueba gratuita", "zh": "输入您的电子邮件以开始免费试用", "de": "Geben Sie Ihre E-Mail-Adresse ein, um eine kostenlose Testversion zu starten" },
+            "btn-signup-cta": { "fr": "S'inscrire / Essai Gratuit", "en": "Sign Up / Free Trial", "es": "Registrarse / Prueba Gratuita", "zh": "注册 / 免费试用", "de": "Anmelden / Kostenlose Testversion" },
+            "search-placeholder": { "fr": "Rechercher des Projets ou Docs...", "en": "Search Projects or Docs...", "es": "Buscar Proyectos o Documentos...", "zh": "搜索项目或文档...", "de": "Projekte oder Dokumente suchen..." },
+            
+            // SDLC Section
+            "sdlc-title": { "fr": "Le Cycle de Vie du Logiciel Intégral.", "en": "The Integral Software Development Life Cycle.", "es": "El Ciclo de Vida Integral del Software.", "zh": "完整的软件生命周期。", "de": "Der integrale Software-Lebenszyklus." },
+            "sdlc-subtitle": { "fr": "De l'idée au produit, GitForge vous accompagne à chaque étape avec des outils robustes.", "en": "From idea to product, GitForge supports you at every step with robust tools.", "es": "Desde la idea hasta el producto, GitForge le acompaña en cada paso con herramientas sólidas.", "zh": "从概念到产品，GitForge 以强大的工具支持您的每一步。", "de": "Von der Idee bis zum Produkt unterstützt Sie GitForge bei jedem Schritt mit robusten Werkzeugen." },
+            "sdlc-1-title": { "fr": "Gestion de Dépôts Git", "en": "Git Repository Management", "es": "Gestión de Repositorios Git", "zh": "Git 仓库管理", "de": "Git Repository-Management" },
+            "sdlc-1-desc": { "fr": "Hébergement illimité, collaboration par Pull Requests (Merge Requests) et revue de code de haute qualité.", "en": "Unlimited hosting, collaboration via Pull Requests (Merge Requests), and high-quality code review.", "es": "Alojamiento ilimitado, colaboración mediante Pull Requests (Merge Requests) y revisión de código de alta calidad.", "zh": "无限托管，通过 Pull Requests（合并请求）协作，以及高质量的代码审查。", "de": "Unbegrenztes Hosting, Zusammenarbeit durch Pull Requests (Merge Requests) und hochwertige Code-Überprüfung." },
+            "sdlc-2-title": { "fr": "Intégration et Déploiement Continu", "en": "Continuous Integration and Deployment", "es": "Integración y Despliegue Continuos", "zh": "持续集成与部署", "de": "Kontinuierliche Integration und Bereitstellung" },
+            "sdlc-2-desc": { "fr": "Automatisez les tests, la compilation et le déploiement multi-cloud avec des pipelines CI/CD ultra-rapides.", "en": "Automate testing, compilation, and multi-cloud deployment with ultra-fast CI/CD pipelines.", "es": "Automatice las pruebas, la compilación y el despliegue multi-nube con pipelines CI/CD ultrarrápidos.", "zh": "使用超快的 CI/CD 流水线自动化测试、编译和多云部署。", "de": "Automatisieren Sie Tests, Kompilierung und Multi-Cloud-Bereitstellung mit ultraschnellen CI/CD-Pipelines." },
+            "sdlc-3-title": { "fr": "Suivi des Projets (Agile)", "en": "Project Tracking (Agile)", "es": "Seguimiento de Proyectos (Agile)", "zh": "项目跟踪（敏捷）", "de": "Projektverfolgung (Agile)" },
+            "sdlc-3-desc": { "fr": "Tableaux Kanban, tickets, épics et gestion des sprints pour une exécution de projet Agile sans faille.", "en": "Kanban boards, tickets, epics, and sprint management for flawless Agile project execution.", "es": "Paneles Kanban, tickets, epics y gestión de sprints para una ejecución de proyectos Agile sin fallos.", "zh": "看板、工单、史诗和冲刺管理，实现完美的敏捷项目执行。", "de": "Kanban-Boards, Tickets, Epics und Sprint-Management für eine reibungslose Agile-Projektausführung." },
+            "sdlc-4-title": { "fr": "Sécurité Intégrée", "en": "Integrated Security", "es": "Seguridad Integrada", "zh": "集成安全", "de": "Integrierte Sicherheit" },
+            "sdlc-4-desc": { "fr": "Analyse de vulnérabilités, détection de secrets et protection des dépendances pour un code sûr dès le départ.", "en": "Vulnerability analysis, secret detection, and dependency protection for secure code from the start.", "es": "Análisis de vulnerabilidades, detección de secretos y protección de dependencias para un código seguro desde el principio.", "zh": "漏洞分析、秘密检测和依赖保护，从一开始就确保代码安全。", "de": "Schwachstellenanalyse, Geheimnis-Erkennung und Abhängigkeitsschutz für sicheren Code von Anfang an." },
+
+            // Use Cases Section
+            "use-cases-title": { "fr": "Cas d'Usage Détaillés pour l'Entreprise.", "en": "Detailed Enterprise Use Cases.", "es": "Casos de Uso Empresariales Detallados.", "zh": "详细的企业用例。", "de": "Detaillierte Unternehmens-Anwendungsfälle." },
+            "use-cases-subtitle": { "fr": "Intégrez GitForge pour résoudre les défis critiques de votre pipeline de développement et d'opérations.", "en": "Integrate GitForge to solve critical challenges in your development and operations pipeline.", "es": "Integre GitForge para resolver desafíos críticos en su pipeline de desarrollo y operaciones.", "zh": "集成 GitForge 以解决您的开发和运营流水线中的关键挑战。", "de": "Integrieren Sie GitForge, um kritische Herausforderungen in Ihrer Entwicklungs- und Betriebspipeline zu lösen." },
+            "use-case-1-title": { "fr": "Gouvernance de Code", "en": "Code Governance", "es": "Gobernanza de Código", "zh": "代码治理", "de": "Code-Governance" },
+            "use-case-1-desc": { "fr": "Appliquez des règles de sécurité et des revues de code obligatoires avant toute fusion de branche critique.", "en": "Enforce security rules and mandatory code reviews before any critical branch merge.", "es": "Haga cumplir las reglas de seguridad y las revisiones de código obligatorias antes de cualquier fusión de rama crítica.", "zh": "在任何关键分支合并之前，强制执行安全规则和强制性代码审查。", "de": "Setzen Sie Sicherheitsregeln und obligatorische Code-Reviews vor jeder kritischen Branch-Zusammenführung durch." },
+            "use-case-2-title": { "fr": "Environnements Éphémères", "en": "Ephemeral Environments", "es": "Entornos Efímeros", "zh": "临时环境", "de": "Ephemere Umgebungen" },
+            "use-case-2-desc": { "fr": "Créez automatiquement des environnements de test pour chaque Pull Request pour une validation non destructive.", "en": "Automatically create test environments for every Pull Request for non-destructive validation.", "es": "Cree automáticamente entornos de prueba para cada Pull Request para una validación no destructiva.", "zh": "为每个 Pull Request 自动创建测试环境，以进行非破坏性验证。", "de": "Erstellen Sie automatisch Testumgebungen für jeden Pull Request zur zerstörungsfreien Validierung." },
+            "use-case-3-title": { "fr": "Développement Microservices", "en": "Microservices Development", "es": "Desarrollo de Microservicios", "zh": "微服务开发", "de": "Microservices-Entwicklung" },
+            "use-case-3-desc": { "fr": "Gérez des centaines de dépôts avec des pipelines de CI/CD et une architecture partagée, conçue pour l'évolutivité.", "en": "Manage hundreds of repositories with CI/CD pipelines and a shared architecture, built for scalability.", "es": "Gestione cientos de repositorios con pipelines de CI/CD y una arquitectura compartida, diseñada para la escalabilidad.", "zh": "使用 CI/CD 流水线和共享架构管理数百个存储库，专为可扩展性设计。", "de": "Verwalten Sie Hunderte von Repositories mit CI/CD-Pipelines und einer gemeinsamen Architektur, die auf Skalierbarkeit ausgelegt ist." },
+
+            // Artifacts Section
+            "artifacts-title": { "fr": "Gestion des Artéfacts et Registres (Nouveau).", "en": "Artifact and Registry Management (New).", "es": "Gestión de Artefactos y Registros (Nuevo).", "zh": "工件和注册表管理（新）。", "de": "Artefakt- und Registry-Management (Neu)." },
+            "artifacts-subtitle": { "fr": "Centralisez vos images Docker, vos paquets NPM, Maven et PyPi directement dans votre environnement de code.", "en": "Centralize your Docker images, NPM, Maven, and PyPi packages directly within your code environment.", "es": "Centralice sus imágenes Docker, paquetes NPM, Maven y PyPi directamente dentro de su entorno de código.", "zh": "将您的 Docker 镜像、NPM、Maven 和 PyPi 包直接集中到您的代码环境中。", "de": "Zentralisieren Sie Ihre Docker-Images, NPM-, Maven- und PyPi-Pakete direkt in Ihrer Code-Umgebung." },
+            "artifact-1-title": { "fr": "Docker & Conteneurs", "en": "Docker & Containers", "es": "Docker y Contenedores", "zh": "Docker 和容器", "de": "Docker & Container" },
+            "artifact-1-desc": { "fr": "Registre Docker sécurisé et privé, intégré aux pipelines pour un déploiement zéro friction.", "en": "Secure and private Docker registry, integrated into pipelines for zero-friction deployment.", "es": "Registro Docker seguro y privado, integrado en los pipelines para un despliegue sin fricciones.", "zh": "安全私有的 Docker 注册表，集成到流水线中，实现零摩擦部署。", "de": "Sicheres und privates Docker Registry, in Pipelines integriert für reibungslose Bereitstellung." },
+            "artifact-2-title": { "fr": "Paquets Logicielles", "en": "Software Packages", "es": "Paquetes de Software", "zh": "软件包", "de": "Software-Pakete" },
+            "artifact-2-desc": { "fr": "Hébergez vos dépendances privées (NPM, Maven, PyPi) pour une gestion de versions interne.", "en": "Host your private dependencies (NPM, Maven, PyPi) for internal version management.", "es": "Aloje sus dependencias privadas (NPM, Maven, PyPi) para una gestión de versiones interna.", "zh": "托管您的私有依赖项（NPM、Maven、PyPi），用于内部版本管理。", "de": "Hosten Sie Ihre privaten Abhängigkeiten (NPM, Maven, PyPi) für internes Versionsmanagement." },
+            "artifact-3-title": { "fr": "Stockage Immuable", "en": "Immutable Storage", "es": "Almacenamiento Inmutable", "zh": "不可变存储", "de": "Unveränderlicher Speicher" },
+            "artifact-3-desc": { "fr": "Chaque artéfact est stocké avec un historique complet et des vérifications de checksum pour une fiabilité totale.", "en": "Every artifact is stored with a full history and checksum verifications for total reliability.", "es": "Cada artefacto se almacena con un historial completo y verificaciones de suma de comprobación para una fiabilidad total.", "zh": "每个工件都以完整的历史记录和校验和验证存储，以实现完全可靠性。", "de": "Jedes Artefakt wird mit vollständigem Verlauf und Prüfsummen-Überprüfungen für absolute Zuverlässigkeit gespeichert." },
+
+            // New Security Section
+            "security-analysis-title": { "fr": "🛡️ Détection de Sécurité et Remédiation (Analyse de Code).", "en": "🛡️ Security Detection and Remediation (Code Analysis).", "es": "🛡️ Detección de Seguridad y Remediación (Análisis de Código).", "zh": "🛡️ 安全检测与修复（代码分析）。", "de": "🛡️ Sicherheitserkennung und -behebung (Code-Analyse)." },
+            "security-analysis-subtitle": { "fr": "Intégrez l'analyse statique et dynamique pour sécuriser votre code tout au long du pipeline CI/CD.", "en": "Integrate static and dynamic analysis to secure your code throughout the CI/CD pipeline.", "es": "Integre análisis estático y dinámico para asegurar su código a lo largo del pipeline CI/CD.", "zh": "集成静态和动态分析，以在整个 CI/CD 流水线中保护您的代码。", "de": "Integrieren Sie statische und dynamische Analyse, um Ihren Code während der gesamten CI/CD-Pipeline zu sichern." },
+            "sec-1-title": { "fr": "Analyse Statique (SAST)", "en": "Static Analysis (SAST)", "es": "Análisis Estático (SAST)", "zh": "静态分析 (SAST)", "de": "Statische Analyse (SAST)" },
+            "sec-1-desc": { "fr": "Détection de bugs et vulnérabilités dans le code source avant le déploiement.", "en": "Detection of bugs and vulnerabilities in source code before deployment.", "es": "Detección de errores y vulnerabilidades en el código fuente antes del despliegue.", "zh": "在部署前检测源代码中的错误和漏洞。", "de": "Erkennung von Fehlern und Schwachstellen im Quellcode vor der Bereitstellung." },
+            "sec-2-title": { "fr": "Analyse des Dépendances", "en": "Dependency Analysis", "es": "Análisis de Dependencias", "zh": "依赖项分析", "de": "Abhängigkeitsanalyse" },
+            "sec-2-desc": { "fr": "Identification automatique des librairies tierces avec des failles de sécurité connues.", "en": "Automatic identification of third-party libraries with known security flaws.", "es": "Identificación automática de librerías de terceros con fallas de seguridad conocidas.", "zh": "自动识别具有已知安全漏洞的第三方库。", "de": "Automatische Identifizierung von Drittanbieter-Bibliotheken mit bekannten Sicherheitslücken." },
+            "sec-3-title": { "fr": "Remédiation Guidée", "en": "Guided Remediation", "es": "Remediación Guiada", "zh": "引导式修复", "de": "Geführte Behebung" },
+            "sec-3-desc": { "fr": "Suggestion de correctifs ou de versions à jour directement dans l'environnement de code.", "en": "Suggestion of patches or updated versions directly within the code environment.", "es": "Sugerencia de parches o versiones actualizadas directamente en el entorno de código.", "zh": "直接在代码环境中建议补丁或更新版本。", "de": "Vorschläge für Patches oder aktualisierte Versionen direkt in der Code-Umgebung." },
+            "sec-4-title": { "fr": "Sécurité as Code", "en": "Security as Code", "es": "Seguridad como Código", "zh": "安全即代码", "de": "Security as Code" },
+            "sec-4-desc": { "fr": "Application de politiques de sécurité directement dans les fichiers de configuration (ex: .gitforge-ci.yml).", "en": "Enforcement of security policies directly in configuration files (e.g., .gitforge-ci.yml).", "es": "Aplicación de políticas de seguridad directamente en los archivos de configuración (ej: .gitforge-ci.yml).", "zh": "直接在配置文件中强制执行安全策略（例如 .gitforge-ci.yml）。", "de": "Durchsetzung von Sicherheitsrichtlinien direkt in Konfigurationsdateien (z. B. .gitforge-ci.yml)." },
+
+            // CI/CD Performance Section
+            "ci-perf-title": { "fr": "Performance et Scalabilité CI/CD.", "en": "CI/CD Performance and Scalability.", "es": "Rendimiento y Escalabilidad CI/CD.", "zh": "CI/CD 性能和可扩展性。", "de": "CI/CD Leistung und Skalierbarkeit." },
+            "ci-perf-subtitle": { "fr": "Exécutez des pipelines en parallèle, sans latence et avec un suivi précis de vos consommations.", "en": "Run pipelines in parallel, without latency and with precise consumption tracking.", "es": "Ejecute pipelines en paralelo, sin latencia y con seguimiento preciso de su consumo.", "zh": "并行运行流水线，无延迟并精确跟踪您的消耗。", "de": "Führen Sie Pipelines parallel aus, ohne Latenz und mit präziser Verbrauchsnachverfolgung." },
+            "perf-1-title": { "fr": "Runners Éclair", "en": "Lightning Runners", "es": "Runners Relámpago", "zh": "闪电运行器", "de": "Blitzschnelle Runner" },
+            "perf-1-desc": { "fr": "Moins de 5 secondes de temps de démarrage des runners. Réduisez le temps de vos builds CI/CD.", "en": "Less than 5 seconds runner startup time. Reduce your CI/CD build time.", "es": "Tiempo de inicio del runner inferior a 5 segundos. Reduzca el tiempo de sus builds CI/CD.", "zh": "运行器启动时间少于 5 秒。减少您的 CI/CD 构建时间。", "de": "Weniger als 5 Sekunden Startzeit der Runner. Reduzieren Sie Ihre CI/CD-Build-Zeit." },
+            "perf-2-title": { "fr": "Dashboard des Pipelines", "en": "Pipeline Dashboard", "es": "Panel de Pipelines", "zh": "流水线仪表板", "de": "Pipeline-Dashboard" },
+            "perf-2-desc": { "fr": "Suivez la durée des jobs, l'utilisation des ressources et l'historique des déploiements via un tableau de bord intuitif.", "en": "Track job duration, resource usage, and deployment history through an intuitive dashboard.", "es": "Siga la duración de los trabajos, el uso de recursos y el historial de despliegues a través de un tableau de bord intuitivo.", "zh": "通过直观的仪表板跟踪作业持续时间、资源使用和部署历史记录。", "de": "Verfolgen Sie die Job-Dauer, Ressourcennutzung und den Bereitstellungsverlauf über ein intuitives Dashboard." },
+            "perf-3-title": { "fr": "Secrets & Variables", "en": "Secrets & Variables", "es": "Secretos y Variables", "zh": "秘密与变量", "de": "Secrets & Variablen" },
+            "perf-3-desc": { "fr": "Gestion sécurisée des secrets d'API, des clés et des certificats avec chiffrement au repos.", "en": "Secure management of API secrets, keys, and certificates with encryption at rest.", "es": "Gestión segura de secretos de API, claves y certificados con cifrado en reposo.", "zh": "通过静态加密安全管理 API 秘密、密钥和证书。", "de": "Sichere Verwaltung von API-Geheimnissen, Schlüsseln und Zertifikaten mit Verschlüsselung im Ruhezustand." },
+
+            // Observability Section
+            "obs-title": { "fr": "Observabilité et Monitoring Intégrés (Nouveau).", "en": "Integrated Observability and Monitoring (New).", "es": "Observabilidad y Monitoreo Integrados (Nuevo).", "zh": "集成可观察性与监控（新）。", "de": "Integrierte Beobachtbarkeit und Überwachung (Neu)." },
+            "obs-subtitle": { "fr": "Visualisez la performance de votre application en temps réel sans intégration d'outils tiers complexes.", "en": "Visualize your application's performance in real-time without complex third-party tool integration.", "es": "Visualice el rendimiento de su aplicación en tiempo real sin integración compleja de herramientas de terceros.", "zh": "无需复杂的第三方工具集成，实时可视化您的应用程序性能。", "de": "Visualisieren Sie die Leistung Ihrer Anwendung in Echtzeit ohne komplexe Integration von Drittanbieter-Tools." },
+            "obs-1-title": { "fr": "Métriques de Performance", "en": "Performance Metrics", "es": "Métricas de Rendimiento", "zh": "性能指标", "de": "Leistungsmetriken" },
+            "obs-1-desc": { "fr": "Collecte et visualisation des métriques de l'application, du serveur et du réseau (Prometheus-compatible).", "en": "Collection and visualization of application, server, and network metrics (Prometheus-compatible).", "es": "Recolección y visualización de métricas de aplicación, servidor y red (compatible con Prometheus).", "zh": "收集和可视化应用程序、服务器和网络指标（兼容 Prometheus）。", "de": "Erfassung und Visualisierung von Anwendungs-, Server- und Netzwerkmetriken (Prometheus-kompatibel)." },
+            "obs-2-title": { "fr": "Gestion des Erreurs", "en": "Error Management", "es": "Gestión de Errores", "zh": "错误管理", "de": "Fehlerverwaltung" },
+            "obs-2-desc": { "fr": "Suivi des traces de pile et des taux d'erreur avec alertes personnalisables pour les incidents critiques.", "en": "Stack trace tracking and error rates with customizable alerts for critical incidents.", "es": "Seguimiento de trazas de pila y tasas de error con alertas personnalisables para incidentes críticos.", "zh": "堆栈跟踪和错误率跟踪，并为关键事件提供可定制的警报。", "de": "Stack-Trace-Verfolgung und Fehlerraten mit anpassbaren Alarmen für kritische Vorfälle." },
+            "obs-3-title": { "fr": "Journalisation Centralisée", "en": "Centralized Logging", "es": "Registro Centralizado", "zh": "集中式日志记录", "de": "Zentrale Protokollierung" },
+            "obs-3-desc": { "fr": "Agrégation des logs d'applications et d'infrastructure pour un diagnostic rapide et précis des problèmes.", "en": "Aggregation of application and infrastructure logs for fast and accurate problem diagnosis.", "es": "Agregación de logs de aplicaciones e infraestructura para un diagnóstico rápido y preciso de problemas.", "zh": "聚合应用程序和基础设施日志，以实现快速准确的问题诊断。", "de": "Aggregation von Anwendungs- und Infrastrukturprotokollen zur schnellen und präzisen Problemdiagnose." },
+
+            // New Partnerships Section
+            "partners-title": { "fr": "🤝 Partenariats et Écosystème.", "en": "🤝 Partnerships and Ecosystem.", "es": "🤝 Asociaciones y Ecosistema.", "zh": "🤝 合作伙伴与生态系统。", "de": "🤝 Partnerschaften und Ökosystem." },
+            "partners-subtitle": { "fr": "Étendez les capacités de GitForge avec des intégrations majeures et notre écosystème en pleine croissance.", "en": "Extend GitForge's capabilities with major integrations and our growing ecosystem.", "es": "Amplíe las capacidades de GitForge con integraciones principales y nuestro ecosistema en crecimiento.", "zh": "通过主要集成和我们不断发展的生态系统扩展 GitForge 的能力。", "de": "Erweitern Sie die Funktionen von GitForge durch wichtige Integrationen und unser wachsendes Ökosystem." },
+            "partner-1-title": { "fr": "Intégrations DevOps Majeures", "en": "Major DevOps Integrations", "es": "Integraciones DevOps Principales", "zh": "主要 DevOps 集成", "de": "Wichtige DevOps-Integrationen" },
+            "partner-1-desc": { "fr": "Connectez-vous facilement à Jira, Slack/Teams, Kubernetes et plus encore pour un flux de travail continu.", "en": "Easily connect to Jira, Slack/Teams, Kubernetes, and more for a continuous workflow.", "es": "Conéctese fácilmente a Jira, Slack/Teams, Kubernetes y más para un flujo de trabajo continuo.", "zh": "轻松连接到 Jira, Slack/Teams, Kubernetes 等，实现持续工作流程。", "de": "Einfache Verbindung zu Jira, Slack/Teams, Kubernetes und mehr für einen kontinuierlichen Workflow." },
+            "partner-2-title": { "fr": "Marketplace d'Extensions (Futur)", "en": "Extension Marketplace (Future)", "es": "Marketplace de Extensiones (Futuro)", "zh": "扩展市场（未来）", "de": "Erweiterungs-Marktplatz (Zukunft)" },
+            "partner-2-desc": { "fr": "Une plateforme à venir pour intégrer des outils tiers ou créer vos propres extensions personnalisées.", "en": "A forthcoming platform to integrate third-party tools or build your own custom extensions.", "es": "Una próxima plataforma para integrar herramientas de terceros o crear sus propias extensiones personalizadas.", "zh": "一个即将推出的平台，用于集成第三方工具或构建您自己的自定义扩展。", "de": "Eine kommende Plattform zur Integration von Drittanbieter-Tools oder zur Erstellung eigener benutzerdefinierter Erweiterungen." },
+            "partner-3-title": { "fr": "Programme Partenaire (Futur)", "en": "Partner Program (Future)", "es": "Programa de Socios (Futuro)", "zh": "合作伙伴计划（未来）", "de": "Partnerprogramm (Zukunft)" },
+            "partner-3-desc": { "fr": "Rejoignez notre réseau de consultants et intégrateurs pour offrir des services basés sur GitForge.", "en": "Join our network of consultants and integrators to offer services based on GitForge.", "es": "Únase a nuestra red de consultores e integradores para ofrecer servicios basados en GitForge.", "zh": "加入我们的顾问和集成商网络，提供基于 GitForge 的服务。", "de": "Treten Sie unserem Netzwerk von Beratern und Integratoren bei, um Dienstleistungen basierend auf GitForge anzubieten." },
+
+            // General Content (already exists, adding keys for completeness)
+            "tech-tools-title": { "fr": "Technologies et Outils DevOps Supportés.", "en": "Supported DevOps Technologies and Tools.", "es": "Tecnologías y Herramientas DevOps Compatibles.", "zh": "支持的 DevOps 技术和工具。", "de": "Unterstützte DevOps Technologien und Tools." },
+            "tech-tools-subtitle": { "fr": "GitForge s'intègre nativement avec l'écosystème de développement et de déploiement moderne.", "en": "GitForge integrates natively with the modern development and deployment ecosystem.", "es": "GitForge se integra de forma nativa con el ecosistema moderno de desarrollo y despliegue.", "zh": "GitForge 与现代开发和部署生态系统原生集成。", "de": "GitForge integriert sich nativ in das moderne Entwicklungs- und Bereitstellungs-Ökosystem." },
+
+            // Footer links
+            "footer-documentation": { "fr": "Documentation", "en": "Documentation", "es": "Documentación", "zh": "文档", "de": "Dokumentation" },
+            "footer-tarifs": { "fr": "Tarifs", "en": "Pricing", "es": "Precios", "zh": "定价", "de": "Preise" },
+            "footer-contact": { "fr": "Contact Email", "en": "Contact Email", "es": "Correo de Contacto", "zh": "联系邮件", "de": "Kontakt-E-Mail" },
+            "footer-espace-client": { "fr": "Espace Client", "en": "Client Area", "es": "Área de Cliente", "zh": "客户区", "de": "Kundenbereich" },
+            "footer-statut-service": { "fr": "Statut Service", "en": "Service Status", "es": "Estado del Servicio", "zh": "服务状态", "de": "Service-Status" },
+            "footer-blog-tech": { "fr": "Blog Tech", "en": "Tech Blog", "es": "Blog de Tecnología", "zh": "技术博客", "de": "Tech-Blog" },
+            "footer-a-propos": { "fr": "À Propos", "en": "About Us", "es": "Sobre Nosotros", "zh": "关于我们", "de": "Über Uns" },
+            "footer-carrières": { "fr": "Carrières", "en": "Careers", "es": "Carreras", "zh": "职业", "de": "Karriere" },
+            "footer-support": { "fr": "Support", "en": "Support", "es": "Soporte", "zh": "支持", "de": "Support" },
+            "footer-faq": { "fr": "FAQ", "en": "FAQ", "es": "FAQ", "zh": "常见问题", "de": "FAQ" },
+            "footer-cgv": { "fr": "CGV", "en": "TOS", "es": "Términos de Servicio", "zh": "服务条款", "de": "AGB" },
+            "footer-mentions-legales": { "fr": "Mentions Légales", "en": "Legal Notice", "es": "Aviso Legal", "zh": "法律声明", "de": "Impressum" },
+            "footer-privacy": { "fr": "Politique de Confidentialité", "en": "Privacy Policy", "es": "Política de Privacidad", "zh": "隐私政策", "de": "Datenschutzrichtlinie" },
+            "footer-copyright": { "fr": "Tous droits réservés. Propulsé par la", "en": "All rights reserved. Powered by the", "es": "Todos los derechos reservados. Impulsado por la", "zh": "保留所有权利。由", "de": "Alle Rechte vorbehalten. Angetrieben von der" },
+            "footer-platform": { "fr": "Plateforme GitForge", "en": "GitForge Platform", "es": "Plataforma GitForge", "zh": "GitForge 平台", "de": "GitForge Plattform" },
+        };
+
+        const languageNames = {
+            "fr": "Français",
+            "en": "English",
+            "es": "Español",
+            "zh": "中文",
+            "de": "Deutsch"
+        };
+        
+        const languageFlags = {
+            "fr": "🌐", // Using globe as a neutral flag for French
+            "en": "🇺🇸",
+            "es": "🇪🇸",
+            "zh": "🇨🇳",
+            "de": "🇩🇪"
+        };
+
+        let currentLang = 'fr'; // Default language
+
+        function applyTranslation(lang) {
+            // Update elements with data-translate attribute (for text content)
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[key] && translations[key][lang]) {
+                    el.textContent = translations[key][lang];
+                }
+            });
+
+            // Update elements with data-translate-placeholder attribute (for input placeholders)
+            document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-translate-placeholder');
+                if (translations[key] && translations[key][lang]) {
+                    el.placeholder = translations[key][lang];
+                }
+            });
+            
+            // Update Title
+            document.querySelector('title').textContent = translations["site-name"][lang] + (lang === 'fr' ? ' | La Plateforme DevOps Ultime' : ' | The Ultimate DevOps Platform');
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+            
+            // Update language selector UI
+            document.getElementById('current-flag').textContent = languageFlags[lang];
+            document.getElementById('current-lang-name').textContent = languageNames[lang];
+            document.getElementById('current-lang-name').setAttribute('data-lang-code', lang);
+
+            currentLang = lang;
+            
+            // Update existing script variable for animated title text
+            const titleElement = document.getElementById('animated-title');
+            if (titleElement) {
+                // Ensure the content is also correctly set for the fixed text
+                titleElement.textContent = translations["title-slogan"][currentLang];
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Language Selector Logic
+            const langMenuButton = document.getElementById('lang-menu-button');
+            const langMenuDropdown = document.getElementById('lang-menu-dropdown');
+            const langOptions = document.querySelectorAll('.lang-option');
+
+            if (langMenuButton) {
+                langMenuButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    langMenuDropdown.classList.toggle('hidden');
+                });
+            }
+
+            langOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const newLang = option.getAttribute('data-lang');
+                    applyTranslation(newLang);
+                    langMenuDropdown.classList.add('hidden');
+                });
+            });
+            
+            // Apply initial translation on load (French is default)
+            applyTranslation(currentLang);
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (langMenuButton && langMenuDropdown && !langMenuButton.contains(e.target) && !langMenuDropdown.contains(e.target)) {
+                    langMenuDropdown.classList.add('hidden');
+                }
+            });
+            
+            // Existing script logic for tabs (kept for completeness)
+            const tabContainer = document.getElementById('language-tabs');
+            if (tabContainer) {
+                tabContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('tab-button')) {
+                        // Désactiver tous les onglets
+                        document.querySelectorAll('.tab-button').forEach(btn => {
+                            btn.classList.remove('border-blue-500', 'text-blue-500', 'bg-gray-800');
+                            btn.classList.add('border-transparent', 'text-gray-400-var', 'hover:text-white', 'hover:bg-gray-800');
+                        });
+        
+                        // Masquer tous les blocs de code
+                        document.querySelectorAll('.tab-code').forEach(code => {
+                            code.closest('pre').classList.add('hidden');
+                        });
+        
+                        // Activer l'onglet cliqué
+                        e.target.classList.add('border-blue-500', 'text-blue-500', 'bg-gray-800');
+                        e.target.classList.remove('border-transparent', 'text-gray-400-var', 'hover:text-white', 'hover:bg-gray-800');
+        
+                        // Afficher le bloc de code correspondant
+                        const lang = e.target.getAttribute('data-lang');
+                        
+                        // Mappage des langues vers les IDs (légèrement modifié pour Git)
+                        let codeId;
+                        if (lang === 'python') {
+                            codeId = 'code-python'; // Utilisé pour Git Clone/Bash
+                        } else if (lang === 'javascript') {
+                            codeId = 'code-javascript'; // Utilisé pour CI/CD YAML
+                        } else if (lang === 'php') {
+                            codeId = 'code-php'; // Utilisé pour API Go
+                        } else if (lang === 'bash') {
+                            codeId = 'code-bash'; // Utilisé pour Docker Push/Bash
+                        }
+        
+                        if (codeId) {
+                            document.getElementById(codeId).closest('pre').classList.remove('hidden');
+                        }
+                        
+                        // Réinitialiser la coloration syntaxique
+                        hljs.highlightAll();
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    
+    <header id="header-primary" class="fixed top-0 left-0 right-0 z-50 flex justify-center py-3 border-b header-border bg-header shadow-xl transition-colors duration-300">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex justify-between items-center w-full">
+            <a href="index.html" class="text-4xl font-extrabold text-blue-500 tracking-wider">
+                <img src="https://i.imgur.com/7Gn3toV.png" alt="GitForge Logo" class="h-8 w-auto inline-block mr-2">
+                <span data-translate="site-name">GitForge</span>
+            </a>
+            <nav class="flex items-center space-x-2 sm:space-x-4">
+                
+                <a data-translate="nav-doc" href="documentation.html" class="nav-link px-2 py-1 sm:px-4 sm:py-2 text-color hover:text-blue-500-var transition duration-200 font-medium text-sm sm:text-base">
+                    Documentation
+                </a>
+                <a data-translate="nav-pricing" href="tarifs.html" class="nav-link px-2 py-1 sm:px-4 sm:py-2 text-color hover:text-blue-500-var transition duration-200 font-medium text-sm sm:text-base">
+                    Pricing
+                </a>
+                <a data-translate="nav-enterprise" href="a-propos.html" class="nav-link px-2 py-1 sm:px-4 sm:py-2 text-color hover:text-blue-500-var transition duration-200 font-medium text-sm sm:text-base hidden md:block">
+                    Enterprise
+                </a>
+                <a data-translate="nav-support" href="support.html" class="nav-link px-2 py-1 sm:px-4 sm:py-2 text-color hover:text-blue-500-var transition duration-200 font-medium text-sm sm:text-base hidden sm:block">
+                    Support
+                </a>
+
+                <a data-translate="btn-login" href="connexion.html" class="px-3 py-1 sm:px-4 sm:py-2 text-black btn-primary rounded-lg transition duration-200 text-sm sm:text-base">
+                    Connexion
+                </a>
+                <a data-translate="btn-signup" href="inscription.html" class="px-3 py-1 sm:px-4 sm:py-2 btn-secondary font-medium transition duration-200 hidden sm:block text-sm sm:text-base rounded-lg">
+                    Inscription
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="pt-20"> 
+
+        <div id="header-secondary" class="z-40 flex justify-center py-2 border-b header-border bg-header transition-colors duration-300"> 
+            <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex justify-end items-center space-x-4 w-full">
+                <div class="relative hidden lg:block">
+                    <input data-translate-placeholder="search-placeholder" id="secondary-search-input" type="text" placeholder="Rechercher des Projets ou Docs..." class="py-2 px-4 pr-10 rounded-md bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 w-64 text-sm">
+                    <span class="material-symbols-rounded text-gray-500 absolute right-2 top-1/2 transform -translate-y-1/2 text-xl cursor-pointer">search</span>
+                </div>
+                <div class="relative">
+                    <button id="lang-menu-button" class="flex items-center bg-gray-900 border border-gray-700 text-white py-2 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                        <span id="current-flag">🌐</span>
+                        <span id="current-lang-name" class="ml-2 font-medium" data-lang-code="fr">Français</span>
+                        <span class="material-symbols-rounded text-gray-400 ml-2 text-xl">expand_more</span>
+                    </button>
+                    <div id="lang-menu-dropdown" class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-50 hidden border border-gray-700">
+                        <a href="#" data-lang="fr" class="lang-option flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700">🌐 Français</a>
+                        <a href="#" data-lang="en" class="lang-option flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700">🇺🇸 English</a>
+                        <a href="#" data-lang="es" class="lang-option flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700">🇪🇸 Español</a>
+                        <a href="#" data-lang="zh" class="lang-option flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700">🇨🇳 中文</a>
+                        <a href="#" data-lang="de" class="lang-option flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700">🇩🇪 Deutsch</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
+
+            <main class="space-y-24">
+                
+
+                        
+                        <h1 id="animated-title" data-translate="title-slogan" class="text-6xl sm:text-7xl font-extrabold text-color leading-tight mb-4"> 
+                            Le SDLC Simplifié. Du Code Source au Déploiement Cloud.
+                        </h1>
+                        <p data-translate="slogan-description" class="text-2xl text-gray-300-var max-w-4xl mr-auto mb-10"> 
+                            Hébergez vos dépôts Git, automatisez votre CI/CD et gérez vos projets sur une seule plateforme unifiée et ultra-rapide. <strong class="text-blue-400">Le futur du développement logiciel.</strong>
+                        </p>
+
+                        <form class="flex flex-col sm:flex-row items-center w-full max-w-2xl bg-gray-900 border border-[var(--border-color)] rounded-lg p-1.5 shadow-2xl">
+                            <input data-translate-placeholder="email-signup-placeholder" type="email" placeholder="Entrez votre email pour démarrer un essai gratuit" class="flex-grow w-full px-4 py-3 bg-transparent text-white placeholder-gray-500 focus:outline-none" required>
+                            <button data-translate="btn-signup-cta" type="submit" class="w-full sm:w-auto mt-3 sm:mt-0 px-8 py-3 btn-primary text-lg font-bold rounded-lg whitespace-nowrap">
+                                S'inscrire / Essai Gratuit
+                            </button>
+                        </form>
+                    </div>
+                    <script>
+                        // The translation script handles the initial text, but this script is kept in case of fallback.
+                        // const titleElement = document.getElementById('animated-title');
+                        // const text = "Le SDLC Simplifié. Du Code Source au Déploiement Cloud.";
+                        // titleElement.innerHTML = text; // Assure que le texte est bien affiché
+                    </script>
+                </section>
+
+                <section>
+                    <h2 data-translate="sdlc-title" class="text-4xl font-bold text-color mb-8 text-center"> Le Cycle de Vie du Logiciel Intégral.
+                    </h2>
+                    <p data-translate="sdlc-subtitle" class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12">
+                        De l'idée au produit, GitForge vous accompagne à chaque étape avec des outils robustes.
+                    </p>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]"> 
+                            <span class="material-symbols-rounded text-blue-400 text-3xl mb-3">account_tree</span> <h3 data-translate="sdlc-1-title" class="text-2xl font-semibold text-color mb-3">Gestion de Dépôts Git</h3>
+                            <p data-translate="sdlc-1-desc" class="text-gray-300-var text-sm">Hébergement illimité, collaboration par Pull Requests (Merge Requests) et revue de code de haute qualité.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-yellow-400 text-3xl mb-3">cloud_upload</span> <h3 data-translate="sdlc-2-title" class="text-2xl font-semibold text-color mb-3">Intégration et Déploiement Continu</h3>
+                            <p data-translate="sdlc-2-desc" class="text-gray-300-var text-sm">Automatisez les tests, la compilation et le déploiement multi-cloud avec des pipelines CI/CD ultra-rapides.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-purple-400 text-3xl mb-3">task_alt</span> <h3 data-translate="sdlc-3-title" class="text-2xl font-semibold text-color mb-3">Suivi des Projets (Agile)</h3>
+                            <p data-translate="sdlc-3-desc" class="text-gray-300-var text-sm">Tableaux Kanban, tickets, épics et gestion des sprints pour une exécution de projet Agile sans faille.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-cyan-400 text-3xl mb-3">security</span> <h3 data-translate="sdlc-4-title" class="text-2xl font-semibold text-color mb-3">Sécurité Intégrée</h3>
+                            <p data-translate="sdlc-4-desc" class="text-gray-300-var text-sm">Analyse de vulnérabilités, détection de secrets et protection des dépendances pour un code sûr dès le départ.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-12">
+                    <h2 data-translate="tech-tools-title" class="text-4xl font-bold text-color mb-4 text-center">
+                        Technologies et Outils DevOps Supportés.
+                    </h2>
+                    <p data-translate="tech-tools-subtitle" class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12">
+                        GitForge s'intègre nativement avec l'écosystème de développement et de déploiement moderne.
+                    </p>
+
+                    <div class="logo-container">
+                        <div class="logos-track" id="logos-track-content">
+                            <div class="logo-item" title="Python"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python Logo"></div>
+                            <div class="logo-item" title="Node.js"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="Node.js Logo"></div>
+                            <div class="logo-item" title="PHP"><img src="https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg" alt="PHP Logo"></div>
+                            <div class="logo-item" title="Ruby"><img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Ruby_logo.svg" alt="Ruby Logo"></div>
+                            
+                            <div class="logo-item" title="AWS (Amazon Web Services)"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo"></div>
+                            <div class="logo-item" title="Google Cloud Platform"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Google Cloud Logo"></div>
+                            
+                            <div class="logo-item" title="React"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React Logo"></div>
+                            <div class="logo-item" title="Vue.js"><img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg" alt="Vue.js Logo"></div>
+                            <div class="logo-item" title="Angular"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Angular_full_color_logo.svg" alt="Angular Logo"></div>
+                            <div class="logo-item" title="Laravel"><img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Laravel.svg" alt="Laravel Logo"></div>
+                            </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 data-translate="use-cases-title" class="text-4xl font-bold text-color mb-8 text-center">
+                        Cas d'Usage Détaillés pour l'Entreprise.
+                    </h2>
+                    <p data-translate="use-cases-subtitle" class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12">
+                        Intégrez GitForge pour résoudre les défis critiques de votre pipeline de développement et d'opérations.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-4xl text-blue-500 mb-4">gavel</span>
+                            <h3 data-translate="use-case-1-title" class="text-2xl font-semibold text-color mb-3">Gouvernance de Code</h3>
+                            <p data-translate="use-case-1-desc" class="text-gray-300-var">Appliquez des règles de sécurité et des revues de code obligatoires avant toute fusion de branche critique.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-4xl text-yellow-500 mb-4">science</span>
+                            <h3 data-translate="use-case-2-title" class="text-2xl font-semibold text-color mb-3">Environnements Éphémères</h3>
+                            <p data-translate="use-case-2-desc" class="text-gray-300-var">Créez automatiquement des environnements de test pour chaque Pull Request pour une validation non destructive.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-4xl text-red-500 mb-4">lan</span>
+                            <h3 data-translate="use-case-3-title" class="text-2xl font-semibold text-color mb-3">Développement Microservices</h3>
+                            <p data-translate="use-case-3-desc" class="text-gray-300-var">Gérez des centaines de dépôts avec des pipelines de CI/CD et une architecture partagée, conçue pour l'évolutivité.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 data-translate="artifacts-title" class="text-4xl font-bold text-color mb-8 text-center"> Gestion des Artéfacts et Registres (Nouveau).
+                    </h2>
+                    <p data-translate="artifacts-subtitle" class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12">
+                        Centralisez vos images Docker, vos paquets NPM, Maven et PyPi directement dans votre environnement de code.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)] text-center">
+                            <span class="material-symbols-rounded text-4xl text-red-500 mb-4">deployed_code</span> <h3 data-translate="artifact-1-title" class="text-2xl font-semibold text-color mb-3">Docker & Conteneurs</h3>
+                            <p data-translate="artifact-1-desc" class="text-gray-300-var">Registre Docker sécurisé et privé, intégré aux pipelines pour un déploiement zéro friction.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)] text-center">
+                            <span class="material-symbols-rounded text-indigo-400 mb-4">package</span> <h3 data-translate="artifact-2-title" class="text-2xl font-semibold text-color mb-3">Paquets Logicielles</h3>
+                            <p data-translate="artifact-2-desc" class="text-gray-300-var">Hébergez vos dépendances privées (NPM, Maven, PyPi) pour une gestion de versions interne.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)] text-center">
+                            <span class="material-symbols-rounded text-pink-500 mb-4">storage</span> <h3 data-translate="artifact-3-title" class="text-2xl font-semibold text-color mb-3">Stockage Immuable</h3>
+                            <p data-translate="artifact-3-desc" class="text-gray-300-var">Chaque artéfact est stocké avec un historique complet et des vérifications de checksum pour une fiabilité totale.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 data-translate="security-analysis-title" class="text-4xl font-bold text-color mb-8 text-center">
+                        🛡️ Détection de Sécurité et Remédiation (Analyse de Code).
+                    </h2>
+                    <p data-translate="security-analysis-subtitle" class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12">
+                        Intégrez l'analyse statique et dynamique pour sécuriser votre code tout au long du pipeline CI/CD.
+                    </p>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-red-400 text-3xl mb-3">bug_report</span> 
+                            <h3 data-translate="sec-1-title" class="text-xl font-semibold text-color mb-3">Analyse Statique (SAST)</h3>
+                            <p data-translate="sec-1-desc" class="text-gray-300-var text-sm">Détection de bugs et vulnérabilités dans le code source avant le déploiement.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-orange-400 text-3xl mb-3">auto_fix_high</span> 
+                            <h3 data-translate="sec-2-title" class="text-xl font-semibold text-color mb-3">Analyse des Dépendances</h3>
+                            <p data-translate="sec-2-desc" class="text-gray-300-var text-sm">Identification automatique des librairies tierces avec des failles de sécurité connues.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-green-400 text-3xl mb-3">health_and_safety</span> 
+                            <h3 data-translate="sec-3-title" class="text-xl font-semibold text-color mb-3">Remédiation Guidée</h3>
+                            <p data-translate="sec-3-desc" class="text-gray-300-var text-sm">Suggestion de correctifs ou de versions à jour directement dans l'environnement de code.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-blue-400 text-3xl mb-3">policy</span> 
+                            <h3 data-translate="sec-4-title" class="text-xl font-semibold text-color mb-3">Sécurité as Code</h3>
+                            <p data-translate="sec-4-desc" class="text-gray-300-var text-sm">Application de politiques de sécurité directement dans les fichiers de configuration (ex: .gitforge-ci.yml).</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 data-translate="ci-perf-title" class="text-4xl font-bold text-color mb-8 text-center"> Performance et Scalabilité CI/CD.
+                    </h2>
+                    <p data-translate="ci-perf-subtitle" class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12">
+                        Exécutez des pipelines en parallèle, sans latence et avec un suivi précis de vos consommations.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)] text-center">
+                            <span class="material-symbols-rounded text-blue-500 mb-4">rocket_launch</span> <h3 data-translate="perf-1-title" class="text-2xl font-semibold text-color mb-3">Runners Éclair</h3>
+                            <p data-translate="perf-1-desc" class="text-gray-300-var">Moins de 5 secondes de temps de démarrage des runners. Réduisez le temps de vos builds CI/CD.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)] text-center">
+                            <span class="material-symbols-rounded text-yellow-500 mb-4">monitoring</span> <h3 data-translate="perf-2-title" class="text-2xl font-semibold text-color mb-3">Dashboard des Pipelines</h3>
+                            <p data-translate="perf-2-desc" class="text-gray-300-var">Suivez la durée des jobs, l'utilisation des ressources et l'historique des déploiements via un tableau de bord intuitif.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)] text-center">
+                            <span class="material-symbols-rounded text-red-500 mb-4">vpn_key</span> <h3 data-translate="perf-3-title" class="text-2xl font-semibold text-color mb-3">Secrets & Variables</h3>
+                            <p data-translate="perf-3-desc" class="text-gray-300-var">Gestion sécurisée des secrets d'API, des clés et des certificats avec chiffrement au repos.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 data-translate="obs-title" class="text-4xl font-bold text-color mb-8 text-center"> Observabilité et Monitoring Intégrés (Nouveau).
+                    </h2>
+                    <p data-translate="obs-subtitle" class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12">
+                        Visualisez la performance de votre application en temps réel sans intégration d'outils tiers complexes.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)] text-center">
+                            <span class="material-symbols-rounded text-4xl text-green-500 mb-4">auto_graph</span> <h3 data-translate="obs-1-title" class="text-2xl font-semibold text-color mb-3">Métriques de Performance</h3>
+                            <p data-translate="obs-1-desc" class="text-gray-300-var">Collecte et visualisation des métriques de l'application, du serveur et du réseau (Prometheus-compatible).</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)] text-center">
+                            <span class="material-symbols-rounded text-orange-500 mb-4">bug_report</span> <h3 data-translate="obs-2-title" class="text-2xl font-semibold text-color mb-3">Gestion des Erreurs</h3>
+                            <p data-translate="obs-2-desc" class="text-gray-300-var">Suivi des traces de pile et des taux d'erreur avec alertes personnalisables pour les incidents critiques.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)] text-center">
+                            <span class="material-symbols-rounded text-cyan-500 mb-4">history</span> <h3 data-translate="obs-3-title" class="text-2xl font-semibold text-color mb-3">Journalisation Centralisée</h3>
+                            <p data-translate="obs-3-desc" class="text-gray-300-var">Agrégation des logs d'applications et d'infrastructure pour un diagnostic rapide et précis des problèmes.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section>
+                    <h2 class="text-4xl font-bold text-color mb-6 text-center"> Démarrez l'Intégration.
+                    </h2>
+                    <p class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-8">
+                        Clonez, configurez et déployez votre premier projet en quelques minutes.
+                    </p>
+
+                    <div class="w-full">
+                        <div id="language-tabs" class="flex flex-wrap sm:flex-nowrap mb-0 border-b border-[var(--border-color)]">
+                            <button data-lang="python" class="tab-button px-4 py-3 text-lg font-semibold border-b-2 border-blue-500 text-blue-500 bg-gray-800 hover:bg-gray-700 flex-grow sm:flex-grow-0 transition duration-200">
+                                Git Clone
+                            </button>
+                            <button data-lang="javascript" class="tab-button px-4 py-3 text-lg font-semibold border-b-2 border-transparent text-gray-400-var hover:text-white hover:bg-gray-800 flex-grow sm:flex-grow-0 transition duration-200">
+                                CI/CD YAML
+                            </button>
+                            <button data-lang="php" class="tab-button px-4 py-3 text-lg font-semibold border-b-2 border-transparent text-gray-400-var hover:text-white hover:bg-gray-800 flex-grow sm:flex-grow-0 transition duration-200">
+                                API Go
+                            </button>
+                            <button data-lang="bash" class="tab-button px-4 py-3 text-lg font-semibold border-b-2 border-transparent text-gray-400-var hover:text-white hover:bg-gray-800 flex-grow sm:flex-grow-0 transition duration-200">
+                                Docker Push
+                            </button>
+                        </div>
+
+                        <div id="code-content" class="code-block p-4 pt-6 text-sm">
+                            
+                            <pre><code id="code-python" class="language-bash tab-code"># Clonage du dépôt Git
+git clone https://gitforge.com/mon-entreprise/projet-api.git
+cd projet-api
+git checkout -b feature/nouvelle-fonctionnalite
+
+# Ajout du code et commit
+# ... (votre code)
+git add .
+git commit -m "feat: ajout de la nouvelle fonctionnalité"
+git push origin feature/nouvelle-fonctionnalite</code></pre>
+
+                            <pre class="hidden"><code id="code-javascript" class="language-yaml tab-code">stages:
+  - build
+  - test
+  - deploy
+
+build_job:
+  stage: build
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA</code></pre>
+
+                            <pre class="hidden"><code id="code-php" class="language-go tab-code">// Exemple d'appel API Go pour déclencher un pipeline
+package main
+
+import (
+    "fmt"
+    "net/http"
+    "bytes"
+)
+
+func main() {
+    url := "https://api.gitforge.com/v1/projects/123/pipeline"
+    var jsonStr = []byte(`{"ref": "master"}`)
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+    req.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    response, _ := client.Do(req)
+    fmt.Println(response.Status)
+}</code></pre>
+
+                            <pre class="hidden"><code id="code-bash" class="language-bash tab-code"># Connexion au registre de conteneurs GitForge
+docker login registry.gitforge.com -u "$GITFORGE_USER" -p "$GITFORGE_TOKEN"
+
+# Tag et push de l'image
+docker tag mon-image registry.gitforge.com/mon-entreprise/mon-image:latest
+docker push registry.gitforge.com/mon-entreprise/mon-image:latest</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-blue-900/40 p-8 shadow-xl border border-blue-600">
+                    <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
+                        <span class="material-symbols-rounded w-12 h-12 text-blue-400 flex-shrink-0 text-5xl">bolt</span> <div>
+                            <h3 class="text-3xl font-bold text-color mb-2">Conçu pour l'Évolutivité Illimitée</h3>
+                            <p class="text-blue-200">
+                                Notre architecture est élastique. De 10 développeurs à 10 000 pipelines par jour, GitForge s'adapte automatiquement. Atteignez la croissance sans jamais vous soucier des limites techniques. Découvrez notre <a href="/documentation" class="text-yellow-400 underline font-semibold" data-translate="footer-documentation">documentation d'architecture</a>.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 data-translate="partners-title" class="text-4xl font-bold text-color mb-8 text-center">
+                        🤝 Partenariats et Écosystème.
+                    </h2>
+                    <p data-translate="partners-subtitle" class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12">
+                        Étendez les capacités de GitForge avec des intégrations majeures et notre écosystème en pleine croissance.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-4xl text-green-500 mb-4">link</span>
+                            <h3 data-translate="partner-1-title" class="text-2xl font-semibold text-color mb-3">Intégrations DevOps Majeures</h3>
+                            <p data-translate="partner-1-desc" class="text-gray-300-var">Connectez-vous facilement à Jira, Slack/Teams, Kubernetes et plus encore pour un flux de travail continu.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-purple-500 mb-4">storefront</span>
+                            <h3 data-translate="partner-2-title" class="text-2xl font-semibold text-color mb-3">Marketplace d'Extensions (Futur)</h3>
+                            <p data-translate="partner-2-desc" class="text-gray-300-var">Une plateforme à venir pour intégrer des outils tiers ou créer vos propres extensions personnalisées.</p>
+                        </div>
+                        <div class="p-6 bg-transparent border-b border-[var(--border-color)]">
+                            <span class="material-symbols-rounded text-yellow-500 mb-4">handshake</span>
+                            <h3 data-translate="partner-3-title" class="text-2xl font-semibold text-color mb-3">Programme Partenaire (Futur)</h3>
+                            <p data-translate="partner-3-desc" class="text-gray-300-var">Rejoignez notre réseau de consultants et intégrateurs pour offrir des services basés sur GitForge.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-4xl font-bold text-color mb-4 text-center"> La sécurité est notre priorité absolue.
+                    </h2>
+                    <p class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12">
+                        Hébergez votre code critique et vos dépendances en toute confiance grâce à une plateforme sécurisée.
+                    </p>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="card-bg p-6 space-y-2">
+                            <span class="material-symbols-rounded text-2xl text-blue-400">shield_with_key</span> <h3 class="font-semibold text-color">Validation Multi-Facteur</h3>
+                            <p class="text-gray-300-var text-sm">Renforcement de l'accès aux comptes par l'authentification à deux ou trois facteurs (2FA/MFA).</p>
+                        </div>
+                        <div class="card-bg p-6 space-y-2">
+                            <span class="material-symbols-rounded text-2xl text-teal-400">history_toggle_off</span> <h3 class="font-semibold text-color">Journaux d'Audit (Logs)</h3>
+                            <p class="text-gray-300-var text-sm">Historique des événements et des accès en temps réel pour le monitoring et la traçabilité.</p>
+                        </div>
+                        <div class="card-bg p-6 space-y-2">
+                            <span class="material-symbols-rounded text-2xl text-pink-400">group_add</span> <h3 class="font-semibold text-color">Authentification Fédérée</h3>
+                            <p class="text-gray-300-var text-sm">Connexion facilitée via les fournisseurs d'identité sociaux et d'entreprise (Google, Microsoft, etc.).</p>
+                        </div>
+                        <div class="card-bg p-6 space-y-2">
+                            <span class="material-symbols-rounded text-2xl text-red-400">sos</span> <h3 class="font-semibold text-color">Prévention des Attaques</h3>
+                            <p class="text-gray-300-var text-sm">Limitation de taux (Rate Limiting), détection de bots et blocage des IP malveillantes automatique.</p>
+                        </div>
+                        <div class="card-bg p-6 space-y-2">
+                            <span class="material-symbols-rounded text-2xl text-indigo-400">bug_report</span> <h3 class="font-semibold text-color">Programme Bug Bounty</h3>
+                            <p class="text-gray-300-var text-sm">Collaboration avec la communauté de la sécurité pour identifier et corriger les vulnérabilités en continu.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-4xl font-bold text-color mb-4 text-center"> Statistiques de Performance Clés </h2>
+                    <p class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12"> L'architecture globale de GitForge garantit fiabilité et rapidité, essentielles à votre infrastructure de développement. </p>
+                    <div class="grid md:grid-cols-3 gap-8 mb-12 text-center">
+                        <div class="card-bg p-6 shadow-xl"> 
+                            <h4 class="text-5xl font-bold text-blue-400 mb-2">99.99%</h4> 
+                            <p class="text-lg font-semibold text-color">SLA Garanti</p>
+                            <p class="text-gray-300-var text-sm">Fiabilité maximale, votre service Git et CI/CD est toujours disponible.</p>
+                        </div>
+                        <div class="card-bg p-6 shadow-xl"> 
+                            <h4 class="text-5xl font-bold text-orange-400 mb-2">&lt; 5s</h4> 
+                            <p class="text-lg font-semibold text-color">Démarrage des Runners</p>
+                            <p class="text-gray-300-var text-sm">Temps de latence minimal pour l'exécution des jobs de CI/CD.</p>
+                        </div>
+                        <div class="card-bg p-6 shadow-xl"> 
+                            <h4 class="text-5xl font-bold text-green-400 mb-2">100 PetaOctets</h4> 
+                            <p class="text-lg font-semibold text-color">Capacité de Stockage</p>
+                            <p class="text-gray-300-var text-sm">Espace illimité et répliqué pour tous vos dépôts et artéfacts.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-12 testimonial-container">
+                    <h2 class="text-4xl font-bold text-color mb-8 text-center"> Avis de Nos Utilisateurs</h2>
+                    <div class="testimonials-track" id="testimonials-track-content">
+                        <div class="testimonial-card p-6"> 
+                            <p class="text-xl italic text-gray-300-var mb-4">"GitForge a simplifié notre stack DevOps. La gestion des dépôts et des images Docker est un jeu d'enfant. Un gain de temps colossal !"</p>
+                            <div class="flex flex-col">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 bg-blue-500 flex items-center justify-center text-black font-bold text-lg mr-3"> F </div>
+                                    <div>
+                                        <p class="font-bold text-color">Frédéric Leblanc</p>
+                                        <p class="text-sm text-gray-400-var">Directeur Technique chez App Studio</p>
+                                    </div>
+                                </div>
+                                <a href="mailto:frederic.leblanc@appstudio.com" class="text-sm font-medium text-blue-500-var hover:underline">frederic.leblanc@appstudio.com</a>
+                            </div>
+                        </div>
+                        <div class="testimonial-card p-6"> 
+                            <p class="text-xl italic text-gray-300-var mb-4">"GitForge a réduit nos temps de CI/CD de 45 minutes à 8 minutes. La documentation est impeccable et le support réactif."</p>
+                            <div class="flex flex-col">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 bg-blue-500 flex items-center justify-center text-black font-bold text-lg mr-3"> J </div>
+                                    <div>
+                                        <p class="font-bold text-color">Jean Dupont</p>
+                                        <p class="text-sm text-gray-400-var">CTO chez TechFusion</p>
+                                    </div>
+                                </div>
+                                <a href="mailto:jean.dupont@techfusion.com" class="text-sm font-medium text-blue-500-var hover:underline">jean.dupont@techfusion.com</a>
+                            </div>
+                        </div>
+                        <div class="testimonial-card p-6"> 
+                            <p class="text-xl italic text-gray-300-var mb-4">"La bascule vers GitForge a été un jeu d'enfant. Notre taux d'échec de déploiement est tombé à presque zéro."</p>
+                            <div class="flex flex-col">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 bg-blue-500 flex items-center justify-center text-black font-bold text-lg mr-3"> S </div>
+                                    <div>
+                                        <p class="font-bold text-color">Sophie Martin</p>
+                                        <p class="text-sm text-gray-400-var">Développeuse Lead chez InnovApp</p>
+                                    </div>
+                                </div>
+                                <a href="mailto:sophie.martin@innovapp.fr" class="text-sm font-medium text-blue-500-var hover:underline">sophie.martin@innovapp.fr</a>
+                            </div>
+                        </div>
+                        <div class="testimonial-card p-6"> 
+                            <p class="text-xl italic text-gray-300-var mb-4">"La fonction SSO intégrée a été essentielle pour la conformité de notre plateforme B2B. Un outil robuste et fiable."</p>
+                            <div class="flex flex-col">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 bg-blue-500 flex items-center justify-center text-black font-bold text-lg mr-3"> D </div>
+                                    <div>
+                                        <p class="font-bold text-color">David Dubois</p>
+                                        <p class="text-sm text-gray-400-var">Chef de Produit chez GlobalSec</p>
+                                    </div>
+                                </div>
+                                <a href="mailto:david.dubois@globalsec.com" class="text-sm font-medium text-blue-500-var hover:underline">david.dubois@globalsec.com</a>
+                            </div>
+                        </div>
+                        <div class="testimonial-card p-6"> 
+                            <p class="text-xl italic text-gray-300-var mb-4">"Scalabilité prouvée : nous avons géré notre pic de releases de fin d'année sans la moindre latence. Chapeau à l'équipe GitForge."</p>
+                            <div class="flex flex-col">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 bg-blue-500 flex items-center justify-center text-black font-bold text-lg mr-3"> M </div>
+                                    <div>
+                                        <p class="font-bold text-color">Marc Lavoie</p>
+                                        <p class="text-sm text-gray-400-var">Architecte Cloud chez E-Commerce X</p>
+                                    </div>
+                                </div>
+                                <a href="mailto:marc.lavoie@ecommercex.com" class="text-sm font-medium text-blue-500-var hover:underline">marc.lavoie@ecommercex.com</a>
+                            </div>
+                        </div>
+                        <div class="testimonial-card p-6"> 
+                            <p class="text-xl italic text-gray-300-var mb-4">"La vue d'ensemble sur tous nos projets et pipelines nous a permis de réduire le temps de mise sur le marché de 20%."</p>
+                            <div class="flex flex-col">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 bg-blue-500 flex items-center justify-center text-black font-bold text-lg mr-3"> C </div>
+                                    <div>
+                                        <p class="font-bold text-color">Chloé Lefevre</p>
+                                        <p class="text-sm text-gray-400-var">COO chez FinTech Z</p>
+                                    </div>
+                                </div>
+                                <a href="mailto:chloe.lefevre@fintechz.com" class="text-sm font-medium text-blue-500-var hover:underline">chloe.lefevre@fintechz.com</a>
+                            </div>
+                        </div>
+                        <div class="testimonial-card p-6"> 
+                            <p class="text-xl italic text-gray-300-var mb-4">"La transition de nos dépôts depuis notre ancien système a été la partie la plus facile de notre refonte, grâce aux outils GitForge."</p>
+                            <div class="flex flex-col">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 bg-blue-500 flex items-center justify-center text-black font-bold text-lg mr-3"> A </div>
+                                    <div>
+                                        <p class="font-bold text-color">Alexandre Roy</p>
+                                        <p class="text-sm text-gray-400-var">Ingénieur DevOps chez Legacy Solutions</p>
+                                    </div>
+                                </div>
+                                <a href="mailto:alexandre.roy@legacy.io" class="text-sm font-medium text-blue-500-var hover:underline">alexandre.roy@legacy.io</a>
+                            </div>
+                        </div>
+                        <div class="testimonial-card p-6"> 
+                            <p class="text-xl italic text-gray-300-var mb-4">"GitForge est le standard de facto pour la gestion des dépôts modernes. Nous ne regardons plus en arrière."</p>
+                            <div class="flex flex-col">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 bg-blue-500 flex items-center justify-center text-black font-bold text-lg mr-3"> J </div>
+                                    <div>
+                                        <p class="font-bold text-color">Julie Gauthier</p>
+                                        <p class="text-sm text-gray-400-var">VP Engineering chez FuturePath</p>
+                                    </div>
+                                </div>
+                                <a href="mailto:julie.gauthier@futurepath.com" class="text-sm font-medium text-blue-500-var hover:underline">julie.gauthier@futurepath.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-12">
+                    <h2 data-translate="footer-faq" class="text-4xl font-bold text-color mb-4 text-center"> FAQ (Foire Aux Questions) </h2>
+                    <p class="text-lg text-gray-400-var max-w-3xl mx-auto text-center mb-12">
+                        Réponses aux questions les plus courantes sur la plateforme et les fonctionnalités de GitForge.
+                    </p>
+                    <div class="max-w-4xl mx-auto divide-y divide-[var(--border-color)]">
+                        <details class="faq-item">
+                            <summary class="text-lg text-color hover:text-blue-400 transition duration-200"> Comment la sécurité de mes données est-elle assurée sur GitForge ? <span class="material-symbols-rounded faq-icon text-blue-400">add</span> </summary>
+                            <p class="pb-4 text-gray-300-var"> Nous appliquons un chiffrement de bout en bout (AES-256) pour tous les dépôts au repos et en transit (TLS 1.3). L'accès aux API et aux interfaces est protégé par une authentification multi-facteurs obligatoire (MFA) et des journaux d'audit en temps réel. Nous ne stockons aucune donnée personnelle de manière non-conforme et nos serveurs respectent les exigences de résidence des données pour les dépôts sensibles. </p>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="text-lg text-color hover:text-blue-400 transition duration-200"> Qu'est-ce qu'un "Environnement Éphémère" et pourquoi est-ce utile ? <span class="material-symbols-rounded faq-icon text-blue-400">add</span> </summary>
+                            <p class="pb-4 text-gray-300-var"> Un environnement éphémère est une instance de test temporaire de votre application, créée automatiquement pour chaque Pull Request. Les développeurs peuvent tester les changements dans un environnement isolé et réaliste avant la fusion, ce qui élimine les bugs en amont. </p>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="text-lg text-color hover:text-blue-400 transition duration-200"> L'API supporte-t-elle les intégrations de webhooks pour les services tiers ? <span class="material-symbols-rounded faq-icon text-blue-400">add</span> </summary>
+                            <p class="pb-4 text-gray-300-var"> Oui, notre API est entièrement documentée pour supporter les webhooks sur tous les événements critiques (push, merge, build fail, etc.). Cela permet une intégration simple avec des outils comme Slack, Jira ou des systèmes de monitoring personnalisés. </p>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="text-lg text-color hover:text-blue-400 transition duration-200"> Comment GitForge assure-t-il la sécurité des clés API de déploiement ? <span class="material-symbols-rounded faq-icon text-blue-400">add</span> </summary>
+                            <p class="pb-4 text-gray-300-var"> Nous utilisons un stockage de secrets crypté (AES-256) et des variables d'environnement masquées dans les pipelines CI/CD. Les clés ne sont jamais exposées dans les logs de build et les accès sont soumis à un contrôle d'accès basé sur les rôles (RBAC). </p>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="text-lg text-color hover:text-blue-400 transition duration-200"> Puis-je migrer mes dépôts depuis GitHub/GitLab ? <span class="material-symbols-rounded faq-icon text-blue-400">add</span> </summary>
+                            <p class="pb-4 text-gray-300-var"> Absolument. Nous proposons des outils de migration automatisés qui permettent d'importer vos dépôts, vos tickets (issues) et vos utilisateurs depuis les plateformes Git majeures en quelques clics. </p>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="text-lg text-color hover:text-blue-400 transition duration-200"> Comment puis-je suivre l'utilisation des ressources (CI Minutes) ? <span class="material-symbols-rounded faq-icon text-blue-400">add</span> </summary>
+                            <p class="pb-4 text-gray-300-var"> Chaque client a accès à un tableau de bord intuitif où il peut suivre en temps réel l'utilisation des CI Minutes, la consommation de stockage des artéfacts, les taux de réussite des pipelines et l'historique détaillé des builds. </p>
+                        </details>
+                        <details class="faq-item">
+                            <summary class="text-lg text-color hover:text-blue-400 transition duration-200"> Supportez-vous l'Authentification Fédérée (SSO) pour les clients B2B ? <span class="material-symbols-rounded faq-icon text-blue-400">add</span> </summary>
+                            <p class="pb-4 text-gray-300-var"> Oui, nous supportons entièrement l'Authentification Fédérée via des protocoles comme OAuth 2.0, OpenID Connect et SAML 2.0, permettant une connexion simplifiée pour vos équipes et clients d'entreprise via leurs fournisseurs d'identité. </p>
+                        </details>
+                    </div>
+                </section>
+            </main>
+
+            <script> 
+                document.addEventListener('DOMContentLoaded', () => { 
+                    const track = document.getElementById('testimonials-track-content'); 
+                    if (track) { 
+                        const cards = track.querySelectorAll('.testimonial-card'); 
+                        // Dupliquer les cartes pour créer l'effet de défilement infini 
+                        cards.forEach(card => { 
+                            const clone = card.cloneNode(true); 
+                            track.appendChild(clone); 
+                        }); 
+                    } 
+                }); 
+            </script>
+        </div> </div> <script> 
+        document.addEventListener('DOMContentLoaded', () => { 
+            const track = document.getElementById('logos-track-content'); 
+            if (track) { 
+                const logos = track.querySelectorAll('.logo-item'); 
+                // Dupliquer les logos pour créer l'effet de défilement infini 
+                logos.forEach(logo => { 
+                    const clone = logo.cloneNode(true); 
+                    track.appendChild(clone); 
+                }); 
+            } 
+        }); 
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <footer class="mt-20 py-10 bg-header border-t header-border">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-4 gap-8 text-sm">
+                <div class="col-span-4 md:col-span-1">
+                    <h3 class="text-2xl font-bold text-blue-500 mb-4">GitForge</h3>
+                    <p class="text-gray-400-var">La plateforme DevOps unifiée qui accélère votre cycle de vie logiciel.</p>
+                </div>
+                <div class="col-span-2 md:col-span-1">
+                    <h4 class="font-bold text-color mb-3">Produit</h4>
+                    <ul class="space-y-2 text-gray-400-var">
+                        <li><a href="documentation.html" data-translate="footer-documentation" class="hover:text-blue-500-var transition duration-200">Documentation</a></li>
+                        <li><a href="tarifs.html" data-translate="footer-tarifs" class="hover:text-blue-500-var transition duration-200">Tarifs</a></li>
+                        <li><a href="integrations.html" class="hover:text-blue-500-var transition duration-200">Intégrations</a></li>
+                        <li><a href="security.html" class="hover:text-blue-500-var transition duration-200">Sécurité</a></li>
+                    </ul>
+                </div>
+                <div class="col-span-2 md:col-span-1">
+                    <h4 class="font-bold text-color mb-3">Entreprise</h4>
+                    <ul class="space-y-2 text-gray-400-var">
+                        <li><a href="a-propos.html" data-translate="footer-a-propos" class="hover:text-blue-500-var transition duration-200">À Propos</a></li>
+                        <li><a href="carrieres.html" data-translate="footer-carrières" class="hover:text-blue-500-var transition duration-200">Carrières</a></li>
+                        <li><a href="support.html" data-translate="footer-support" class="hover:text-blue-500-var transition duration-200">Support</a></li>
+                        <li><a href="faq.html" data-translate="footer-faq" class="hover:text-blue-500-var transition duration-200">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-span-2 md:col-span-1">
+                    <h4 class="font-bold text-color mb-3">Ressources</h4>
+                    <ul class="space-y-2 text-gray-400-var">
+                        <li><a href="mailto:contact@gitforge.com" data-translate="footer-contact" class="hover:text-blue-500-var transition duration-200">Contact Email</a></li>
+                        <li><a href="dashboard.html" data-translate="footer-espace-client" class="hover:text-blue-500-var transition duration-200">Espace Client</a></li>
+                        <li><a href="api-logs.html" data-translate="footer-statut-service" class="hover:text-blue-500-var transition duration-200">Statut Service</a></li>
+                        <li><a href="blog.html" data-translate="footer-blog-tech" class="hover:text-blue-500-var transition duration-200">Blog Tech</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-10 pt-6 border-t border-[var(--border-color)]">
+                <p class="text-center text-sm text-gray-500-var"> © 2025 GitForge. <span data-translate="footer-copyright">Tous droits réservés. Propulsé par la</span> <a href="/" data-translate="footer-platform" class="hover:text-blue-500-var hover:underline">Plateforme GitForge</a>.</p>
+                <div class="text-center mt-2 space-x-4 text-xs">
+                    <a href="cgv.html" data-translate="footer-cgv" class="text-gray-500-var hover:text-blue-500-var">CGV</a>
+                    <a href="mentions-legales.html" data-translate="footer-mentions-legales" class="text-gray-500-var hover:text-blue-500-var">Mentions Légales</a>
+                    <a href="politique-de-confidentialite.html" data-translate="footer-privacy" class="text-gray-500-var hover:text-blue-500-var">Politique de Confidentialité</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentions Légales - Nexus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.21.0/tocbot.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Style pour les boutons carrés */
+        .btn-square {
+            border-radius: 0; 
+        }
+
+        /* Étape 2 : Définir les Styles (CSS) */
+        /* Variables Mode Sombre (Défaut) - Couleur noir très foncé demandée */
+        :root {
+            --bg-page: #0A0A0A; /* Noir très foncé */
+            --bg-main: #0A0A0A; /* Noir très foncé */
+            --bg-card: #121212; /* Arrière-plan des éléments (e.g., sidebar) */
+            --text-color-strong: #E3E3E3; /* White-like */
+            --text-color-main: #C0C0C0; /* Adjusted for content */
+            --text-muted: #9CA3AF; /* gray-400, for secondary text */
+            --border-color: #1F2937; /* gray-800, for borders */
+            --header-border: #3B82F6; /* blue-500/50, primary accent */
+            --toc-active-bg: #1F2937; /* Background for active TOC link (border-color) */
+        }
+
+        /* Variables Mode Clair */
+        html.light {
+            --bg-page: #F8F8F8;
+            --bg-main: #FFFFFF;
+            --bg-card: #F3F4F6;
+            --text-color-strong: #1F2937;
+            --text-color-main: #374151; /* gray-700 */
+            --text-muted: #6B7280; /* gray-500 */
+            --border-color: #E5E7EB;
+            --header-border: #10B981; /* teal-500/50 */
+            --toc-active-bg: #E5E7EB;
+        }
+        
+        /* Appliquer les variables aux sélecteurs principaux pour la couverture complète */
+        .bg-gray-900 { background-color: var(--bg-page) !important; }
+        .bg-gray-800\/50 { background-color: var(--bg-card) !important; }
+        .text-white { color: var(--text-color-strong) !important; }
+        .text-gray-300 { color: var(--text-color-main) !important; } /* Contenu principal */
+        .text-gray-400 { color: var(--text-muted) !important; }
+        .text-gray-500 { color: var(--text-muted) !important; } /* Texte footer */
+        .border-gray-700 { border-color: var(--border-color) !important; }
+        .border-gray-800 { border-color: var(--border-color) !important; }
+        .border-blue-500\/50 { border-color: var(--header-border) !important; }
+
+
+        /* Styles personnalisés pour intégrer Tocbot au thème sombre et "chat-like" */
+        .toc-list { 
+            list-style: none; 
+            padding-left: 0; 
+            margin: 0; 
+        }
+        .toc-list-item { 
+            margin-bottom: 0.25rem; 
+        }
+        .toc-list-item a { 
+            display: block; 
+            padding: 0.5rem 0.75rem; 
+            color: var(--text-muted); 
+            border-left: 2px solid transparent; 
+            transition: all 0.2s; 
+            font-size: 0.9rem;
+        }
+        .toc-list-item a:hover { 
+            color: var(--text-color-strong); 
+            border-left-color: #3B82F6; 
+        }
+        .is-active-link { 
+            font-weight: 700; 
+            color: #3B82F6 !important; 
+            border-left-color: #3B82F6 !important; 
+            background-color: var(--toc-active-bg) !important; /* Utilisation de la variable */
+            border-radius: 0; 
+        }
+
+        /* Style du bouton theme-switch (Étape 2) */
+        .theme-switch {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-color-strong);
+            font-size: 28px; /* Rendu plus visible */
+            transition: color 0.2s;
+            margin-left: 1rem;
+        }
+
+        /* Rendre la barre de navigation horizontale stable (sticky) */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50; /* Tailwind z-index: 50 */
+            background-color: var(--bg-page) !important; /* Assure la couleur de fond en mode sticky */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        /* Rendre la barre latérale sticky et ajuster la hauteur max pour la rendre moins large verticalement */
+        /* lg:w-1/4 est conservé, mais style ajusté */
+        .lg\:h-screen { 
+            height: auto; /* Supprimer la hauteur pleine écran */
+            max-height: calc(100vh - 8rem); /* Limiter la hauteur pour qu'elle soit moins large verticalement si nécessaire, tout en permettant le défilement */
+        }
+        
+        @media (max-width: 1023px) {
+            .js-toc-container { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
+
+        <header class="sticky-header flex flex-col sm:flex-row justify-between items-center border-b border-blue-500/50 mb-8">
+            <a href="/" class="text-4xl font-extrabold text-blue-500 tracking-wider mb-4 sm:mb-0">
+                NEXUS
+            </a>
+            <nav class="flex items-center space-x-4">
+                <a href="/support" class="px-6 py-3 bg-teal-600 text-white font-bold hover:bg-teal-700 transition duration-300 btn-square shadow-md">
+                    Contacter l'Administration
+                </a>
+                
+                <button id="theme-toggle" class="theme-switch" aria-label="Basculer le thème">
+                    <span class="material-symbols-rounded">light_mode</span>
+                </button>
+            </nav>
+        </header>
+
+        <main class="flex flex-col lg:flex-row lg:space-x-8">
+
+            <div class="lg:w-3/4 js-toc-content">
+                
+                <h1 class="text-4xl font-extrabold text-white mb-6">
+                    Mentions Légales
+                </h1>
+                <p class="text-gray-400 text-lg mb-10 border-l-4 border-blue-500 pl-4 italic">
+                    Ces mentions légales définissent les obligations légales de la plateforme Nexus.
+                </p>
+
+                <h2 id="editeur" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                    1. Informations sur l'Éditeur du Site
+                </h2>
+                <p class="text-gray-300 mb-6">
+                    Le présent site et l'API sont édités par :
+                </p>
+                <ul class="list-disc list-inside text-gray-300 space-y-2 ml-4 mb-6">
+                    <li>Dénomination Sociale : [Nom de l'Entreprise / Nom Personnel]</li>
+                    <li>Forme Juridique : [SARL / SAS / Entrepreneur Individuel, etc.]</li>
+                    <li>Adresse du Siège Social : [Adresse complète, Pays]</li>
+                    <li>Numéro d'immatriculation (RCS/SIRET) : [Numéro d'enregistrement légal]</li>
+                    <li>Capital Social : [Montant du Capital, si applicable]</li>
+                    <li>Adresse e-mail : contact@[votre-domaine].com</li>
+                    <li>Numéro de téléphone : [Numéro de téléphone de contact]</li>
+                    <li>Directeur de la publication : [Nom du Responsable Légal]</li>
+                </ul>
+
+                <h2 id="hebergement" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                    2. Hébergement
+                </h2>
+                <p class="text-gray-300 mb-6">
+                    L'hébergement du site web et de l'infrastructure API est assuré par :
+                </p>
+                <ul class="list-disc list-inside text-gray-300 space-y-2 ml-4 mb-6">
+                    <li>Nom de l'Hébergeur : Hugging Face</li>
+                    <li>Adresse du Siège Social : [Adresse complète de l'Hébergeur]</li>
+                    <li>Contact : https://academy.visiplus.com/blog/web-et-e-business/5-meilleurs-exemples-de-page-contact-pour-un-site-web-2018-07-23</li>
+                </ul>
+
+                <h2 id="propriete-intellectuelle" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                    3. Propriété Intellectuelle
+                </h2>
+                <h3 id="droits-auteur" class="text-2xl font-semibold text-white mt-8 mb-3 pt-2">
+                    3.1. Droits d'Auteur et Marques
+                </h3>
+                <p class="text-gray-300 mb-4">
+                    L'ensemble des éléments constituant la Plateforme Nexus (structure, textes, images, sons, logiciels, logos, bases de données, y compris les interfaces API) sont la propriété exclusive de [Nom de l'Entreprise] ou sont utilisés avec l'autorisation de leurs titulaires, et sont protégés par le droit d'auteur.
+                </p>
+                <p class="text-gray-300 mb-6">
+                    Toute reproduction, représentation, modification, publication, transmission ou dénaturation, totale ou partielle, du site ou de son contenu, par quelque procédé que ce soit, et sur quelque support que ce soit, est interdite. Les utilisateurs sont autorisés à utiliser l'API uniquement via la clé d'accès fournie et conformément aux Conditions d'Utilisation.
+                </p>
+
+                <h2 id="limitation-responsabilite" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                    4. Limitation de Responsabilité
+                </h2>
+                <p class="text-gray-300 mb-6">
+                    [Nom de l'Entreprise] s'efforce d'assurer au mieux de ses possibilités l'exactitude et la mise à jour des informations diffusées sur ce site, dont elle se réserve le droit de corriger, à tout moment et sans préavis, le contenu. Toutefois, l'Éditeur ne peut garantir l'exactitude, la précision ou l'exhaustivité des informations mises à disposition.
+                </p>
+                <ul class="list-disc list-inside text-gray-300 space-y-2 ml-4 mb-6">
+                    <li>Interruption de service : L'Éditeur n'est pas responsable des interruptions de service ou des dysfonctionnements techniques de l'API.</li>
+                    <li>Sécurité : L'Utilisateur est seul responsable de la protection de sa clé API et des conséquences d'une éventuelle compromission.</li>
+                </ul>
+
+                <h2 id="donnees-personnelles-ml" class="text-3xl font-bold text-blue-400 mt-10 mb-4 pt-2">
+                    5. Données Personnelles
+                </h2>
+                <p class="text-gray-300 mb-6">
+                    Les informations relatives à la collecte et au traitement des données personnelles sont détaillées dans la Politique de Confidentialité de Nexus, accessible via le lien en bas de page.
+                </p>
+
+                <div class="mt-12 text-center">
+                    <a href="/politique-confidentialite" class="px-6 py-3 bg-blue-600 text-white text-lg font-bold hover:bg-blue-700 transition duration-300 btn-square shadow-xl">
+                        Voir la Politique de Confidentialité
+                    </a>
+                </div>
+
+                </div>
+
+            <div class="lg:w-1/4 pt-4 sticky top-0 h-full lg:h-screen lg:overflow-y-auto js-toc-container">
+                <div class="lg:sticky lg:top-24 p-4 border border-gray-700 bg-gray-800/50">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-500">Navigation Rapide</h3>
+                    <div class="js-toc"></div>
+                </div>
+            </div>
+
+        </main>
+        
+        </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.21.0/tocbot.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            tocbot.init({
+                tocSelector: '.js-toc',
+                contentSelector: '.js-toc-content',
+                headingSelector: 'h2, h3',
+                hasSmoothScroll: true,
+                headingsOffset: 60,
+                scrollSmoothOffset: -60,
+            });
+        });
+    </script>
+    
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const iconElement = themeToggle.querySelector('.material-symbols-rounded');
+
+        // Charger le thème depuis le localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            htmlElement.classList.add('light');
+            iconElement.textContent = 'dark_mode';
+        } else {
+            // S'assurer que le mode sombre est le défaut et que l'icône est correcte
+            htmlElement.classList.remove('light');
+            iconElement.textContent = 'light_mode';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.classList.contains('light')) {
+                // Basculer vers le mode sombre
+                htmlElement.classList.remove('light');
+                localStorage.setItem('theme', 'dark');
+                iconElement.textContent = 'light_mode';
+            } else {
+                // Basculer vers le mode clair
+                htmlElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                iconElement.textContent = 'dark_mode';
+            }
+        });
+    </script>
+
+<footer class="mt-16 border-t border-gray-700 bg-gray-900">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 text-sm">
+            
+            <div class="col-span-2 lg:col-span-1">
+                <a href="/" class="text-3xl font-extrabold text-blue-500 tracking-wider">NEXUS</a>
+                <p class="mt-3 text-gray-400">
+                    L'infrastructure API qui propulse votre avenir technologique.
+                </p>
+                <div class="mt-4 flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-blue-500 transition duration-200">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.014 4.85.07c3.275.146 4.47 1.583 4.61 4.85.056 1.266.07 1.646.07 4.85s-.014 3.584-.07 4.85c-.14 3.267-1.335 4.704-4.61 4.85-1.266.056-1.646.07-4.85.07s-3.584-.014-4.85-.07c-3.275-.146-4.47-1.583-4.61-4.85-.056-1.266-.07-1.646-.07-4.85s.014-3.584.07-4.85c.14-3.267 1.335-4.704 4.61-4.85 1.266-.056 1.646-.07 4.85-.07zM12 0c-3.784 0-4.285.016-5.773.083-4.722.211-6.755 2.24-6.965 6.965C.016 7.715 0 8.216 0 12s.016 4.285.083 5.773c.21 4.721 2.239 6.755 6.965 6.965 1.488.067 1.99.083 5.773.083s4.285-.016 5.773-.083c4.721-.21 6.755-2.239 6.965-6.965.067-1.488.083-1.99.083-5.773s-.016-4.285-.083-5.773c-.21-4.722-2.239-6.755-6.965-6.965C16.285.016 15.784 0 12 0zm0 14.5c-1.381 0-2.5-1.119-2.5-2.5s1.119-2.5 2.5-2.5 2.5 1.119 2.5 2.5-1.119 2.5-2.5 2.5z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-semibold text-white mb-4">Plateforme</h3>
+                <ul class="space-y-3 text-gray-400">
+                    <li><a href="/tarifs" class="hover:text-blue-500 transition duration-200">Tarifs</a></li>
+                    <li><a href="/documentation" class="hover:text-blue-500 transition duration-200">Documentation</a></li>
+                    <li><a href="/connexion" class="hover:text-blue-500 transition duration-200">Connexion</a></li>
+                    <li><a href="/support" class="hover:text-blue-500 transition duration-200">Support</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-semibold text-white mb-4">Légal</h3>
+                <ul class="space-y-3 text-gray-400">
+                    <li><a href="/politique-confidentialite" class="hover:text-blue-500 transition duration-200">Politique de Confidentialité</a></li>
+                    <li><a href="/mentions-legales" class="hover:text-blue-500 transition duration-200">Mentions Légales</a></li>
+                    <li><a href="/conditions-utilisation" class="hover:text-blue-500 transition duration-200">Conditions d'Utilisation</a></li>
+                    <li><a href="/a-propos" class="hover:text-blue-500 transition duration-200">À Propos</a></li>
+                </ul>
+            </div>
+
+            <div class="col-span-2 md:col-span-1">
+                <h3 class="text-lg font-semibold text-white mb-4">Ressources</h3>
+                <ul class="space-y-3 text-gray-400">
+                    <li><a href="mailto:support@nexus.com" class="hover:text-blue-500 transition duration-200">Contact Email</a></li>
+                    <li><a href="/dashboard" class="hover:text-blue-500 transition duration-200">Espace Client</a></li>
+                    <li><a href="/api-logs" class="hover:text-blue-500 transition duration-200">Statut API</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="mt-10 pt-6 border-t border-gray-800 text-center text-gray-500 text-sm">
+            &copy; 2025 Nexus. Tous droits réservés. Construit pour l'ère des microservices.
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

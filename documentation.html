@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation API - Nexus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-block {
+            background-color: #1f2937; /* gray-800 */
+            border: 1px solid #3b82f6; /* blue-500 */
+            padding: 1rem;
+            /* Suppression des bords arrondis pour un look carré */
+            overflow-x: auto;
+            margin-top: 0.75rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-6xl">
+
+        <header class="flex flex-col sm:flex-row justify-between items-center py-4 border-b border-blue-500/50 mb-8">
+            <a href="/" class="text-4xl font-extrabold text-blue-500 tracking-wider mb-4 sm:mb-0">
+                NEXUS
+            </a>
+            <nav class="flex items-center space-x-4">
+                <a href="/tarifs" class="px-4 py-2 text-white hover:text-blue-300 transition duration-200 font-medium">
+                    Tarifs
+                </a>
+                <a href="/a-propos" class="px-4 py-2 text-white hover:text-blue-300 transition duration-200 font-medium">
+                    À Propos
+                </a>
+                {% if is_logged_in %}
+                    <a href="/dashboard" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 font-medium transition duration-200">
+                        Dashboard
+                    </a>
+                {% else %}
+                    <a href="/connexion" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 font-medium transition duration-200">
+                        Connexion
+                    </a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <main class="space-y-16">
+            
+            <section class="text-center p-8 bg-gray-800/50 shadow-lg border border-gray-700">
+                <h1 class="text-5xl font-extrabold text-white mb-4 leading-tight">
+                    Documentation de l'API Nexus
+                </h1>
+                <p class="text-xl text-gray-300 max-w-4xl mx-auto">
+                    Le guide complet pour intégrer l'authentification et la gestion utilisateur la plus sécurisée du marché dans vos applications, quel que soit votre langage.
+                </p>
+            </section>
+
+            <section class="space-y-6">
+                <h2 class="text-4xl font-extrabold text-blue-500 border-b-2 border-gray-700 pb-3">
+                    1. Vue d'Ensemble & Clés API
+                </h2>
+                <p class="text-gray-300">
+                    L'API Nexus est structurée autour d'une ressource unique pour l'authentification. Tous les appels nécessitent votre **Clé API** (`X-API-KEY`) pour l'identification de votre application, et un **Token JWT** pour les actions utilisateur spécifiques.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="p-4 bg-gray-800 border-l-4 border-teal-500 shadow-md">
+                        <h3 class="text-xl font-semibold text-teal-400 mb-2">Endpoint de Base :</h3>
+                        <p class="font-mono text-sm code-block p-2 border-none">
+                            <code class="text-gray-100">https://api.nexus-pro.com/v1/auth</code>
+                        </p>
+                        <p class="text-xs text-gray-400 mt-2">Ce chemin est la base de toutes les opérations d'authentification.</p>
+                    </div>
+                    <div class="p-4 bg-gray-800 border-l-4 border-yellow-500 shadow-md">
+                        <h3 class="text-xl font-semibold text-yellow-400 mb-2">Clé API (Sécurité) :</h3>
+                        <p class="font-mono text-sm code-block p-2 border-none">
+                            <code class="text-gray-100">X-API-KEY: VOTRE_CLE_API_SECRETE</code>
+                        </p>
+                        <p class="text-xs text-gray-400 mt-2">À inclure dans l'entête de chaque requête (sauf mention contraire).</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="space-y-8">
+                <h2 class="text-4xl font-extrabold text-blue-500 border-b-2 border-gray-700 pb-3">
+                    2. Flux d'Authentification
+                </h2>
+                
+                <h3 class="text-2xl font-semibold text-white border-b border-gray-800 pb-1">
+                    2.1 S'inscrire (POST /register)
+                </h3>
+                <p class="text-gray-300">
+                    Crée un nouvel utilisateur. Le système retourne le token JWT si l'inscription est réussie.
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-lg font-bold text-teal-400 mb-2">cURL (Exemple Rapide)</p>
+                        <pre class="code-block"><code class="language-bash">curl -X POST &quot;https://api.nexus-pro.com/v1/auth/register&quot; \
+-H &quot;X-API-KEY: VOTRE_CLE_API_SECRETE&quot; \
+-H &quot;Content-Type: application/json&quot; \
+-d '{
+  &quot;email&quot;: &quot;utilisateur@exemple.com&quot;,
+  &quot;password&quot;: &quot;motdepassefort123&quot;
+}'</code></pre>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-teal-400 mb-2">Python (`requests`)</p>
+                        <pre class="code-block"><code class="language-python">import requests
+import json
+url = "https://api.nexus-pro.com/v1/auth/register"
+headers = {
+    "X-API-KEY": "VOTRE_CLE_API_SECRETE",
+    "Content-Type": "application/json"
+}
+payload = {"email": "user@example.com", "password": "strongpassword123"}
+response = requests.post(url, headers=headers, json=payload)
+print(response.json())</code></pre>
+                    </div>
+                    <div class="md:col-span-2">
+                         <p class="text-lg font-bold text-teal-400 mb-2">JavaScript (Fetch)</p>
+                        <pre class="code-block"><code class="language-javascript">const url = 'https://api.nexus-pro.com/v1/auth/register';
+const response = await fetch(url, {
+  method: 'POST',
+  headers: {
+    'X-API-KEY': 'VOTRE_CLE_API_SECRETE',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: 'user@example.com',
+    password: 'strongpassword123'
+  })
+});
+const data = await response.json();
+console.log(data);</code></pre>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-white border-b border-gray-800 pb-1 pt-6">
+                    2.2 Se connecter (POST /login)
+                </h3>
+                <p class="text-gray-300">
+                    Authentifie un utilisateur existant. La réponse contient le **Token JWT** pour les requêtes futures.
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-lg font-bold text-teal-400 mb-2">cURL</p>
+                        <pre class="code-block"><code class="language-bash">curl -X POST &quot;https://api.nexus-pro.com/v1/auth/login&quot; \
+-H &quot;X-API-KEY: VOTRE_CLE_API_SECRETE&quot; \
+-H &quot;Content-Type: application/json&quot; \
+-d '{
+  &quot;email&quot;: &quot;utilisateur@exemple.com&quot;,
+  &quot;password&quot;: &quot;motdepassefort123&quot;
+}'</code></pre>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-teal-400 mb-2">Python (`requests`)</p>
+                        <pre class="code-block"><code class="language-python">import requests
+url = "https://api.nexus-pro.com/v1/auth/login"
+headers = {
+    "X-API-KEY": "VOTRE_CLE_API_SECRETE",
+    "Content-Type": "application/json"
+}
+payload = {"email": "user@example.com", "password": "strongpassword123"}
+response = requests.post(url, headers=headers, json=payload)
+token = response.json().get('jwt_token')
+print(f"Token: {token}")</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-8">
+                <h2 class="text-4xl font-extrabold text-blue-500 border-b-2 border-gray-700 pb-3">
+                    3. Gestion des Données Utilisateur (Token Requis)
+                </h2>
+                <p class="text-gray-300">
+                    Toutes les requêtes de cette section doivent inclure l'entête <strong class="text-yellow-400">`Authorization: Bearer VOTRE_TOKEN_JWT`</strong> obtenu lors de la connexion.
+                </p>
+
+                <h3 class="text-2xl font-semibold text-white border-b border-gray-800 pb-1">
+                    3.1 Récupérer les Informations Utilisateur (GET /user)
+                </h3>
+                <p class="text-gray-300">
+                    Récupère le profil de l'utilisateur associé au Token JWT fourni.
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-lg font-bold text-teal-400 mb-2">cURL</p>
+                        <pre class="code-block"><code class="language-bash">curl -X GET &quot;https://api.nexus-pro.com/v1/auth/user&quot; \
+-H &quot;Authorization: Bearer VOTRE_TOKEN_JWT&quot;</code></pre>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-teal-400 mb-2">JavaScript (Fetch)</p>
+                        <pre class="code-block"><code class="language-javascript">const url = 'https://api.nexus-pro.com/v1/auth/user';
+const userToken = localStorage.getItem('nexus_jwt'); // Exemple de récupération
+const response = await fetch(url, {
+  method: 'GET',
+  headers: { 'Authorization': `Bearer ${userToken}` }
+});
+const data = await response.json();
+console.log(data);</code></pre>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-white border-b border-gray-800 pb-1 pt-6">
+                    3.2 Mettre à Jour les Informations (PUT /user/update)
+                </h3>
+                <p class="text-gray-300">
+                    Permet de modifier les informations de l'utilisateur (nom, prénom, etc.). Seuls les champs fournis sont mis à jour.
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-lg font-bold text-teal-400 mb-2">cURL</p>
+                        <pre class="code-block"><code class="language-bash">curl -X PUT &quot;https://api.nexus-pro.com/v1/auth/user/update&quot; \
+-H &quot;Authorization: Bearer VOTRE_TOKEN_JWT&quot; \
+-H &quot;Content-Type: application/json&quot; \
+-d '{
+  &quot;first_name&quot;: &quot;Jean&quot;,
+  &quot;last_name&quot;: &quot;Dupont&quot;
+}'</code></pre>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-teal-400 mb-2">Python (`requests`)</p>
+                        <pre class="code-block"><code class="language-python">import requests
+url = "https://api.nexus-pro.com/v1/auth/user/update"
+token = "VOTRE_TOKEN_JWT"
+headers = {
+    "Authorization": f"Bearer {token}",
+    "Content-Type": "application/json"
+}
+payload = {"first_name": "Jean", "last_name": "Dupont"}
+response = requests.put(url, headers=headers, json=payload)
+print(response.json())</code></pre>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="space-y-6">
+                <h2 class="text-4xl font-extrabold text-blue-500 border-b-2 border-gray-700 pb-3">
+                    4. Logs, Erreurs et Tarification
+                </h2>
+                <h3 class="text-2xl font-semibold text-white border-b border-gray-800 pb-1">
+                    Gestion des Erreurs
+                </h3>
+                <p class="text-gray-300">
+                    Toutes les erreurs API sont retournées avec un code d'état HTTP standard (4xx pour les erreurs clients, 5xx pour les erreurs serveurs). Le corps de la réponse contiendra une description JSON détaillée de l'erreur.
+                </p>
+                <div class="code-block bg-gray-800/80 p-4 border-l-4 border-red-500 text-sm">
+                    <pre><code class="language-json">{
+  &quot;error&quot;: true,
+  &quot;status_code&quot;: 401,
+  &quot;message&quot;: &quot;Token JWT manquant ou invalide. Veuillez vous reconnecter.&quot;
+}</code></pre>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-white border-b border-gray-800 pb-1 pt-6">
+                    Accès aux Logs Détaillés
+                </h3>
+                <p class="text-gray-300">
+                    Les utilisateurs du **Plan Professionnel** et supérieur bénéficient d'un accès à l'endpoint `/api-logs` pour un historique complet des tentatives de connexion, des échecs d'authentification et des activités du compte. Cette fonctionnalité est essentielle pour le monitoring de sécurité.
+                </p>
+                <div class="mt-4">
+                    <a href="/tarifs" class="px-6 py-3 bg-teal-600 text-white text-lg font-bold shadow-md hover:bg-teal-700 transition duration-300">
+                        Voir les Détails des Plans
+                    </a>
+                </div>
+            </section>
+            
+        </main>
+
+        <footer class="mt-12 pt-6 border-t border-gray-700 text-center text-gray-500 text-sm">
+            &copy; 2024 Nexus. Documentation API.
+        </footer>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script>
+        // Active la coloration syntaxique après le chargement du DOM
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

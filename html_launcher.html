@@ -1,0 +1,221 @@
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/7Gn3toV.png">
+    <title>Mailix | Lanceur HTML</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --dark-bg: #1e1e1e; /* Fond principal (très sombre) */
+            --main-bg: #2d2d30; /* Arrière-plan de la plateforme */
+            --bar-color: #3e3e42; /* Couleur de la barre horizontale (gris foncé) */
+            --text-color: #f0f0f0;
+            --button-hover: #007acc; /* Bleu pour le survol (standard dark theme) */
+            --button-icon: #cccccc;
+            --border-color: #444444;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden; /* Empêche le défilement global */
+        }
+
+        .header-bar {
+            background-color: var(--bar-color);
+            display: flex;
+            align-items: center;
+            padding: 8px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .header-bar button, .header-bar input[type="file"] {
+            margin-right: 10px;
+        }
+
+        .btn {
+            background-color: transparent;
+            color: var(--button-icon);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn:hover:not(:disabled) {
+            background-color: var(--button-hover);
+            color: var(--text-color);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .iframe-container {
+            flex-grow: 1;
+            padding: 0;
+            background-color: white; /* Fond blanc pour le contenu HTML */
+            position: relative;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #status-message {
+            margin-left: auto;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+        
+        #html-file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <button id="import-btn" class="btn">
+            <span class="material-symbols-rounded text-xl mr-1">folder_open</span>
+            Importer Fichier HTML
+        </button>
+        <input type="file" id="html-file-input" accept=".html,.htm">
+
+        <button id="run-btn" class="btn" disabled>
+            <span class="material-symbols-rounded text-xl mr-1">play_arrow</span>
+            Lancer (▶)
+        </button>
+        
+        <button id="static-deploy-btn" class="btn">
+            <span class="material-symbols-rounded text-xl mr-1">web</span>
+            Déploiement Statique
+        </button>
+
+        <span id="status-message"></span>
+    </div>
+
+    <div class="iframe-container">
+        <iframe id="html-iframe" title="HTML Renderer"></iframe>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('html-file-input');
+        const importBtn = document.getElementById('import-btn');
+        const runBtn = document.getElementById('run-btn');
+        const iframe = document.getElementById('html-iframe');
+        const statusMessage = document.getElementById('status-message');
+        const staticDeployBtn = document.getElementById('static-deploy-btn');
+        
+        let uploadedFileUrl = null;
+
+        // --- NOUVELLE LOGIQUE : GESTION DE L'URL PASSÉE EN PARAMÈTRE ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialLaunchUrl = urlParams.get('url');
+
+        if (initialLaunchUrl) {
+            // Mode "Déploiement Statique" activé
+            // Décoder l'URL et l'injecter directement dans l'iframe
+            const decodedUrl = decodeURIComponent(initialLaunchUrl);
+            iframe.src = decodedUrl;
+            
+            uploadedFileUrl = decodedUrl; // Mettre à jour l'URL pour la fonction Run
+            
+            // Mettre à jour l'interface
+            importBtn.disabled = true; // Désactiver l'importation de fichier simple
+            runBtn.disabled = false;
+            statusMessage.textContent = "Site statique lancé depuis l'URL: " + decodedUrl.split('/').pop();
+            
+        } else {
+            // Mode "Importation de Fichier Simple"
+            statusMessage.textContent = "Importez un fichier HTML pour commencer.";
+        }
+        // ------------------------------------------------------------------------
+
+        // 1. Ouvrir le dialogue de fichier lorsque le bouton 'Import' est cliqué
+        importBtn.addEventListener('click', () => {
+            // Seulement si nous ne sommes PAS en mode site statique lancé
+            if (!initialLaunchUrl) {
+                fileInput.click();
+            }
+        });
+
+        // 2. Gérer la sélection du fichier et l'upload (ancienne logique pour un seul fichier)
+        fileInput.addEventListener('change', async (event) => {
+            const files = event.target.files;
+            if (files.length === 0) return;
+
+            const file = files[0];
+            statusMessage.textContent = `Téléversement de ${file.name}...`;
+            runBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                // Utiliser l'ancienne route pour l'upload d'un seul fichier (si elle existe toujours)
+                const response = await fetch('/upload-html', { 
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+
+                if (response.ok && data.status === 'success') {
+                    uploadedFileUrl = data.file_url;
+                    statusMessage.textContent = `Fichier prêt: ${file.name}. Cliquez sur Lancer (▶).`;
+                    runBtn.disabled = false; // Activer le bouton Run
+                } else {
+                    // Afficher l'erreur du backend
+                    throw new Error(data.message || "Erreur de téléversement.");
+                }
+
+            } catch (error) {
+                console.error("Erreur d'upload:", error);
+                statusMessage.textContent = `Erreur: ${error.message}`;
+                runBtn.disabled = true;
+                uploadedFileUrl = null;
+            }
+            
+            // Réinitialiser l'input file pour permettre l'upload du même fichier
+            fileInput.value = ""; 
+        });
+
+        // 3. Gérer le clic sur le bouton 'Run'
+        runBtn.addEventListener('click', () => {
+            if (uploadedFileUrl) {
+                // Charger l'URL temporaire dans l'iframe
+                iframe.src = uploadedFileUrl;
+                statusMessage.textContent = "Contenu lancé ou rechargé.";
+            } else {
+                statusMessage.textContent = "Veuillez d'abord importer un fichier ou un site statique.";
+            }
+        });
+        
+        // 4. Redirection vers la nouvelle page de déploiement statique
+        staticDeployBtn.addEventListener('click', () => {
+            window.location.href = '/static-deploy';
+        });
+    </script>
+
+</body>
+</html>
