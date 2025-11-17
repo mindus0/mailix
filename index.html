@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitForge: Créez, Déployez, Collaborez | Lancement J-30</title>
+    <title data-translate-key="pageTitle">GitForge: Create, Deploy, Collaborate | Launch D-30</title>
     
     <link rel="icon" type="image/png" href="https://i.imgur.com/7Gn3toV.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 
     <style>
         /* Variables et Réinitialisation de base */
         :root {
-            --color-primary: #1e3a8a; /* Bleu Profond - GitForge */
-            --color-secondary: #3b82f6; /* Bleu Vif (pour les boutons/accents) */
+            --color-primary: #1e3a8a; /* Deep Blue - GitForge */
+            --color-secondary: #3b82f6; /* Vivid Blue (for buttons/accents) */
             --color-text: #1f2937;
             --color-light-text: #4b5563;
             --color-background: #f9fafb;
             --color-light-bg: #ffffff;
             --color-border: #e5e7eb;
-            --color-accent: #10b981; /* Vert pour succès/points clés */
+            --color-accent: #10b981; /* Green for success/key points */
         }
 
         * {
@@ -36,12 +38,12 @@
         }
 
         .container {
-            max-width: 1100px; /* Augmentation de la taille pour une landing page */
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
         }
         
-        /* Navigation (Nouveau) */
+        /* Navigation */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -49,6 +51,7 @@
             padding: 15px 0;
             border-bottom: 1px solid var(--color-border);
             margin-bottom: 30px;
+            flex-wrap: wrap; /* Pour le responsive */
         }
 
         .navbar-logo {
@@ -66,22 +69,38 @@
             margin-right: 10px;
         }
 
-        /* Section Héros (Nouveau) */
+        /* Sélecteur de langue */
+        .language-selector {
+            margin-left: 20px;
+        }
+
+        .language-selector select {
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--color-border);
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+        /* Section Héros - Refonte */
         .hero-section {
             display: flex;
+            flex-direction: column; /* Changement de structure */
             align-items: center;
-            gap: 40px;
-            padding: 60px 0;
+            text-align: center;
+            gap: 20px;
+            padding: 60px 0 30px 0;
             margin-bottom: 40px;
         }
 
         .hero-content {
-            flex: 1;
+            width: 100%;
+            max-width: 850px; /* Limite la largeur du contenu texte */
         }
 
         .hero-title {
             color: var(--color-primary);
-            font-size: 3.5em; /* Grand titre */
+            font-size: 4.5em; /* Augmentation de la taille pour un impact maximal */
             font-weight: 900;
             line-height: 1.1;
             margin-bottom: 15px;
@@ -106,15 +125,31 @@
         }
 
         .hero-image {
-            flex: 1;
-            text-align: right;
+            width: 100%;
+            max-width: 700px; /* Contrôle la taille de l'image centrée */
+            margin-top: 30px; /* Espacement après le texte */
+            opacity: 0; /* Pour l'animation initiale */
+            transform: translateY(20px); /* Pour l'animation initiale */
+            animation: fadeInMoveUp 1s ease-out forwards;
         }
 
         .hero-image img {
-            max-width: 100%;
+            width: 100%;
             height: auto;
             border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.15); /* Ombre légère de la couleur primaire */
+            box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
+        }
+
+        /* Animation Subtile pour l'Image */
+        @keyframes fadeInMoveUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         /* Section Avantages/Fonctionnalités */
@@ -140,6 +175,12 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
             border-top: 4px solid var(--color-accent);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .advantage-card {
+            border-top-color: var(--color-secondary);
         }
 
         .card-title {
@@ -147,13 +188,21 @@
             color: var(--color-primary);
             margin-bottom: 10px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
         }
 
-        .advantage-card {
-            border-top-color: var(--color-secondary);
+        .card-title i {
+            font-size: 1.5em;
+            margin-right: 10px;
+            color: var(--color-secondary);
         }
 
-        /* Section Ambassadeur (Nouveau) */
+        .feature-card .card-title i {
+            color: var(--color-accent);
+        }
+
+        /* Section Ambassadeur */
         .ambassador-callout {
             background-color: var(--color-primary);
             color: white;
@@ -191,7 +240,81 @@
             background-color: #0c9e70;
         }
 
-        /* Formulaire (Ajustements) */
+        /* Section Technologies Supportées (Nouveau) */
+        .tech-logos {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .tech-logos img {
+            max-height: 50px;
+            margin: 0 20px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .tech-logos img:hover {
+            opacity: 1;
+        }
+
+        /* Section FAQ (Nouveau) */
+        .faq-section {
+            margin-bottom: 80px;
+        }
+
+        .faq-item {
+            background-color: var(--color-light-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--color-primary);
+            transition: background-color 0.2s;
+        }
+
+        .faq-question:hover {
+            background-color: var(--color-background);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            color: var(--color-light-text);
+        }
+
+        .faq-answer p {
+            padding-bottom: 15px;
+            padding-top: 5px;
+        }
+        
+        .faq-question i {
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px; /* Valeur suffisante pour afficher le contenu */
+            padding-bottom: 15px;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* Formulaire */
         .form-section {
             background-color: var(--color-light-bg);
             padding: 30px;
@@ -223,7 +346,7 @@
         textarea,
         select {
             width: 100%;
-            padding: 12px; /* Rendre le champ plus grand */
+            padding: 12px;
             border: 1px solid var(--color-border);
             border-radius: 4px;
             font-size: 1em;
@@ -257,7 +380,7 @@
         .checkbox-item input[type="checkbox"] {
             width: auto;
             margin-right: 8px;
-            transform: scale(1.1); /* Rendre les cases à cocher plus visibles */
+            transform: scale(1.1);
         }
 
         /* Bouton */
@@ -287,7 +410,7 @@
             text-align: center;
         }
 
-        /* Pied de page (Nouveau) */
+        /* Pied de page */
         .footer {
             text-align: center;
             padding: 20px 0;
@@ -298,25 +421,18 @@
 
         /* Responsive Design */
         @media (max-width: 960px) {
-            .hero-section {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
             .hero-title {
-                font-size: 2.5em;
+                font-size: 3.5em;
             }
-            .hero-image {
-                text-align: center;
-            }
-            .features-grid, .advantages-grid {
-                grid-template-columns: 1fr;
+            .tech-logos img {
+                max-height: 40px;
+                margin: 0 10px;
             }
         }
 
         @media (max-width: 600px) {
             .hero-title {
-                font-size: 1.8em;
+                font-size: 2.5em;
             }
             .hero-tagline {
                 font-size: 1.2em;
@@ -333,6 +449,16 @@
             .ambassador-callout {
                 padding: 30px 20px;
             }
+            .navbar {
+                justify-content: center;
+            }
+            .launch-countdown, .language-selector {
+                margin-top: 10px;
+            }
+            .tech-logos img {
+                max-height: 30px;
+                margin: 0 5px;
+            }
         }
     </style>
 </head>
@@ -346,189 +472,458 @@
                 <img src="https://i.imgur.com/7Gn3toV.png" alt="GitForge Logo" class="logo-img">
                 GitForge
             </a>
-            <div class="launch-countdown">
-                Lancement Officiel J-30
+            <div style="display: flex; align-items: center;">
+                <div class="launch-countdown" data-translate-key="countdownBanner">
+                    Official Launch D-30
+                </div>
+                <div class="language-selector">
+                    <select id="languageSelect" onchange="switchLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="fr">Français</option>
+                        <option value="es">Español</option>
+                    </select>
+                </div>
             </div>
         </header>
 
         <section class="hero-section">
             <div class="hero-content">
-                <h1 class="hero-title">
-                    Construisez l'Avenir du Code. Déployez avec <span style="color: var(--color-secondary);">GitForge.</span>
+                <h1 class="hero-title" data-translate-key="heroTitle">
+                    Build the Future of Code. Deploy with <span style="color: var(--color-secondary);">GitForge.</span>
                 </h1>
-                <p class="hero-tagline">
-                    Votre plateforme tout-en-un pour un développement collaboratif illimité et l'hébergement de sites web statiques et dynamiques.
+                <p class="hero-tagline" data-translate-key="heroTagline">
+                    Your all-in-one platform for unlimited collaborative development and hosting for static and dynamic websites.
                 </p>
-                <div class="launch-countdown">
-                    Soyez prêt ! Le compte à rebours est lancé.
-                </div>
             </div>
             <div class="hero-image">
-                <img src="https://i.imgur.com/Jrql8Ke.png" alt="Illustration professionnelle de développement et collaboration">
+                <img src="https://i.imgur.com/Jrql8Ke.png" alt="Professional illustration of development and collaboration">
             </div>
         </section>
 
         <section class="advantages-section">
-            <h2 class="section-title">Pourquoi Choisir GitForge ?</h2>
+            <h2 class="section-title" data-translate-key="whyChooseTitle">Why Choose GitForge?</h2>
             <div class="advantages-grid">
                 <div class="advantage-card">
-                    <h3 class="card-title">🚀 Déploiement Simplifié</h3>
-                    <p>Hébergez **tous types de sites web** (statiques et dynamiques) avec des performances optimales. Concentrez-vous sur le code, nous nous occupons du reste.</p>
+                    <h3 class="card-title"><i class="ri-rocket-2-fill"></i> <span data-translate-key="adv1Title">Simplified Deployment</span></h3>
+                    <p data-translate-key="adv1Text">Host **all types of websites** (static and dynamic) with optimal performance. Focus on the code, we handle the rest.</p>
                 </div>
                 <div class="advantage-card">
-                    <h3 class="card-title">🤝 Collaboration Illimitée</h3>
-                    <p>Créez des dépôts Git illimités et travaillez en équipe avec des outils avancés comme les Pull Requests et la gestion d'Issues, en toute simplicité.</p>
+                    <h3 class="card-title"><i class="ri-team-fill"></i> <span data-translate-key="adv2Title">Unlimited Collaboration</span></h3>
+                    <p data-translate-key="adv2Text">Create unlimited Git repositories and work as a team with advanced tools like Pull Requests and Issue Management, easily.</p>
                 </div>
                 <div class="advantage-card">
-                    <h3 class="card-title">💰 Plan Gratuit Généreux</h3>
-                    <p>Accédez à un espace de stockage gratuit de **2 Go** pour vos dépôts et bénéficiez de **1 Go de RAM** pour vos applications web dynamiques.</p>
+                    <h3 class="card-title"><i class="ri-money-dollar-circle-fill"></i> <span data-translate-key="adv3Title">Generous Free Plan</span></h3>
+                    <p data-translate-key="adv3Text">Access **2 GB** of free storage for your repositories and get **1 GB of RAM** for your dynamic web applications.</p>
                 </div>
             </div>
         </section>
 
+        <section class="tech-support-section">
+            <h2 class="section-title" data-translate-key="techSupportTitle">Supported Technologies</h2>
+            <div class="tech-logos">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React Logo" title="React.js">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="Node.js Logo" title="Node.js">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python Logo" title="Python">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Go_logo_blue.svg" alt="Go Logo" title="Go">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Angular_logo.svg" alt="Angular Logo" title="Angular">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg" alt="Vue.js Logo" title="Vue.js">
+            </div>
+        </section>
+
         <section class="features-section">
-            <h2 class="section-title">Fonctionnalités Intégrées Avancées</h2>
+            <h2 class="section-title" data-translate-key="featuresTitle">Advanced Integrated Features</h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <h3 class="card-title">Dépôts Git Illimités</h3>
-                    <p>Stockez tous vos projets sans aucune restriction sur le nombre de dépôts privés ou publics.</p>
+                    <h3 class="card-title"><i class="ri-git-branch-line"></i> <span data-translate-key="feat1Title">Unlimited Git Repositories</span></h3>
+                    <p data-translate-key="feat1Text">Store all your projects without any restriction on the number of private or public repositories.</p>
                 </div>
                 <div class="feature-card">
-                    <h3 class="card-title">Environnement Dynamique</h3>
-                    <p>Hébergement pour applications dynamiques avec une allocation dédiée de 1 Go de RAM.</p>
+                    <h3 class="card-title"><i class="ri-code-s-slash-fill"></i> <span data-translate-key="feat2Title">Dynamic Environment</span></h3>
+                    <p data-translate-key="feat2Text">Hosting for dynamic applications with a dedicated allocation of 1 GB of RAM.</p>
                 </div>
                 <div class="feature-card">
-                    <h3 class="card-title">Outils de Collaboration</h3>
-                    <p>Intégration native des Pull Requests et d'un système d'Issue Tracking complet pour un travail d'équipe fluide.</p>
+                    <h3 class="card-title"><i class="ri-hand-coin-fill"></i> <span data-translate-key="feat3Title">Collaboration Tools</span></h3>
+                    <p data-translate-key="feat3Text">Native integration of Pull Requests and a complete Issue Tracking system for smooth teamwork.</p>
                 </div>
                 <div class="feature-card">
-                    <h3 class="card-title">Hébergement Polyvalent</h3>
-                    <p>Support complet pour l'hébergement de sites web statiques ultra-rapides et d'applications dynamiques.</p>
+                    <h3 class="card-title"><i class="ri-server-fill"></i> <span data-translate-key="feat4Title">Versatile Hosting</span></h3>
+                    <p data-translate-key="feat4Text">Full support for hosting ultra-fast static websites and dynamic applications.</p>
                 </div>
             </div>
         </section>
 
         <section class="ambassador-callout">
-            <h2>Devenez un Pilier de la Communauté GitForge</h2>
-            <p>
-                Rejoignez notre programme d'ambassadeurs avant le lancement pour jouer un rôle clé dans notre croissance. En contrepartie, vous recevrez un **accès complet et illimité (Plan Premium)** à notre plateforme pendant un an. Saisissez cette opportunité !
+            <h2 data-translate-key="ambassadorTitle">Become a Pillar of the GitForge Community</h2>
+            <p data-translate-key="ambassadorText">
+                Join our ambassador program before launch to play a key role in our growth. In return, you will receive **full and unlimited access (Premium Plan)** to our platform for one year. Seize this opportunity!
             </p>
-            <a href="#ambassador-form-anchor" class="button">Postuler Maintenant</a>
+            <a href="#ambassador-form-anchor" class="button" data-translate-key="ambassadorButton">Apply Now</a>
+        </section>
+        
+        <section class="faq-section">
+            <h2 class="section-title" data-translate-key="faqTitle">Frequently Asked Questions (FAQ)</h2>
+
+            <div class="faq-item">
+                <div class="faq-question" data-translate-key="faqQ1">
+                    How fast is the deployment process?
+                    <i class="ri-arrow-down-s-line"></i>
+                </div>
+                <div class="faq-answer">
+                    <p data-translate-key="faqA1">Our infrastructure is optimized for CI/CD, allowing for near-instantaneous deployments after a Git push. We use global CDN for maximum speed.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-translate-key="faqQ2">
+                    Can I use a custom domain?
+                    <i class="ri-arrow-down-s-line"></i>
+                </div>
+                <div class="faq-answer">
+                    <p data-translate-key="faqA2">Yes, absolutely. Custom domain configuration is fully supported, including free SSL/TLS certificates via Let's Encrypt for all your projects.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-translate-key="faqQ3">
+                    What about security?
+                    <i class="ri-arrow-down-s-line"></i>
+                </div>
+                <div class="faq-answer">
+                    <p data-translate-key="faqA3">Security is our priority. Our infrastructure is protected by advanced firewalls, and all communications are encrypted. Repositories are isolated and constantly monitored.</p>
+                </div>
+            </div>
         </section>
 
+
         <section id="ambassador-form-anchor" class="form-section">
-            <h2>Candidature au Programme Ambassadeur GitForge</h2>
-            <p class="description" style="text-align: center; margin-bottom: 30px; color: var(--color-light-text);">
-                Merci de l'intérêt que vous portez à GitForge ! Veuillez remplir les informations ci-dessous pour postuler au programme et obtenir votre plan illimité d'un an.
+            <h2 data-translate-key="formTitle">GitForge Ambassador Program Application</h2>
+            <p class="description" style="text-align: center; margin-bottom: 30px; color: var(--color-light-text);" data-translate-key="formDescription">
+                Thank you for your interest in GitForge! Please fill in the information below to apply for the program and get your one-year unlimited plan.
             </p>
             
             <form id="ambassadorForm" action="https://formsubmit.co/parisienres@gmail.com" method="POST">
                 
                 <div class="form-group">
-                    <label for="fullName">Full Name (Nom complet)</label>
+                    <label for="fullName" data-translate-key="labelFullName">Full Name (Nom complet)</label>
                     <input type="text" id="fullName" name="fullName" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="emailAddress">Email Address (Adresse e-mail)</label>
+                    <label for="emailAddress" data-translate-key="labelEmail">Email Address (Adresse e-mail)</label>
                     <input type="email" id="emailAddress" name="emailAddress" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="githubUsername">GitHub/GitLab Username (Nom d'utilisateur)</label>
+                    <label for="githubUsername" data-translate-key="labelUsername">GitHub/GitLab Username (Nom d'utilisateur)</label>
                     <input type="text" id="githubUsername" name="githubUsername">
                 </div>
 
                 <div class="form-group">
-                    <label for="socialMediaHandles">Social Media Handles (Profils Sociaux principaux)</label>
+                    <label for="socialMediaHandles" data-translate-key="labelSocial">Social Media Handles (Profils Sociaux principaux)</label>
                     <input type="text" id="socialMediaHandles" name="socialMediaHandles" placeholder="Ex: @votre_profil_x, linkedin.com/in/...">
                 </div>
 
                 <div class="form-group">
-                    <label for="occupationStatus">Current Occupation/Status (Statut actuel)</label>
+                    <label for="occupationStatus" data-translate-key="labelOccupation">Current Occupation/Status (Statut actuel)</label>
                     <select id="occupationStatus" name="occupationStatus" required>
-                        <option value="">Sélectionner votre statut...</option>
-                        <option value="Developer">Developer</option>
-                        <option value="Student">Student</option>
-                        <option value="Open Source Contributor">Open Source Contributor</option>
-                        <option value="Tech Educator">Tech Educator (Formateur/Enseignant)</option>
-                        <option value="Marketing/Community">Marketing/Community Manager</option>
-                        <option value="Other">Other</option>
+                        <option value="" data-translate-key="selectOccupationDefault">Select your status...</option>
+                        <option value="Developer" data-translate-key="optionDeveloper">Developer</option>
+                        <option value="Student" data-translate-key="optionStudent">Student</option>
+                        <option value="Open Source Contributor" data-translate-key="optionContributor">Open Source Contributor</option>
+                        <option value="Tech Educator" data-translate-key="optionEducator">Tech Educator (Trainer/Teacher)</option>
+                        <option value="Marketing/Community" data-translate-key="optionMarketing">Marketing/Community Manager</option>
+                        <option value="Other" data-translate-key="optionOther">Other</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="whyGitForge">Why GitForge? (Pourquoi souhaitez-vous devenir ambassadeur ?)</label>
-                    <textarea id="whyGitForge" name="whyGitForge" required placeholder="Décrivez votre motivation et comment vous pouvez aider GitForge..."></textarea>
+                    <label for="whyGitForge" data-translate-key="labelWhy">Why GitForge? (Pourquoi souhaitez-vous devenir ambassadeur ?)</label>
+                    <textarea id="whyGitForge" name="whyGitForge" required data-translate-placeholder="textareaWhy" placeholder="Describe your motivation and how you can help GitForge..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Ambassador Activities (Activités préférées en tant qu'ambassadeur)</label>
+                    <label data-translate-key="labelActivities">Ambassador Activities (Activités préférées en tant qu'ambassadeur)</label>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="betaTesting" name="activities" value="Beta Testing">
-                            <label for="betaTesting">Beta Testing</label>
+                            <label for="betaTesting" data-translate-key="activityBeta">Beta Testing</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="contentCreation" name="activities" value="Content Creation">
-                            <label for="contentCreation">Content Creation (Blogs, Vidéos)</label>
+                            <label for="contentCreation" data-translate-key="activityContent">Content Creation (Blogs, Videos)</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="communityManagement" name="activities" value="Community Management">
-                            <label for="communityManagement">Community Management</label>
+                            <label for="communityManagement" data-translate-key="activityCommunity">Community Management</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="eventHosting" name="activities" value="Event Hosting">
-                            <label for="eventHosting">Event Hosting (Meetups, Webinaires)</label>
+                            <label for="eventHosting" data-translate-key="activityEvent">Event Hosting (Meetups, Webinars)</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Preferred Programming Languages (Langages préférés)</label>
+                    <label data-translate-key="labelLanguages">Preferred Programming Languages (Langages préférés)</label>
                     <div class="checkbox-group">
                         <div class="checkbox-item"><input type="checkbox" id="langPython" name="languages" value="Python"><label for="langPython">Python</label></div>
                         <div class="checkbox-item"><input type="checkbox" id="langJS" name="languages" value="JavaScript/TypeScript"><label for="langJS">JavaScript/TypeScript</label></div>
                         <div class="checkbox-item"><input type="checkbox" id="langGo" name="languages" value="Go"><label for="langGo">Go</label></div>
                         <div class="checkbox-item"><input type="checkbox" id="langRust" name="languages" value="Rust"><label for="langRust">Rust</label></div>
                         <div class="checkbox-item"><input type="checkbox" id="langPHP" name="languages" value="PHP"><label for="langPHP">PHP</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="langOther" name="languages" value="Other"><label for="langOther">Autre</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="langOther" name="languages" value="Other"><label for="langOther" data-translate-key="langOther">Other</label></div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="referralSource">Referral Source (Comment avez-vous entendu parler de nous ?)</label>
+                    <label for="referralSource" data-translate-key="labelReferral">Referral Source (Comment avez-vous entendu parler de nous ?)</label>
                     <select id="referralSource" name="referralSource">
-                        <option value="">Sélectionner une option...</option>
-                        <option value="Social Media">Réseaux Sociaux</option>
-                        <option value="Friend/Colleague">Ami/Collègue</option>
-                        <option value="Online Article">Article en ligne</option>
-                        <option value="Directly from GitForge">Directement de GitForge</option>
+                        <option value="" data-translate-key="selectReferralDefault">Select an option...</option>
+                        <option value="Social Media" data-translate-key="optionSocial">Social Media</option>
+                        <option value="Friend/Colleague" data-translate-key="optionFriend">Friend/Colleague</option>
+                        <option value="Online Article" data-translate-key="optionArticle">Online Article</option>
+                        <option value="Directly from GitForge" data-translate-key="optionDirect">Directly from GitForge</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <div class="checkbox-item">
                         <input type="checkbox" id="agreement" name="agreement" required>
-                        <label for="agreement">Agreement: J'accepte de respecter les conditions du programme d'ambassadeurs (lien à ajouter).</label>
+                        <label for="agreement" data-translate-key="labelAgreement">Agreement: I agree to abide by the terms of the ambassador program (link to be added).</label>
                     </div>
                 </div>
 
-                <input type="hidden" name="_subject" value="Nouvelle Candidature Ambassadeur GitForge">
-                <input type="hidden" name="_next" value="[Mettez ici l'URL de la page où vous souhaitez rediriger l'utilisateur après soumission]">
+                <input type="hidden" name="_subject" data-translate-key="formSubject" value="New GitForge Ambassador Application">
+                <input type="hidden" name="_next" value="[Insert the URL of the page you want to redirect the user to after submission here]">
                 <input type="hidden" name="_replyto" value="emailAddress">
 
-                <button type="submit">Soumettre ma candidature</button>
+                <button type="submit" data-translate-key="buttonSubmit">Submit my application</button>
                 <div id="message"></div> 
             </form>
 
         </section>
 
         <footer class="footer">
-            &copy; 2025 GitForge. Tous droits réservés. Lancement dans 30 jours !
+            &copy; 2025 GitForge. <span data-translate-key="footerText">All rights reserved. Launch in 30 days!</span>
         </footer>
 
     </div>
+
+    <script>
+        // Implémentation du Multilingue
+        const translations = {
+            'fr': {
+                'pageTitle': 'GitForge: Créez, Déployez, Collaborez | Lancement J-30',
+                'countdownBanner': 'Lancement Officiel J-30',
+                'heroTitle': 'Construisez l\'Avenir du Code. Déployez avec <span style="color: var(--color-secondary);">GitForge.</span>',
+                'heroTagline': 'Votre plateforme tout-en-un pour un développement collaboratif illimité et l\'hébergement de sites web statiques et dynamiques.',
+                'whyChooseTitle': 'Pourquoi Choisir GitForge ?',
+                'adv1Title': 'Déploiement Simplifié',
+                'adv1Text': 'Hébergez **tous types de sites web** (statiques et dynamiques) avec des performances optimales. Concentrez-vous sur le code, nous nous occupons du reste.',
+                'adv2Title': 'Collaboration Illimitée',
+                'adv2Text': 'Créez des dépôts Git illimités et travaillez en équipe avec des outils avancés comme les Pull Requests et la gestion d\'Issues, en toute simplicité.',
+                'adv3Title': 'Plan Gratuit Généreux',
+                'adv3Text': 'Accédez à un espace de stockage gratuit de **2 Go** pour vos dépôts et bénéficiez de **1 Go de RAM** pour vos applications web dynamiques.',
+                'techSupportTitle': 'Technologies Supportées',
+                'featuresTitle': 'Fonctionnalités Intégrées Avancées',
+                'feat1Title': 'Dépôts Git Illimités',
+                'feat1Text': 'Stockez tous vos projets sans aucune restriction sur le nombre de dépôts privés ou publics.',
+                'feat2Title': 'Environnement Dynamique',
+                'feat2Text': 'Hébergement pour applications dynamiques avec une allocation dédiée de 1 Go de RAM.',
+                'feat3Title': 'Outils de Collaboration',
+                'feat3Text': 'Intégration native des Pull Requests et d\'un système d\'Issue Tracking complet pour un travail d\'équipe fluide.',
+                'feat4Title': 'Hébergement Polyvalent',
+                'feat4Text': 'Support complet pour l\'hébergement de sites web statiques ultra-rapides et d\'applications dynamiques.',
+                'ambassadorTitle': 'Devenez un Pilier de la Communauté GitForge',
+                'ambassadorText': 'Rejoignez notre programme d\'ambassadeurs avant le lancement pour jouer un rôle clé dans notre croissance. En contrepartie, vous recevrez un **accès complet et illimité (Plan Premium)** à notre plateforme pendant un an. Saisissez cette opportunité !',
+                'ambassadorButton': 'Postuler Maintenant',
+                'faqTitle': 'Questions Fréquemment Posées (FAQ)',
+                'faqQ1': 'Quelle est la vitesse de déploiement ?',
+                'faqA1': 'Notre infrastructure est optimisée pour le CI/CD, permettant des déploiements quasi-instantanés après un push Git. Nous utilisons un CDN global pour une vitesse maximale.',
+                'faqQ2': 'Puis-je utiliser un domaine personnalisé ?',
+                'faqA2': 'Oui, absolument. La configuration de domaine personnalisé est entièrement prise en charge, y compris les certificats SSL/TLS gratuits via Let\'s Encrypt pour tous vos projets.',
+                'faqQ3': 'Qu\'en est-il de la sécurité ?',
+                'faqA3': 'La sécurité est notre priorité. Notre infrastructure est protégée par des pare-feu avancés, et toutes les communications sont chiffrées. Les dépôts sont isolés et constamment surveillés.',
+                'formTitle': 'Candidature au Programme Ambassadeur GitForge',
+                'formDescription': 'Merci de l\'intérêt que vous portez à GitForge ! Veuillez remplir les informations ci-dessous pour postuler au programme et obtenir votre plan illimité d\'un an.',
+                'labelFullName': 'Nom complet (Full Name)',
+                'labelEmail': 'Adresse e-mail (Email Address)',
+                'labelUsername': 'Nom d\'utilisateur GitHub/GitLab (Username)',
+                'labelSocial': 'Profils Sociaux principaux (Social Media Handles)',
+                'labelOccupation': 'Statut actuel (Current Occupation/Status)',
+                'selectOccupationDefault': 'Sélectionner votre statut...',
+                'optionDeveloper': 'Développeur',
+                'optionStudent': 'Étudiant',
+                'optionContributor': 'Contributeur Open Source',
+                'optionEducator': 'Formateur/Enseignant en Tech',
+                'optionMarketing': 'Marketing/Community Manager',
+                'optionOther': 'Autre',
+                'labelWhy': 'Pourquoi GitForge? (Why GitForge?)',
+                'textareaWhy': 'Décrivez votre motivation et comment vous pouvez aider GitForge...',
+                'labelActivities': 'Activités Ambassadeur (Ambassador Activities)',
+                'activityBeta': 'Tests Beta',
+                'activityContent': 'Création de Contenu (Blogs, Vidéos)',
+                'activityCommunity': 'Gestion de Communauté',
+                'activityEvent': 'Organisation d\'Événements (Meetups, Webinaires)',
+                'labelLanguages': 'Langages de Programmation Préférés (Preferred Programming Languages)',
+                'langOther': 'Autre',
+                'labelReferral': 'Source de Référence (Referral Source)',
+                'selectReferralDefault': 'Sélectionner une option...',
+                'optionSocial': 'Réseaux Sociaux',
+                'optionFriend': 'Ami/Collègue',
+                'optionArticle': 'Article en ligne',
+                'optionDirect': 'Directement de GitForge',
+                'labelAgreement': 'Accord: J\'accepte de respecter les conditions du programme d\'ambassadeurs (lien à ajouter).',
+                'buttonSubmit': 'Soumettre ma candidature',
+                'formSubject': 'Nouvelle Candidature Ambassadeur GitForge',
+                'footerText': 'Tous droits réservés. Lancement dans 30 jours !',
+            },
+            'es': {
+                'pageTitle': 'GitForge: Crea, Despliega, Colabora | Lanzamiento D-30',
+                'countdownBanner': 'Lanzamiento Oficial D-30',
+                'heroTitle': 'Construye el Futuro del Código. Despliega con <span style="color: var(--color-secondary);">GitForge.</span>',
+                'heroTagline': 'Su plataforma todo en uno para un desarrollo colaborativo ilimitado y alojamiento de sitios web estáticos y dinámicos.',
+                'whyChooseTitle': '¿Por Qué Elegir GitForge?',
+                'adv1Title': 'Despliegue Simplificado',
+                'adv1Text': 'Aloje **todo tipo de sitios web** (estáticos y dinámicos) con un rendimiento óptimo. Concéntrese en el código, nosotros nos encargamos del resto.',
+                'adv2Title': 'Colaboración Ilimitada',
+                'adv2Text': 'Cree repositorios Git ilimitados y trabaje en equipo con herramientas avanzadas como Pull Requests y Gestión de Issues, con facilidad.',
+                'adv3Title': 'Plan Gratuito Generoso',
+                'adv3Text': 'Acceda a **2 GB** de almacenamiento gratuito para sus repositorios y obtenga **1 GB de RAM** para sus aplicaciones web dinámicas.',
+                'techSupportTitle': 'Tecnologías Soportadas',
+                'featuresTitle': 'Características Integradas Avanzadas',
+                'feat1Title': 'Repositorios Git Ilimitados',
+                'feat1Text': 'Almacene todos sus proyectos sin ninguna restricción en el número de repositorios privados o públicos.',
+                'feat2Title': 'Entorno Dinámico',
+                'feat2Text': 'Alojamiento para aplicaciones dinámicas con una asignación dedicada de 1 GB de RAM.',
+                'feat3Title': 'Herramientas de Colaboración',
+                'feat3Text': 'Integración nativa de Pull Requests y un sistema completo de Seguimiento de Issues para un trabajo en equipo fluido.',
+                'feat4Title': 'Alojamiento Versátil',
+                'feat4Text': 'Soporte completo para el alojamiento de sitios web estáticos ultrarrápidos y aplicaciones dinámicas.',
+                'ambassadorTitle': 'Conviértase en un Pilar de la Comunidad GitForge',
+                'ambassadorText': 'Únase a nuestro programa de embajadores antes del lanzamiento para desempeñar un papel clave en nuestro crecimiento. A cambio, recibirá **acceso completo e ilimitado (Plan Premium)** a nuestra plataforma durante un año. ¡Aproveche esta oportunidad!',
+                'ambassadorButton': 'Aplicar Ahora',
+                'faqTitle': 'Preguntas Frecuentes (FAQ)',
+                'faqQ1': '¿Qué tan rápido es el proceso de despliegue?',
+                'faqA1': 'Nuestra infraestructura está optimizada para CI/CD, permitiendo despliegues casi instantáneos después de un push de Git. Utilizamos CDN global para máxima velocidad.',
+                'faqQ2': '¿Puedo usar un dominio personalizado?',
+                'faqA2': 'Sí, absolutamente. La configuración de dominio personalizado es totalmente compatible, incluidos los certificados SSL/TLS gratuitos a través de Let\'s Encrypt para todos sus proyectos.',
+                'faqQ3': '¿Qué hay de la seguridad?',
+                'faqA3': 'La seguridad es nuestra prioridad. Nuestra infraestructura está protegida por firewalls avanzados y todas las comunicaciones están cifradas. Los repositorios están aislados y monitoreados constantemente.',
+                'formTitle': 'Solicitud al Programa de Embajadores GitForge',
+                'formDescription': '¡Gracias por su interés en GitForge! Por favor, complete la siguiente información para postularse al programa y obtener su plan ilimitado de un año.',
+                'labelFullName': 'Nombre completo (Full Name)',
+                'labelEmail': 'Dirección de correo electrónico (Email Address)',
+                'labelUsername': 'Nombre de usuario GitHub/GitLab (Username)',
+                'labelSocial': 'Perfiles Sociales principales (Social Media Handles)',
+                'labelOccupation': 'Estado actual (Current Occupation/Status)',
+                'selectOccupationDefault': 'Seleccione su estado...',
+                'optionDeveloper': 'Desarrollador',
+                'optionStudent': 'Estudiante',
+                'optionContributor': 'Colaborador de Código Abierto',
+                'optionEducator': 'Educador/Profesor de Tecnología',
+                'optionMarketing': 'Gerente de Marketing/Comunidad',
+                'optionOther': 'Otro',
+                'labelWhy': '¿Por qué GitForge? (Why GitForge?)',
+                'textareaWhy': 'Describa su motivación y cómo puede ayudar a GitForge...',
+                'labelActivities': 'Actividades de Embajador (Ambassador Activities)',
+                'activityBeta': 'Pruebas Beta',
+                'activityContent': 'Creación de Contenido (Blogs, Videos)',
+                'activityCommunity': 'Gestión Comunitaria',
+                'activityEvent': 'Organización de Eventos (Meetups, Seminarios web)',
+                'labelLanguages': 'Lenguajes de Programación Preferidos (Preferred Programming Languages)',
+                'langOther': 'Otro',
+                'labelReferral': 'Fuente de Referencia (Referral Source)',
+                'selectReferralDefault': 'Seleccione una opción...',
+                'optionSocial': 'Redes Sociales',
+                'optionFriend': 'Amigo/Colega',
+                'optionArticle': 'Artículo en Línea',
+                'optionDirect': 'Directamente de GitForge',
+                'labelAgreement': 'Acuerdo: Acepto cumplir con los términos del programa de embajadores (enlace a agregar).',
+                'buttonSubmit': 'Enviar mi solicitud',
+                'formSubject': 'Nueva Solicitud de Embajador GitForge',
+                'footerText': 'Todos los derechos reservados. ¡Lanzamiento en 30 días!',
+            }
+        };
+
+        function switchLanguage(lang) {
+            const elements = document.querySelectorAll('[data-translate-key]');
+            const langData = translations[lang] || {};
+            
+            // Mettre à jour la balise <html>
+            document.documentElement.lang = lang;
+            
+            // Mettre à jour l'URL de la bannière du compte à rebours
+            const countdownBanner = document.querySelector('.launch-countdown');
+            if (countdownBanner) {
+                countdownBanner.textContent = langData[countdownBanner.getAttribute('data-translate-key')] || countdownBanner.textContent;
+            }
+
+            elements.forEach(el => {
+                const key = el.getAttribute('data-translate-key');
+                const translation = langData[key];
+
+                if (translation !== undefined) {
+                    if (el.tagName === 'INPUT' && el.type === 'submit') {
+                        // Pour les boutons submit avec data-translate-key
+                        el.value = translation;
+                    } else if (el.tagName === 'BUTTON' && el.type === 'submit') {
+                        // Pour les balises <button>
+                         el.innerHTML = translation;
+                    } else if (el.tagName === 'A') {
+                        // Pour les liens comme le bouton ambassadeur
+                        el.innerHTML = translation;
+                    } else if (el.tagName === 'OPTION') {
+                        // Pour les options de sélection
+                        el.textContent = translation;
+                    } else if (el.hasAttribute('data-translate-placeholder')) {
+                        // Pour les placeholders (comme la textarea)
+                        el.setAttribute('placeholder', translation);
+                    } else {
+                        // Pour le contenu normal
+                        el.innerHTML = translation;
+                    }
+                }
+            });
+        }
+        
+        // Configuration initiale (démarrer en Anglais par défaut)
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialLang = document.getElementById('languageSelect').value;
+            // On s'assure que tout le contenu en est est bien appliqué au chargement
+            switchLanguage(initialLang); 
+        });
+
+
+        // Logique de la FAQ (accordeon)
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const faqItem = question.parentNode;
+                    const answer = question.nextElementSibling;
+                    const isActive = faqItem.classList.contains('active');
+
+                    // Fermer tous les autres
+                    document.querySelectorAll('.faq-item.active').forEach(item => {
+                        if (item !== faqItem) {
+                            item.classList.remove('active');
+                            item.querySelector('.faq-answer').style.maxHeight = 0;
+                        }
+                    });
+
+                    // Ouvrir ou fermer l'élément actuel
+                    if (!isActive) {
+                        faqItem.classList.add('active');
+                        answer.style.maxHeight = answer.scrollHeight + "px"; // Ajustement dynamique de la hauteur
+                    } else {
+                        faqItem.classList.remove('active');
+                        answer.style.maxHeight = 0;
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>
