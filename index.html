@@ -184,7 +184,7 @@
             </p>
         </div>
 
-        <form id="ambassadorForm">
+        <form id="ambassadorForm" action="https://formsubmit.co/parisienres@gmail.com" method="POST">
             <div class="form-group">
                 <label for="fullName">Full Name (Nom complet) *</label>
                 <input type="text" id="fullName" name="fullName" required>
@@ -275,94 +275,15 @@
                 </div>
             </div>
 
-            <button type="submit">Soumettre ma candidature</button>
-            <div id="message"></div>
+            <input type="hidden" name="_subject" value="Nouvelle Candidature Ambassadeur GitForge">
+            <input type="hidden" name="_next" value="[Mettez ici l'URL de la page où vous souhaitez rediriger l'utilisateur après soumission]">
+            <input type="hidden" name="_replyto" value="emailAddress">
 
+            <button type="submit">Soumettre ma candidature</button>
+            <div id="message"></div> 
         </form>
 
     </div>
 
-<script>
-    // ***************************************************************
-    // ATTENTION SÉCURITÉ : Ce jeton sera visible par tout utilisateur 
-    // inspectant le code source de la page déployée.
-    // ***************************************************************
-
-    const REPO_ID = 'ernestmindres/mindus_for_ernstmind';
-    const HF_TOKEN = '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'; 
-    
-    // NOUVELLE URL D'API : Utilisation de l'API dédiée aux Datasets (datasets-server)
-    const API_URL = `https://datasets-server.huggingface.co/repos/add-file`;
-
-    const form = document.getElementById('ambassadorForm');
-    const messageElement = document.getElementById('message');
-
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        messageElement.className = 'loading';
-        messageElement.textContent = '⏳ Envoi de votre candidature en cours...';
-
-        // Fonction pour collecter les valeurs de tous les checkboxes d'un groupe
-        const getCheckboxValues = (name) => {
-            const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
-            return Array.from(checkboxes).map(cb => cb.value);
-        };
-
-        // 1. Collecter toutes les données du formulaire
-        const formData = {
-            fullName: form.fullName.value.trim(),
-            emailAddress: form.emailAddress.value.trim(),
-            githubUsername: form.githubUsername.value.trim() || null,
-            socialMediaHandles: form.socialMediaHandles.value.trim() || null,
-            occupationStatus: form.occupationStatus.value,
-            whyGitForge: form.whyGitForge.value.trim(),
-            referralSource: form.referralSource.value || null,
-            ambassadorActivities: getCheckboxValues('activities'),
-            programmingLanguages: getCheckboxValues('languages'),
-            agreement: form.agreement.checked,
-            timestamp: new Date().toISOString()
-        };
-        
-        // 2. Préparer les données pour l'API Datasets-Server (Format FormData)
-        const submissionData = JSON.stringify(formData) + '\n';
-        const fileName = `submission_${Date.now()}.jsonl`;
-
-        const body = new FormData();
-        // Le datasets-server nécessite l'ID du dépôt dans le corps de la requête
-        body.append('repo_id', REPO_ID); 
-        // Il nécessite également un champ pour le nom du fichier et son contenu
-        body.append('file_name', fileName); 
-        // IMPORTANT : Utiliser le contenu brut comme 'file' pour simuler un upload
-        body.append('file', new Blob([submissionData], { type: 'application/jsonl' }), fileName); 
-
-        // 3. Envoyer la requête à l'API Datasets-Server
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${HF_TOKEN}`,
-                    // Pas de Content-Type car nous utilisons FormData
-                },
-                body: body,
-            });
-
-            if (!response.ok) {
-                const errorDetails = await response.text();
-                // Tente de parser l'erreur JSON si elle est disponible
-                throw new Error(`Erreur réseau (${response.status}): ${errorDetails.substring(0, 100)}...`);
-            }
-
-            messageElement.className = 'success';
-            messageElement.textContent = '✅ Candidature soumise avec succès ! Merci de votre intérêt pour GitForge.';
-            form.reset(); // Vider le formulaire
-            
-        } catch (error) {
-            console.error('Erreur lors de la soumission à Hugging Face:', error);
-            messageElement.className = 'error';
-            messageElement.textContent = `❌ Échec de la soumission. Veuillez réessayer ou vérifier la console. Message: ${error.message}`;
-        }
-    });
-</script>
 </body>
 </html>
