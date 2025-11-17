@@ -286,13 +286,13 @@
     // ***************************************************************
     // ATTENTION SÉCURITÉ : Ce jeton sera visible par tout utilisateur 
     // inspectant le code source de la page déployée.
-    // N'utilisez cette méthode que pour des jetons à faible privilège 
-    // sur des pages à diffusion limitée, comme demandé.
     // ***************************************************************
 
     const REPO_ID = 'ernestmindres/mindus_for_ernstmind';
     const HF_TOKEN = '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'; 
-    // L'ancienne API_URL est ignorée. Nous utilisons l'API REPO pour la création de fichiers.
+    
+    // NOUVELLE URL D'API : Utilisation de l'API dédiée aux Datasets (datasets-server)
+    const API_URL = `https://datasets-server.huggingface.co/repos/add-file`;
 
     const form = document.getElementById('ambassadorForm');
     const messageElement = document.getElementById('message');
@@ -311,56 +311,45 @@
 
         // 1. Collecter toutes les données du formulaire
         const formData = {
-            // Champs de réponse courte / email
             fullName: form.fullName.value.trim(),
             emailAddress: form.emailAddress.value.trim(),
             githubUsername: form.githubUsername.value.trim() || null,
             socialMediaHandles: form.socialMediaHandles.value.trim() || null,
-            
-            // Champs Select / Textarea
             occupationStatus: form.occupationStatus.value,
             whyGitForge: form.whyGitForge.value.trim(),
             referralSource: form.referralSource.value || null,
-
-            // Champs Checkbox
             ambassadorActivities: getCheckboxValues('activities'),
             programmingLanguages: getCheckboxValues('languages'),
-            
-            // Accord et horodatage
             agreement: form.agreement.checked,
             timestamp: new Date().toISOString()
         };
         
-        // 2. Préparer l'objet à envoyer à Hugging Face (Format API REPO)
-        // Utilisation de .jsonl pour correspondre au format JSON Lines pour les datasets
-        const submissionData = JSON.stringify(formData, null, 2); 
-        const filePath = `submissions/submission_${Date.now()}.jsonl`; // Chemin et nom du fichier
-        
-        // Préparation du corps de la requête: Le contenu JSON doit être encodé en Base64.
-        const payload = {
-            // Fonction standard pour l'encodage en Base64 des caractères UTF-8
-            encoded_content: btoa(unescape(encodeURIComponent(submissionData))), 
-            path: filePath, 
-            message: `Ambassador application from ${formData.fullName}`,
-        };
+        // 2. Préparer les données pour l'API Datasets-Server (Format FormData)
+        const submissionData = JSON.stringify(formData) + '\n';
+        const fileName = `submission_${Date.now()}.jsonl`;
 
-        // 3. NOUVELLE URL D'API pour la création de fichiers dans le dépôt
-        const REPO_UPLOAD_API_URL = `https://huggingface.co/api/repos/create-file/${REPO_ID}/main`; 
+        const body = new FormData();
+        // Le datasets-server nécessite l'ID du dépôt dans le corps de la requête
+        body.append('repo_id', REPO_ID); 
+        // Il nécessite également un champ pour le nom du fichier et son contenu
+        body.append('file_name', fileName); 
+        // IMPORTANT : Utiliser le contenu brut comme 'file' pour simuler un upload
+        body.append('file', new Blob([submissionData], { type: 'application/jsonl' }), fileName); 
 
-        // 4. Envoyer la requête
+        // 3. Envoyer la requête à l'API Datasets-Server
         try {
-            const response = await fetch(REPO_UPLOAD_API_URL, {
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${HF_TOKEN}`,
-                    'Content-Type': 'application/json', // L'API Repos attend du JSON
+                    // Pas de Content-Type car nous utilisons FormData
                 },
-                body: JSON.stringify(payload),
+                body: body,
             });
 
             if (!response.ok) {
                 const errorDetails = await response.text();
-                // Afficher le statut et les 100 premiers caractères de la réponse d'erreur
+                // Tente de parser l'erreur JSON si elle est disponible
                 throw new Error(`Erreur réseau (${response.status}): ${errorDetails.substring(0, 100)}...`);
             }
 
