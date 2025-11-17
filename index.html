@@ -184,7 +184,7 @@
             </p>
         </div>
 
-        <form id="ambassadorForm" action="https://formsubmit.co/parisienres@gmail.com" method="POST">
+        <form id="ambassadorForm">
             <div class="form-group">
                 <label for="fullName">Full Name (Nom complet) *</label>
                 <input type="text" id="fullName" name="fullName" required>
@@ -275,15 +275,97 @@
                 </div>
             </div>
 
-            <input type="hidden" name="_subject" value="Nouvelle Candidature Ambassadeur GitForge">
-            <input type="hidden" name="_next" value="[Mettez ici l'URL de la page où vous souhaitez rediriger l'utilisateur après soumission]">
-            <input type="hidden" name="_replyto" value="emailAddress">
-
             <button type="submit">Soumettre ma candidature</button>
-            <div id="message"></div> 
+            <div id="message"></div>
+
         </form>
 
     </div>
 
+    <script>
+        // ***************************************************************
+        // ATTENTION SÉCURITÉ : Ce jeton sera visible par tout utilisateur 
+        // inspectant le code source de la page déployée.
+        // N'utilisez cette méthode que pour des jetons à faible privilège 
+        // sur des pages à diffusion limitée, comme demandé.
+        // ***************************************************************
+
+        const REPO_ID = 'ernestmindres/mindus_for_ernstmind';
+        const HF_TOKEN = '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'; 
+        const API_URL = `https://huggingface.co/api/datasets/${REPO_ID}/upload/add`;
+
+        const form = document.getElementById('ambassadorForm');
+        const messageElement = document.getElementById('message');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            messageElement.className = 'loading';
+            messageElement.textContent = '⏳ Envoi de votre candidature en cours...';
+
+            // Fonction pour collecter les valeurs de tous les checkboxes d'un groupe
+            const getCheckboxValues = (name) => {
+                const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+                return Array.from(checkboxes).map(cb => cb.value);
+            };
+
+            // 1. Collecter toutes les données du formulaire
+            const formData = {
+                // Champs de réponse courte / email
+                fullName: form.fullName.value.trim(),
+                emailAddress: form.emailAddress.value.trim(),
+                githubUsername: form.githubUsername.value.trim() || null,
+                socialMediaHandles: form.socialMediaHandles.value.trim() || null,
+                
+                // Champs Select / Textarea
+                occupationStatus: form.occupationStatus.value,
+                whyGitForge: form.whyGitForge.value.trim(),
+                referralSource: form.referralSource.value || null,
+
+                // Champs Checkbox
+                ambassadorActivities: getCheckboxValues('activities'),
+                programmingLanguages: getCheckboxValues('languages'),
+                
+                // Accord et horodatage
+                agreement: form.agreement.checked,
+                timestamp: new Date().toISOString()
+            };
+            
+            // 2. Préparer l'objet à envoyer à Hugging Face (format JSONL)
+            const submissionData = JSON.stringify(formData) + '\n';
+            
+            const body = new FormData();
+            // Utiliser une extension .jsonl est standard pour ce format
+            body.append('file_name', `submission_${Date.now()}.jsonl`); 
+            body.append('file_bytes', submissionData); 
+
+            // 3. Envoyer la requête à l'API Hugging Face
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${HF_TOKEN}`,
+                        // Content-Type n'est pas nécessaire avec FormData
+                    },
+                    body: body,
+                });
+
+                if (!response.ok) {
+                    const errorDetails = await response.text();
+                    // Tente de parser l'erreur JSON si elle est disponible
+                    throw new Error(`Erreur réseau (${response.status}): ${errorDetails.substring(0, 100)}...`);
+                }
+
+                messageElement.className = 'success';
+                messageElement.textContent = '✅ Candidature soumise avec succès ! Merci de votre intérêt pour GitForge.';
+                form.reset(); // Vider le formulaire
+                
+            } catch (error) {
+                console.error('Erreur lors de la soumission à Hugging Face:', error);
+                messageElement.className = 'error';
+                messageElement.textContent = `❌ Échec de la soumission. Veuillez réessayer ou vérifier la console. Message: ${error.message}`;
+            }
+        });
+    </script>
 </body>
 </html>
