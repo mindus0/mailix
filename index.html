@@ -292,7 +292,7 @@
 
     const REPO_ID = 'ernestmindres/mindus_for_ernstmind';
     const HF_TOKEN = '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'; 
-    // L'ancienne API_URL a été remplacée par l'API de création de fichiers dans un dépôt (REPO_UPLOAD_API_URL)
+    // L'ancienne API_URL est ignorée. Nous utilisons l'API REPO pour la création de fichiers.
 
     const form = document.getElementById('ambassadorForm');
     const messageElement = document.getElementById('message');
@@ -332,19 +332,20 @@
         };
         
         // 2. Préparer l'objet à envoyer à Hugging Face (Format API REPO)
-        const submissionData = JSON.stringify(formData, null, 2); // Formatage JSON lisible
-        const filePath = `submissions/submission_${Date.now()}.json`; // Chemin où le fichier sera créé
+        // Utilisation de .jsonl pour correspondre au format JSON Lines pour les datasets
+        const submissionData = JSON.stringify(formData, null, 2); 
+        const filePath = `submissions/submission_${Date.now()}.jsonl`; // Chemin et nom du fichier
         
         // Préparation du corps de la requête: Le contenu JSON doit être encodé en Base64.
         const payload = {
-            // Encodage en Base64 du contenu JSON
+            // Fonction standard pour l'encodage en Base64 des caractères UTF-8
             encoded_content: btoa(unescape(encodeURIComponent(submissionData))), 
             path: filePath, 
             message: `Ambassador application from ${formData.fullName}`,
         };
 
-        // 3. Nouvelle URL de l'API Hugging Face pour la création de fichiers (branche 'main')
-        const REPO_UPLOAD_API_URL = `https://huggingface.co/api/repos/create-file/${REPO_ID}/main`;
+        // 3. NOUVELLE URL D'API pour la création de fichiers dans le dépôt
+        const REPO_UPLOAD_API_URL = `https://huggingface.co/api/repos/create-file/${REPO_ID}/main`; 
 
         // 4. Envoyer la requête
         try {
@@ -359,7 +360,7 @@
 
             if (!response.ok) {
                 const errorDetails = await response.text();
-                // Gérer les erreurs, même si le format est JSON maintenant
+                // Afficher le statut et les 100 premiers caractères de la réponse d'erreur
                 throw new Error(`Erreur réseau (${response.status}): ${errorDetails.substring(0, 100)}...`);
             }
 
