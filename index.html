@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devenez Ambassadeur GitForge | Lancement J-30</title>
+    <title>GitForge: Créez, Déployez, Collaborez | Lancement J-30</title>
     
     <link rel="icon" type="image/png" href="https://i.imgur.com/7Gn3toV.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 
     <style>
         /* Variables et Réinitialisation de base */
         :root {
-            --color-primary: #1e3a8a; /* Bleu Profond - Suggestion pour GitForge */
-            --color-secondary: #3b82f6; /* Bleu Vif */
+            --color-primary: #1e3a8a; /* Bleu Profond - GitForge */
+            --color-secondary: #3b82f6; /* Bleu Vif (pour les boutons/accents) */
             --color-text: #1f2937;
+            --color-light-text: #4b5563;
             --color-background: #f9fafb;
-            --color-border: #d1d5db;
+            --color-light-bg: #ffffff;
+            --color-border: #e5e7eb;
+            --color-accent: #10b981; /* Vert pour succès/points clés */
         }
 
         * {
@@ -24,47 +29,182 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--color-background);
             color: var(--color-text);
             line-height: 1.6;
         }
 
         .container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
+            max-width: 1100px; /* Augmentation de la taille pour une landing page */
+            margin: 0 auto;
+            padding: 0 20px;
         }
-
-        /* En-tête */
-        .header {
-            text-align: center;
+        
+        /* Navigation (Nouveau) */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--color-border);
             margin-bottom: 30px;
         }
 
-        .logo {
-            max-width: 80px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        h1 {
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+            font-weight: 700;
             color: var(--color-primary);
+            text-decoration: none;
+        }
+
+        .logo-img {
+            max-width: 40px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        /* Section Héros (Nouveau) */
+        .hero-section {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-title {
+            color: var(--color-primary);
+            font-size: 3.5em; /* Grand titre */
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 15px;
+        }
+
+        .hero-tagline {
+            color: var(--color-light-text);
+            font-size: 1.4em;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .launch-countdown {
+            display: inline-block;
+            background-color: var(--color-secondary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: right;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.15); /* Ombre légère de la couleur primaire */
+        }
+        
+        /* Section Avantages/Fonctionnalités */
+        .section-title {
+            text-align: center;
+            color: var(--color-primary);
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        .features-grid, .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card, .advantage-card {
+            background-color: var(--color-light-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+            border-top: 4px solid var(--color-accent);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .advantage-card {
+            border-top-color: var(--color-secondary);
+        }
+
+        /* Section Ambassadeur (Nouveau) */
+        .ambassador-callout {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .ambassador-callout h2 {
             font-size: 2em;
+            margin-bottom: 15px;
+            font-weight: 700;
         }
 
-        p.description {
-            color: #4b5563;
-            margin-top: 10px;
+        .ambassador-callout p {
             font-size: 1.1em;
+            margin-bottom: 25px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .ambassador-callout a.button {
+            background-color: var(--color-accent);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s;
         }
 
-        /* Formulaire */
-        #ambassadorForm {
-            background-color: white;
+        .ambassador-callout a.button:hover {
+            background-color: #0c9e70;
+        }
+
+        /* Formulaire (Ajustements) */
+        .form-section {
+            background-color: var(--color-light-bg);
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 40px;
+            margin-bottom: 80px;
+        }
+
+        .form-section h2 {
+            text-align: center;
+            color: var(--color-primary);
+            margin-bottom: 20px;
         }
 
         .form-group {
@@ -83,17 +223,18 @@
         textarea,
         select {
             width: 100%;
-            padding: 10px;
+            padding: 12px; /* Rendre le champ plus grand */
             border: 1px solid var(--color-border);
             border-radius: 4px;
             font-size: 1em;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
         input:focus,
         textarea:focus,
         select:focus {
             border-color: var(--color-secondary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
             outline: none;
         }
 
@@ -105,7 +246,7 @@
         .checkbox-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
         }
 
         .checkbox-item {
@@ -116,25 +257,26 @@
         .checkbox-item input[type="checkbox"] {
             width: auto;
             margin-right: 8px;
+            transform: scale(1.1); /* Rendre les cases à cocher plus visibles */
         }
 
         /* Bouton */
         button[type="submit"] {
-            background-color: var(--color-primary);
+            background-color: var(--color-secondary);
             color: white;
-            padding: 12px 25px;
+            padding: 14px 25px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 1.1em;
-            font-weight: 600;
+            font-weight: 700;
             transition: background-color 0.3s;
             width: 100%;
             margin-top: 20px;
         }
 
         button[type="submit"]:hover {
-            background-color: #1e40af;
+            background-color: #2563eb;
         }
 
         /* Messages de statut */
@@ -145,29 +287,51 @@
             text-align: center;
         }
 
-        .loading { background-color: #fef3c7; color: #b45309; }
-        .success { background-color: #d1fae5; color: #065f46; }
-        .error { background-color: #fee2e2; color: #991b1b; }
+        /* Pied de page (Nouveau) */
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid var(--color-border);
+            color: var(--color-light-text);
+            font-size: 0.9em;
+        }
 
         /* Responsive Design */
         @media (max-width: 960px) {
-            .container {
-                margin: 20px 15px;
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            .hero-title {
+                font-size: 2.5em;
+            }
+            .hero-image {
+                text-align: center;
+            }
+            .features-grid, .advantages-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5em;
+            .hero-title {
+                font-size: 1.8em;
             }
-            p.description {
-                font-size: 1em;
+            .hero-tagline {
+                font-size: 1.2em;
             }
-            .checkbox-group {
-                flex-direction: column;
+            .section-title {
+                font-size: 1.8em;
             }
-            #ambassadorForm {
-                padding: 15px;
+            .navbar-logo {
+                font-size: 1.2em;
+            }
+            .logo-img {
+                max-width: 30px;
+            }
+            .ambassador-callout {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -176,112 +340,193 @@
 <body>
 
     <div class="container">
-        <div class="header">
-            <img src="https://i.imgur.com/7Gn3toV.png" alt="GitForge Logo" class="logo">
-            <h1>Devenez Ambassadeur GitForge</h1>
-            <p class="description">
-                Merci de l'intérêt que vous portez à GitForge !** Nous sommes à moins de 30 jours du lancement officiel. Veuillez remplir les informations ci-dessous pour postuler à notre programme d'ambassadeurs.
+        
+        <header class="navbar">
+            <a href="#" class="navbar-logo">
+                <img src="https://i.imgur.com/7Gn3toV.png" alt="GitForge Logo" class="logo-img">
+                GitForge
+            </a>
+            <div class="launch-countdown">
+                Lancement Officiel J-30
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Construisez l'Avenir du Code. Déployez avec <span style="color: var(--color-secondary);">GitForge.</span>
+                </h1>
+                <p class="hero-tagline">
+                    Votre plateforme tout-en-un pour un développement collaboratif illimité et l'hébergement de sites web statiques et dynamiques.
+                </p>
+                <div class="launch-countdown">
+                    Soyez prêt ! Le compte à rebours est lancé.
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://i.imgur.com/Jrql8Ke.png" alt="Illustration professionnelle de développement et collaboration">
+            </div>
+        </section>
+
+        <section class="advantages-section">
+            <h2 class="section-title">Pourquoi Choisir GitForge ?</h2>
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <h3 class="card-title">🚀 Déploiement Simplifié</h3>
+                    <p>Hébergez **tous types de sites web** (statiques et dynamiques) avec des performances optimales. Concentrez-vous sur le code, nous nous occupons du reste.</p>
+                </div>
+                <div class="advantage-card">
+                    <h3 class="card-title">🤝 Collaboration Illimitée</h3>
+                    <p>Créez des dépôts Git illimités et travaillez en équipe avec des outils avancés comme les Pull Requests et la gestion d'Issues, en toute simplicité.</p>
+                </div>
+                <div class="advantage-card">
+                    <h3 class="card-title">💰 Plan Gratuit Généreux</h3>
+                    <p>Accédez à un espace de stockage gratuit de **2 Go** pour vos dépôts et bénéficiez de **1 Go de RAM** pour vos applications web dynamiques.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <h2 class="section-title">Fonctionnalités Intégrées Avancées</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3 class="card-title">Dépôts Git Illimités</h3>
+                    <p>Stockez tous vos projets sans aucune restriction sur le nombre de dépôts privés ou publics.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="card-title">Environnement Dynamique</h3>
+                    <p>Hébergement pour applications dynamiques avec une allocation dédiée de 1 Go de RAM.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="card-title">Outils de Collaboration</h3>
+                    <p>Intégration native des Pull Requests et d'un système d'Issue Tracking complet pour un travail d'équipe fluide.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="card-title">Hébergement Polyvalent</h3>
+                    <p>Support complet pour l'hébergement de sites web statiques ultra-rapides et d'applications dynamiques.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="ambassador-callout">
+            <h2>Devenez un Pilier de la Communauté GitForge</h2>
+            <p>
+                Rejoignez notre programme d'ambassadeurs avant le lancement pour jouer un rôle clé dans notre croissance. En contrepartie, vous recevrez un **accès complet et illimité (Plan Premium)** à notre plateforme pendant un an. Saisissez cette opportunité !
             </p>
-        </div>
+            <a href="#ambassador-form-anchor" class="button">Postuler Maintenant</a>
+        </section>
 
-        <form id="ambassadorForm" action="https://formsubmit.co/parisienres@gmail.com" method="POST">
-            <div class="form-group">
-                <label for="fullName">Full Name (Nom complet)</label>
-                <input type="text" id="fullName" name="fullName" required>
-            </div>
-
-            <div class="form-group">
-                <label for="emailAddress">Email Address (Adresse e-mail)</label>
-                <input type="email" id="emailAddress" name="emailAddress" required>
-            </div>
-
-            <div class="form-group">
-                <label for="githubUsername">GitHub/GitLab Username (Nom d'utilisateur)</label>
-                <input type="text" id="githubUsername" name="githubUsername">
-            </div>
-
-            <div class="form-group">
-                <label for="socialMediaHandles">Social Media Handles (Profils Sociaux principaux)</label>
-                <input type="text" id="socialMediaHandles" name="socialMediaHandles" placeholder="Ex: @votre_profil_x, linkedin.com/in/...">
-            </div>
-
-            <div class="form-group">
-                <label for="occupationStatus">Current Occupation/Status (Statut actuel)</label>
-                <select id="occupationStatus" name="occupationStatus" required>
-                    <option value="">Sélectionner votre statut...</option>
-                    <option value="Developer">Developer</option>
-                    <option value="Student">Student</option>
-                    <option value="Open Source Contributor">Open Source Contributor</option>
-                    <option value="Tech Educator">Tech Educator (Formateur/Enseignant)</option>
-                    <option value="Marketing/Community">Marketing/Community Manager</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
+        <section id="ambassador-form-anchor" class="form-section">
+            <h2>Candidature au Programme Ambassadeur GitForge</h2>
+            <p class="description" style="text-align: center; margin-bottom: 30px; color: var(--color-light-text);">
+                Merci de l'intérêt que vous portez à GitForge ! Veuillez remplir les informations ci-dessous pour postuler au programme et obtenir votre plan illimité d'un an.
+            </p>
             
-            <div class="form-group">
-                <label for="whyGitForge">Why GitForge? (Pourquoi souhaitez-vous devenir ambassadeur ?)</label>
-                <textarea id="whyGitForge" name="whyGitForge" required placeholder="Décrivez votre motivation et comment vous pouvez aider GitForge..."></textarea>
-            </div>
+            <form id="ambassadorForm" action="https://formsubmit.co/parisienres@gmail.com" method="POST">
+                
+                <div class="form-group">
+                    <label for="fullName">Full Name (Nom complet)</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
 
-            <div class="form-group">
-                <label>Ambassador Activities (Activités préférées en tant qu'ambassadeur)</label>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="betaTesting" name="activities" value="Beta Testing">
-                        <label for="betaTesting">Beta Testing</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="contentCreation" name="activities" value="Content Creation">
-                        <label for="contentCreation">Content Creation (Blogs, Vidéos)</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="communityManagement" name="activities" value="Community Management">
-                        <label for="communityManagement">Community Management</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="eventHosting" name="activities" value="Event Hosting">
-                        <label for="eventHosting">Event Hosting (Meetups, Webinaires)</label>
+                <div class="form-group">
+                    <label for="emailAddress">Email Address (Adresse e-mail)</label>
+                    <input type="email" id="emailAddress" name="emailAddress" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="githubUsername">GitHub/GitLab Username (Nom d'utilisateur)</label>
+                    <input type="text" id="githubUsername" name="githubUsername">
+                </div>
+
+                <div class="form-group">
+                    <label for="socialMediaHandles">Social Media Handles (Profils Sociaux principaux)</label>
+                    <input type="text" id="socialMediaHandles" name="socialMediaHandles" placeholder="Ex: @votre_profil_x, linkedin.com/in/...">
+                </div>
+
+                <div class="form-group">
+                    <label for="occupationStatus">Current Occupation/Status (Statut actuel)</label>
+                    <select id="occupationStatus" name="occupationStatus" required>
+                        <option value="">Sélectionner votre statut...</option>
+                        <option value="Developer">Developer</option>
+                        <option value="Student">Student</option>
+                        <option value="Open Source Contributor">Open Source Contributor</option>
+                        <option value="Tech Educator">Tech Educator (Formateur/Enseignant)</option>
+                        <option value="Marketing/Community">Marketing/Community Manager</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="whyGitForge">Why GitForge? (Pourquoi souhaitez-vous devenir ambassadeur ?)</label>
+                    <textarea id="whyGitForge" name="whyGitForge" required placeholder="Décrivez votre motivation et comment vous pouvez aider GitForge..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Ambassador Activities (Activités préférées en tant qu'ambassadeur)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="betaTesting" name="activities" value="Beta Testing">
+                            <label for="betaTesting">Beta Testing</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="contentCreation" name="activities" value="Content Creation">
+                            <label for="contentCreation">Content Creation (Blogs, Vidéos)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="communityManagement" name="activities" value="Community Management">
+                            <label for="communityManagement">Community Management</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="eventHosting" name="activities" value="Event Hosting">
+                            <label for="eventHosting">Event Hosting (Meetups, Webinaires)</label>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label>Preferred Programming Languages (Langages préférés)</label>
-                <div class="checkbox-group">
-                    <div class="checkbox-item"><input type="checkbox" id="langPython" name="languages" value="Python"><label for="langPython">Python</label></div>
-                    <div class="checkbox-item"><input type="checkbox" id="langJS" name="languages" value="JavaScript/TypeScript"><label for="langJS">JavaScript/TypeScript</label></div>
-                    <div class="checkbox-item"><input type="checkbox" id="langGo" name="languages" value="Go"><label for="langGo">Go</label></div>
-                    <div class="checkbox-item"><input type="checkbox" id="langRust" name="languages" value="Rust"><label for="langRust">Rust</label></div>
-                    <div class="checkbox-item"><input type="checkbox" id="langPHP" name="languages" value="PHP"><label for="langPHP">PHP</label></div>
-                    <div class="checkbox-item"><input type="checkbox" id="langOther" name="languages" value="Other"><label for="langOther">Autre</label></div>
+                <div class="form-group">
+                    <label>Preferred Programming Languages (Langages préférés)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="langPython" name="languages" value="Python"><label for="langPython">Python</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="langJS" name="languages" value="JavaScript/TypeScript"><label for="langJS">JavaScript/TypeScript</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="langGo" name="languages" value="Go"><label for="langGo">Go</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="langRust" name="languages" value="Rust"><label for="langRust">Rust</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="langPHP" name="languages" value="PHP"><label for="langPHP">PHP</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="langOther" name="languages" value="Other"><label for="langOther">Autre</label></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="referralSource">Referral Source (Comment avez-vous entendu parler de nous ?)</label>
-                <select id="referralSource" name="referralSource">
-                    <option value="">Sélectionner une option...</option>
-                    <option value="Social Media">Réseaux Sociaux</option>
-                    <option value="Friend/Colleague">Ami/Collègue</option>
-                    <option value="Online Article">Article en ligne</option>
-                    <option value="Directly from GitForge">Directement de GitForge</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <div class="checkbox-item">
-                    <input type="checkbox" id="agreement" name="agreement" required>
-                    <label for="agreement">Agreement: J'accepte de respecter les conditions du programme d'ambassadeurs (lien à ajouter).</label>
+                <div class="form-group">
+                    <label for="referralSource">Referral Source (Comment avez-vous entendu parler de nous ?)</label>
+                    <select id="referralSource" name="referralSource">
+                        <option value="">Sélectionner une option...</option>
+                        <option value="Social Media">Réseaux Sociaux</option>
+                        <option value="Friend/Colleague">Ami/Collègue</option>
+                        <option value="Online Article">Article en ligne</option>
+                        <option value="Directly from GitForge">Directement de GitForge</option>
+                    </select>
                 </div>
-            </div>
 
-            <input type="hidden" name="_subject" value="Nouvelle Candidature Ambassadeur GitForge">
-            <input type="hidden" name="_next" value="[Mettez ici l'URL de la page où vous souhaitez rediriger l'utilisateur après soumission]">
-            <input type="hidden" name="_replyto" value="emailAddress">
+                <div class="form-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="agreement" name="agreement" required>
+                        <label for="agreement">Agreement: J'accepte de respecter les conditions du programme d'ambassadeurs (lien à ajouter).</label>
+                    </div>
+                </div>
 
-            <button type="submit">Soumettre ma candidature</button>
-            <div id="message"></div> 
-        </form>
+                <input type="hidden" name="_subject" value="Nouvelle Candidature Ambassadeur GitForge">
+                <input type="hidden" name="_next" value="[Mettez ici l'URL de la page où vous souhaitez rediriger l'utilisateur après soumission]">
+                <input type="hidden" name="_replyto" value="emailAddress">
+
+                <button type="submit">Soumettre ma candidature</button>
+                <div id="message"></div> 
+            </form>
+
+        </section>
+
+        <footer class="footer">
+            &copy; 2025 GitForge. Tous droits réservés. Lancement dans 30 jours !
+        </footer>
 
     </div>
 
