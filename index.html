@@ -1,929 +1,1615 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-translate-key="pageTitle">GitForge: Create, Deploy, Collaborate | Launch D-30</title>
-    
-    <link rel="icon" type="image/png" href="https://i.imgur.com/7Gn3toV.png">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
-
+    <title>Gitforge Copilot - Interface Professionnelle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        /* Variables et Réinitialisation de base */
-        :root {
-            --color-primary: #1e3a8a; /* Deep Blue - GitForge */
-            --color-secondary: #3b82f6; /* Vivid Blue (for buttons/accents) */
-            --color-text: #1f2937;
-            --color-light-text: #4b5563;
-            --color-background: #f9fafb;
-            --color-light-bg: #ffffff;
-            --color-border: #e5e7eb;
-            --color-accent: #10b981; /* Green for success/key points */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #d1d5db transparent; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        [x-cloak] { display: none !important; }
+        
+        .sidebar-transition {
+            transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--color-background);
-            color: var(--color-text);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
+        /* Style pour la carte des modèles */
+        .model-card {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
         }
         
-        /* Navigation */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--color-border);
-            margin-bottom: 30px;
-            flex-wrap: wrap; /* Pour le responsive */
-        }
-
-        .navbar-logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5em;
-            font-weight: 700;
-            color: var(--color-primary);
-            text-decoration: none;
-        }
-
-        .logo-img {
-            max-width: 40px;
-            height: auto;
-            margin-right: 10px;
-        }
-
-        /* Sélecteur de langue */
-        .language-selector {
-            margin-left: 20px;
-        }
-
-        .language-selector select {
-            padding: 5px 10px;
-            border-radius: 4px;
-            border: 1px solid var(--color-border);
-            font-size: 0.9em;
-            cursor: pointer;
-        }
-
-        /* Section Héros - Refonte */
-        .hero-section {
-            display: flex;
-            flex-direction: column; /* Changement de structure */
-            align-items: center;
-            text-align: center;
-            gap: 20px;
-            padding: 60px 0 30px 0;
-            margin-bottom: 40px;
-        }
-
-        .hero-content {
-            width: 100%;
-            max-width: 850px; /* Limite la largeur du contenu texte */
-        }
-
-        .hero-title {
-            color: var(--color-primary);
-            font-size: 4.5em; /* Augmentation de la taille pour un impact maximal */
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 15px;
-        }
-
-        .hero-tagline {
-            color: var(--color-light-text);
-            font-size: 1.4em;
-            margin-bottom: 30px;
-            font-weight: 400;
-        }
-
-        .launch-countdown {
-            display: inline-block;
-            background-color: var(--color-secondary);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-        }
-
-        .hero-image {
-            width: 100%;
-            max-width: 700px; /* Contrôle la taille de l'image centrée */
-            margin-top: 30px; /* Espacement après le texte */
-            opacity: 0; /* Pour l'animation initiale */
-            transform: translateY(20px); /* Pour l'animation initiale */
-            animation: fadeInMoveUp 1s ease-out forwards;
-        }
-
-        .hero-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
-        }
-
-        /* Animation Subtile pour l'Image */
-        @keyframes fadeInMoveUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Style pour les fichiers importés */
+        .file-item {
+            transition: all 0.2s ease;
         }
         
-        /* Section Avantages/Fonctionnalités */
-        .section-title {
-            text-align: center;
-            color: var(--color-primary);
-            font-size: 2.2em;
-            font-weight: 700;
-            margin-bottom: 40px;
-            padding-top: 20px;
+        .file-item:hover {
+            background-color: #f9fafb;
         }
-
-        .features-grid, .advantages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
+        
+        /* Animation pour l'apparition de la carte d'importation */
+        .import-card-enter {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
         }
-
-        .feature-card, .advantage-card {
-            background-color: var(--color-light-bg);
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-            border-top: 4px solid var(--color-accent);
-            display: flex;
-            flex-direction: column;
+        
+        .import-card-enter-active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
-
-        .advantage-card {
-            border-top-color: var(--color-secondary);
+        
+        .import-card-leave {
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
-
-        .card-title {
-            font-size: 1.3em;
-            color: var(--color-primary);
-            margin-bottom: 10px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
+        
+        .import-card-leave-active {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            transition: opacity 0.15s ease, transform 0.15s ease;
         }
-
-        .card-title i {
-            font-size: 1.5em;
-            margin-right: 10px;
-            color: var(--color-secondary);
+        
+        /* Style pour le drag-and-drop */
+        .drag-active {
+            border-color: #3b82f6 !important;
+            background-color: #eff6ff !important;
         }
-
-        .feature-card .card-title i {
-            color: var(--color-accent);
+        
+        .drag-overlay {
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 2px dashed #3b82f6;
         }
-
-        /* Section Ambassadeur */
-        .ambassador-callout {
-            background-color: var(--color-primary);
-            color: white;
-            padding: 40px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 60px;
+        
+        /* Animation pour les nouveaux messages */
+        .message-enter {
+            opacity: 0;
+            transform: translateY(10px);
         }
-
-        .ambassador-callout h2 {
-            font-size: 2em;
-            margin-bottom: 15px;
-            font-weight: 700;
+        
+        .message-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
-
-        .ambassador-callout p {
-            font-size: 1.1em;
-            margin-bottom: 25px;
-            max-width: 700px;
+        
+        /* Style pour les messages utilisateur - PLUS CLAIR */
+        .user-message-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(100, 116, 139, 0.05);
+            position: relative;
+            max-width: 90%;
             margin-left: auto;
-            margin-right: auto;
         }
         
-        .ambassador-callout a.button {
-            background-color: var(--color-accent);
-            color: white;
-            padding: 12px 30px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: background-color 0.3s;
+        .user-message-card::before {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #e2e8f0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
         }
-
-        .ambassador-callout a.button:hover {
-            background-color: #0c9e70;
+        
+        .user-message-card::after {
+            content: '';
+            position: absolute;
+            right: -7px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #f8fafc;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
         }
-
-        /* Section Technologies Supportées (Nouveau) */
-        .tech-logos {
-            text-align: center;
-            margin-bottom: 60px;
-            padding: 40px 0;
-            border-top: 1px solid var(--color-border);
-            border-bottom: 1px solid var(--color-border);
+        
+        .message-collapsed {
+            max-height: 120px;
+            overflow: hidden;
+            position: relative;
         }
-
-        .tech-logos img {
-            max-height: 50px;
-            margin: 0 20px;
-            opacity: 0.7;
-            transition: opacity 0.3s;
+        
+        .message-expanded {
+            max-height: none;
         }
-
-        .tech-logos img:hover {
+        
+        .message-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, #f9fafb);
+        }
+        
+        .message-expanded .message-gradient {
+            display: none;
+        }
+        
+        /* Style pour les cartes de fichiers */
+        .file-preview-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            min-width: 180px;
+            max-width: 200px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .file-preview-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            border-color: #3b82f6;
+        }
+        
+        .files-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+            margin-bottom: 16px;
+        }
+        
+        /* Style pour la zone de saisie focus */
+        .chat-input-focused {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Style pour le menu de gestion de discussion */
+        .chat-management-menu {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            min-width: 200px;
+            z-index: 60;
+        }
+        
+        /* Style pour les longs messages avec gestion des tokens */
+        .token-counter {
+            font-size: 11px;
+            padding: 2px 8px;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .message-content-wrapper {
+            position: relative;
+            padding-right: 20px;
+        }
+        
+        .copy-message-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .user-message-card:hover .copy-message-btn {
             opacity: 1;
         }
-
-        /* Section FAQ (Nouveau) */
-        .faq-section {
-            margin-bottom: 80px;
-        }
-
-        .faq-item {
-            background-color: var(--color-light-bg);
-            border: 1px solid var(--color-border);
-            border-radius: 6px;
-            margin-bottom: 15px;
-            overflow: hidden;
-        }
-
-        .faq-question {
-            padding: 15px 20px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: var(--color-primary);
-            transition: background-color 0.2s;
-        }
-
-        .faq-question:hover {
-            background-color: var(--color-background);
-        }
-
-        .faq-answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
-            color: var(--color-light-text);
-        }
-
-        .faq-answer p {
-            padding-bottom: 15px;
-            padding-top: 5px;
+        
+        /* Styles pour le markdown */
+        .markdown-content h1 {
+            font-size: 1.875rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            margin-bottom: 0.75rem;
+            color: #111827;
         }
         
-        .faq-question i {
-            transition: transform 0.3s;
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: #111827;
         }
-
-        .faq-item.active .faq-answer {
-            max-height: 200px; /* Valeur suffisante pour afficher le contenu */
-            padding-bottom: 15px;
-        }
-
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
-        }
-
-        /* Formulaire */
-        .form-section {
-            background-color: var(--color-light-bg);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            margin-top: 40px;
-            margin-bottom: 80px;
-        }
-
-        .form-section h2 {
-            text-align: center;
-            color: var(--color-primary);
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
+        
+        .markdown-content h3 {
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--color-text);
+            margin-top: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: #111827;
         }
-
-        input[type="text"],
-        input[type="email"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--color-border);
-            border-radius: 4px;
-            font-size: 1em;
-            transition: border-color 0.3s, box-shadow 0.3s;
+        
+        .markdown-content p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
         }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            border-color: var(--color-secondary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-            outline: none;
+        
+        .markdown-content ul, .markdown-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
         }
-
-        textarea {
-            resize: vertical;
-            min-height: 120px;
+        
+        .markdown-content li {
+            margin-bottom: 0.25rem;
         }
-
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+        
+        .markdown-content code {
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875em;
         }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
+        
+        .markdown-content pre {
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
         }
-
-        .checkbox-item input[type="checkbox"] {
-            width: auto;
-            margin-right: 8px;
-            transform: scale(1.1);
+        
+        .markdown-content pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
         }
-
-        /* Bouton */
-        button[type="submit"] {
-            background-color: var(--color-secondary);
-            color: white;
-            padding: 14px 25px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: 700;
-            transition: background-color 0.3s;
-            width: 100%;
-            margin-top: 20px;
+        
+        .markdown-content blockquote {
+            border-left: 4px solid #d1d5db;
+            padding-left: 1rem;
+            margin-left: 0;
+            margin-bottom: 1rem;
+            color: #6b7280;
+            font-style: italic;
         }
-
-        button[type="submit"]:hover {
-            background-color: #2563eb;
+        
+        /* Styles pour la carte de partage */
+        .share-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            min-width: 320px;
+            max-width: 400px;
         }
-
-        /* Messages de statut */
-        #message {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 4px;
-            text-align: center;
+        
+        /* Styles pour la carte de profil */
+        .profile-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            min-width: 260px;
+            max-width: 320px;
         }
-
-        /* Pied de page */
-        .footer {
-            text-align: center;
-            padding: 20px 0;
-            border-top: 1px solid var(--color-border);
-            color: var(--color-light-text);
-            font-size: 0.9em;
+        
+        /* Transition pour les cartes */
+        .card-enter {
+            opacity: 0;
+            transform: scale(0.95) translateY(-10px);
         }
-
-        /* Responsive Design */
-        @media (max-width: 960px) {
-            .hero-title {
-                font-size: 3.5em;
-            }
-            .tech-logos img {
-                max-height: 40px;
-                margin: 0 10px;
-            }
+        
+        .card-enter-active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
-
-        @media (max-width: 600px) {
-            .hero-title {
-                font-size: 2.5em;
-            }
-            .hero-tagline {
-                font-size: 1.2em;
-            }
-            .section-title {
-                font-size: 1.8em;
-            }
-            .navbar-logo {
-                font-size: 1.2em;
-            }
-            .logo-img {
-                max-width: 30px;
-            }
-            .ambassador-callout {
-                padding: 30px 20px;
-            }
-            .navbar {
-                justify-content: center;
-            }
-            .launch-countdown, .language-selector {
-                margin-top: 10px;
-            }
-            .tech-logos img {
-                max-height: 30px;
-                margin: 0 5px;
-            }
+        
+        .card-leave {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+        
+        .card-leave-active {
+            opacity: 0;
+            transform: scale(0.95) translateY(-10px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        
+        /* Style pour les discussions dans la sidebar */
+        .chat-item {
+            position: relative;
+            padding-left: 0.75rem;
+        }
+        
+        .chat-item-menu {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .chat-item:hover .chat-item-menu {
+            opacity: 1;
         }
     </style>
 </head>
+<body class="bg-white h-screen flex overflow-hidden" x-data="{ 
+    sidebarOpen: false, 
+    modelMenuOpen: false, 
+    selectedModel: 'Claude Haiku 4.5',
+    importMenuOpen: false,
+    importedFiles: [],
+    chatInputHeight: 'auto',
+    messages: [
+        { 
+            type: 'user', 
+            content: 'Quelles sont les caractéristiques d\'une interface professionnelle et que faut-il respecter pour la barre de défilement ?',
+            expanded: true,
+            needsExpansion: false,
+            tokens: 42,
+            files: []
+        },
+        { 
+            type: 'assistant', 
+            content: '# Caractéristiques d\'une interface professionnelle\n\nCréer une interface professionnelle nécessite une attention particulière aux **détails visuels**, à l\'**expérience utilisateur (UX)** et à l\'**ergonomie**. Voici les points essentiels :\n\n## Caractéristiques clés :\n\n- **Design épuré** : Utilisation d\'espaces blancs pour laisser respirer le contenu et réduire la charge cognitive.\n- **Barre de défilement (Scrollbar)** : Elle ne doit pas être la barre standard du navigateur. Elle doit être fine, discrète (souvent grise claire) et ne s\'afficher ou s\'assombrir qu\'au survol pour ne pas distraire l\'utilisateur.\n- **Navigation contextuelle** : Les menus doivent être accessibles là où l\'utilisateur en a besoin, sans encombrer l\'écran.\n- **Typographie** : Utilisation de polices sans-serif modernes avec une hiérarchie claire (tailles de texte différenciées).\n\n## Exemple de code CSS pour une scrollbar personnalisée :\n\n```css\n.custom-scrollbar::-webkit-scrollbar {\n    width: 6px;\n}\n\n.custom-scrollbar::-webkit-scrollbar-track {\n    background: transparent;\n}\n\n.custom-scrollbar::-webkit-scrollbar-thumb {\n    background: #d1d5db;\n    border-radius: 10px;\n}\n```',
+            expanded: true,
+            needsExpansion: false 
+        }
+    ],
+    isDragging: false,
+    newChatMode: false,
+    dragCounter: 0,
+    chatManagementOpen: false,
+    chatInputFocused: false,
+    currentChatTitle: 'Comparaison entre Gitforge Copilot et Git...',
+    chatManagementPosition: { x: 0, y: 0 },
+    shareMenuOpen: false,
+    shareUrl: 'https://gitforge.com/copilot/chat/abc123',
+    shareVisibility: 'private',
+    profileMenuOpen: false,
+    theme: 'light',
+    activeChatMenu: null,
+    mobileSidebarControls: true
+}" x-init="chatInputHeight = 'auto'; setupDragAndDrop();" @keydown.ctrl.enter="sendMessage" @keydown.cmd.enter="sendMessage" @resize.window="handleResize()">
 
-<body>
+    <aside 
+        x-cloak
+        :class="sidebarOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full lg:translate-x-[-100%]'" 
+        class="sidebar-transition border-r border-gray-100 flex flex-col bg-white h-full z-40 fixed lg:relative overflow-hidden"
+    >
+        <div class="p-4 mb-4 min-w-[256px] flex items-center justify-between">
+            <img src="https://i.postimg.cc/t4NCGNzD/gitforge-png.png" alt="Gitforge Logo" class="h-8 w-auto">
+            
+            <!-- Bouton de fermeture visible uniquement sur mobile quand la sidebar est ouverte -->
+            <button x-show="sidebarOpen && mobileSidebarControls" @click="sidebarOpen = false" 
+                    class="p-2 hover:bg-gray-100 rounded-lg text-gray-500 lg:hidden">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+        </div>
 
-    <div class="container">
-        
-        <header class="navbar">
-            <a href="#" class="navbar-logo">
-                <img src="https://i.imgur.com/7Gn3toV.png" alt="GitForge Logo" class="logo-img">
-                GitForge
-            </a>
-            <div style="display: flex; align-items: center;">
-                <div class="launch-countdown" data-translate-key="countdownBanner">
-                    Official Launch D-30
+        <nav class="flex-1 px-3 space-y-1 overflow-y-auto custom-scrollbar min-w-[256px]">
+            <button @click="startNewChat" class="w-full flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg text-[15px] transition-colors">
+                <span class="material-symbols-rounded text-[22px]">edit_square</span> New chat
+            </button>
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg text-[15px] transition-colors">
+                <span class="material-symbols-rounded text-[22px]">smart_toy</span> Agents
+            </button>
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg text-[15px] transition-colors">
+                <span class="material-symbols-rounded text-[22px]">folder</span> Spaces
+            </button>
+
+            <div class="mt-8 pt-4">
+                <p class="px-3 text-[12px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Last 7 days</p>
+                <div class="space-y-1">
+                    <div class="chat-item px-3 py-2 text-[15px] text-gray-600 hover:bg-gray-50 rounded-lg cursor-pointer truncate">
+                        <div class="flex items-center justify-between">
+                            <span>Comparaison entre Gitforge...</span>
+                            <button @click.stop="activeChatMenu = activeChatMenu === 1 ? null : 1" 
+                                    class="chat-item-menu p-1 hover:bg-gray-200 rounded">
+                                <span class="material-symbols-rounded text-gray-500">more_vert</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Menu pour cette discussion -->
+                        <div x-show="activeChatMenu === 1" @click.outside="activeChatMenu = null"
+                             class="absolute left-0 right-0 mt-1 z-50 chat-management-menu">
+                            <div class="p-2">
+                                <button @click="renameChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
+                                    <span class="material-symbols-rounded text-[20px] text-gray-500">edit</span>
+                                    Rename
+                                </button>
+                                <button @click="pinChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
+                                    <span class="material-symbols-rounded text-[20px] text-gray-500">push_pin</span>
+                                    Pin chat
+                                </button>
+                                <div class="h-px bg-gray-100 my-1"></div>
+                                <button @click="deleteChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-red-50 rounded-lg text-[14px] text-red-600 transition-colors">
+                                    <span class="material-symbols-rounded text-[20px]">delete</span>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-item px-3 py-2 text-[15px] text-gray-600 hover:bg-gray-50 rounded-lg cursor-pointer truncate">
+                        <div class="flex items-center justify-between">
+                            <span>Optimisation React</span>
+                            <button @click.stop="activeChatMenu = activeChatMenu === 2 ? null : 2" 
+                                    class="chat-item-menu p-1 hover:bg-gray-200 rounded">
+                                <span class="material-symbols-rounded text-gray-500">more_vert</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Menu pour cette discussion -->
+                        <div x-show="activeChatMenu === 2" @click.outside="activeChatMenu = null"
+                             class="absolute left-0 right-0 mt-1 z-50 chat-management-menu">
+                            <div class="p-2">
+                                <button @click="renameChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
+                                    <span class="material-symbols-rounded text-[20px] text-gray-500">edit</span>
+                                    Rename
+                                </button>
+                                <button @click="pinChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
+                                    <span class="material-symbols-rounded text-[20px] text-gray-500">push_pin</span>
+                                    Pin chat
+                                </button>
+                                <div class="h-px bg-gray-100 my-1"></div>
+                                <button @click="deleteChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-red-50 rounded-lg text-[14px] text-red-600 transition-colors">
+                                    <span class="material-symbols-rounded text-[20px]">delete</span>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="language-selector">
-                    <select id="languageSelect" onchange="switchLanguage(this.value)">
-                        <option value="en">English</option>
-                        <option value="fr">Français</option>
-                        <option value="es">Español</option>
-                    </select>
+            </div>
+        </nav>
+
+        <!-- Section stable en bas de la sidebar -->
+        <div class="mt-auto border-t border-gray-50 min-w-[256px]">
+            <div class="p-3 space-y-1">
+                <button @click="sidebarOpen = false" class="w-full flex items-center gap-3 px-3 py-2 text-gray-500 hover:bg-gray-50 rounded-lg text-sm">
+                    <span class="material-symbols-rounded">dock_to_left</span> Collapse
+                </button>
+                
+                <!-- Profil utilisateur -->
+                <div class="relative">
+                    <button @click="profileMenuOpen = !profileMenuOpen" 
+                            class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors">
+                        <div class="w-9 h-9 rounded-full bg-yellow-100 flex items-center justify-center text-sm font-bold text-yellow-700 border border-yellow-200">
+                            M
+                        </div>
+                        <div class="flex flex-col flex-1 text-left">
+                            <span class="text-sm font-medium text-gray-700">mindus0</span>
+                            <span class="text-[11px] text-gray-400">Copilot Free</span>
+                        </div>
+                        <span class="material-symbols-rounded text-gray-400 text-sm" 
+                              :class="profileMenuOpen ? 'rotate-180' : ''">expand_more</span>
+                    </button>
+                    
+                    <!-- Menu profil -->
+                    <div x-show="profileMenuOpen" @click.outside="profileMenuOpen = false"
+                         x-transition:enter="card-enter"
+                         x-transition:enter-start="card-enter"
+                         x-transition:enter-end="card-enter-active"
+                         x-transition:leave="card-leave"
+                         x-transition:leave-start="card-leave"
+                         x-transition:leave-end="card-leave-active"
+                         class="absolute bottom-full left-0 mb-2 w-full profile-card z-50"
+                         x-cloak>
+                        <div class="p-3">
+                            <div class="mb-3">
+                                <p class="text-sm font-medium text-gray-700">mindus0</p>
+                                <p class="text-xs text-gray-500">Copilot Free</p>
+                            </div>
+                            
+                            <div class="space-y-1">
+                                <button class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-sm text-gray-700 transition-colors">
+                                    <span class="material-symbols-rounded text-[20px] text-gray-500">settings</span>
+                                    Settings
+                                </button>
+                                
+                                <button class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-sm text-gray-700 transition-colors">
+                                    <span class="material-symbols-rounded text-[20px] text-gray-500">upgrade</span>
+                                    Upgrade plan
+                                </button>
+                                
+                                <!-- Sélecteur de thème -->
+                                <div class="px-3 py-2">
+                                    <p class="text-xs font-medium text-gray-500 mb-2">Theme</p>
+                                    <div class="flex items-center gap-2">
+                                        <button @click="theme = 'light'" 
+                                                class="flex items-center gap-1.5 px-2 py-1 rounded text-xs"
+                                                :class="theme === 'light' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100 text-gray-600'">
+                                            <span class="material-symbols-rounded text-sm">light_mode</span>
+                                            Light
+                                        </button>
+                                        <button @click="theme = 'dark'" 
+                                                class="flex items-center gap-1.5 px-2 py-1 rounded text-xs"
+                                                :class="theme === 'dark' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100 text-gray-600'">
+                                            <span class="material-symbols-rounded text-sm">dark_mode</span>
+                                            Dark
+                                        </button>
+                                        <button @click="theme = 'system'" 
+                                                class="flex items-center gap-1.5 px-2 py-1 rounded text-xs"
+                                                :class="theme === 'system' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100 text-gray-600'">
+                                            <span class="material-symbols-rounded text-sm">computer</span>
+                                            System
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="h-px bg-gray-100 my-1"></div>
+                                
+                                <button @click="clearAllHistory" 
+                                        class="w-full flex items-center gap-3 px-3 py-2 hover:bg-red-50 rounded-lg text-sm text-red-600 transition-colors">
+                                    <span class="material-symbols-rounded text-[20px]">delete_forever</span>
+                                    Clear all history
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col relative h-full min-w-0 bg-white">
+        
+        <header class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-gray-50 bg-white shrink-0">
+            <div class="flex items-center gap-3 overflow-hidden">
+                <!-- Bouton menu - caché sur mobile quand sidebar ouverte -->
+                <button x-show="!sidebarOpen || !mobileSidebarControls" 
+                        @click="sidebarOpen = !sidebarOpen" 
+                        class="p-2 hover:bg-gray-100 rounded-lg text-gray-500 lg:hidden">
+                    <span class="material-symbols-rounded">menu</span>
+                </button>
+                
+                <!-- Bouton nouvelle discussion - caché sur mobile quand sidebar ouverte -->
+                <button x-show="!sidebarOpen || !mobileSidebarControls" 
+                        @click="startNewChat" 
+                        class="p-2 hover:bg-gray-100 rounded-lg text-gray-500" 
+                        title="Nouvelle discussion">
+                    <span class="material-symbols-rounded">edit_square</span>
+                </button>
+                
+                <div class="relative">
+                    <button 
+                        @click="chatManagementOpen = !chatManagementOpen; updateChatMenuPosition($event)"
+                        class="flex items-center gap-2 cursor-pointer group truncate" 
+                        :class="newChatMode ? 'text-gray-500' : 'text-gray-800'">
+                        <span class="font-semibold text-[15px] truncate max-w-[200px]" x-text="newChatMode ? 'Nouvelle discussion' : currentChatTitle"></span>
+                        <span class="material-symbols-rounded text-gray-400 text-sm group-hover:rotate-180 transition-transform">arrow_drop_down</span>
+                    </button>
+                    
+                    <!-- Menu de gestion de discussion -->
+                    <div 
+                        x-show="chatManagementOpen && !newChatMode" 
+                        @click.outside="chatManagementOpen = false"
+                        :style="`left: ${chatManagementPosition.x}px; top: ${chatManagementPosition.y}px`"
+                        class="fixed sm:absolute sm:left-0 sm:top-full sm:mt-2 z-50 chat-management-menu"
+                        x-cloak
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95"
+                        x-transition:enter-end="opacity-100 scale-100"
+                    >
+                        <div class="p-2">
+                            <button @click="renameChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
+                                <span class="material-symbols-rounded text-[20px] text-gray-500">edit</span>
+                                Rename
+                            </button>
+                            <button @click="pinChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
+                                <span class="material-symbols-rounded text-[20px] text-gray-500">push_pin</span>
+                                Pin chat
+                            </button>
+                            <div class="h-px bg-gray-100 my-1"></div>
+                            <button @click="deleteChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-red-50 rounded-lg text-[14px] text-red-600 transition-colors">
+                                <span class="material-symbols-rounded text-[20px]">delete</span>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <button @click="shareMenuOpen = !shareMenuOpen" 
+                            class="flex items-center gap-2 border border-gray-200 px-3 py-1.5 rounded-lg text-[13px] font-medium hover:bg-gray-50">
+                        <span class="material-symbols-rounded text-sm">share</span> Share
+                    </button>
+                    
+                    <!-- Carte de partage -->
+                    <div x-show="shareMenuOpen" @click.outside="shareMenuOpen = false"
+                         x-transition:enter="card-enter"
+                         x-transition:enter-start="card-enter"
+                         x-transition:enter-end="card-enter-active"
+                         x-transition:leave="card-leave"
+                         x-transition:leave-start="card-leave"
+                         x-transition:leave-end="card-leave-active"
+                         class="absolute right-0 top-full mt-2 share-card z-50"
+                         x-cloak>
+                        <div class="p-4">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-gray-900">Share chat</h3>
+                                <button @click="shareMenuOpen = false" class="p-1 hover:bg-gray-100 rounded">
+                                    <span class="material-symbols-rounded text-gray-500">close</span>
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Visibility</label>
+                                <div class="flex items-center gap-3">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" x-model="shareVisibility" value="private" class="text-blue-600">
+                                        <span class="text-sm text-gray-700">Private</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" x-model="shareVisibility" value="public" class="text-blue-600">
+                                        <span class="text-sm text-gray-700">Public</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Link</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" x-model="shareUrl" readonly 
+                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50">
+                                    <button @click="copyShareUrl" 
+                                            class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <p class="text-xs text-gray-500">
+                                <span x-show="shareVisibility === 'private'">
+                                    Only people with the link can access this chat.
+                                </span>
+                                <span x-show="shareVisibility === 'public'">
+                                    Anyone with the link can access this chat.
+                                </span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1 class="hero-title" data-translate-key="heroTitle">
-                    Build the Future of Code. Deploy with <span style="color: var(--color-secondary);">GitForge.</span>
-                </h1>
-                <p class="hero-tagline" data-translate-key="heroTagline">
-                    Your all-in-one platform for unlimited collaborative development and hosting for static and dynamic websites.
-                </p>
+        <!-- Overlay pour le drag-and-drop -->
+        <div x-show="isDragging" @dragover.prevent @drop.prevent="handleDrop" @dragleave="handleDragLeave"
+             class="fixed inset-0 z-50 bg-white/90 flex items-center justify-center pointer-events-auto"
+             x-cloak>
+            <div class="drag-overlay rounded-2xl w-full max-w-2xl mx-4 h-64 flex flex-col items-center justify-center">
+                <span class="material-symbols-rounded text-6xl text-blue-500 mb-4">upload</span>
+                <p class="text-xl font-medium text-gray-700">Déposez vos fichiers ici</p>
+                <p class="text-gray-500 mt-2">Images, documents, fichiers de code...</p>
             </div>
-            <div class="hero-image">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1280&q=80" alt="Professional illustration of development and collaboration">
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scrollbar" id="chatContainer">
+            <div class="max-w-3xl mx-auto py-10 px-4 space-y-10">
+                <!-- Messages existants -->
+                <template x-for="(message, index) in messages" :key="index">
+                    <div x-data="{ isVisible: false }" x-init="setTimeout(() => isVisible = true, 50)" 
+                         :class="isVisible ? 'message-enter-active' : 'message-enter'"
+                         class="flex gap-4" :class="message.type === 'user' ? 'flex-col items-end' : ''">
+                        <template x-if="message.type === 'user'">
+                            <div class="user-message-card px-6 py-4 text-gray-800 text-[16px] leading-relaxed w-full"
+                                 :class="message.needsExpansion && !message.expanded ? 'message-collapsed' : 'message-expanded'">
+                                <div class="message-content-wrapper">
+                                    <p x-text="message.content"></p>
+                                    <button @click="copyMessage(index)" class="copy-message-btn p-1 hover:bg-white/50 rounded-lg" title="Copier le message">
+                                        <span class="material-symbols-rounded text-gray-500 text-sm">content_copy</span>
+                                    </button>
+                                </div>
+                                
+                                <!-- Affichage des fichiers si présents -->
+                                <template x-if="message.files && message.files.length > 0">
+                                    <div class="files-container">
+                                        <template x-for="(file, fileIndex) in message.files" :key="fileIndex">
+                                            <div class="file-preview-card">
+                                                <div class="flex items-start gap-2">
+                                                    <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+                                                        <template x-if="file.type === 'code'">
+                                                            <span class="material-symbols-rounded text-gray-600">code</span>
+                                                        </template>
+                                                        <template x-if="file.type === 'document'">
+                                                            <span class="material-symbols-rounded text-gray-600">description</span>
+                                                        </template>
+                                                        <template x-if="file.type === 'image'">
+                                                            <span class="material-symbols-rounded text-gray-600">image</span>
+                                                        </template>
+                                                        <template x-if="file.type === 'repository'">
+                                                            <span class="material-symbols-rounded text-gray-600">folder</span>
+                                                        </template>
+                                                        <template x-if="file.type === 'archive'">
+                                                            <span class="material-symbols-rounded text-gray-600">folder_zip</span>
+                                                        </template>
+                                                    </div>
+                                                    <div class="flex-1 min-w-0">
+                                                        <div class="text-[13px] font-medium text-gray-800 truncate" x-text="file.name"></div>
+                                                        <div class="text-[11px] text-gray-500" x-text="file.size"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                
+                                <!-- Compteur de tokens et bouton d'expansion -->
+                                <div class="flex items-center justify-between mt-3">
+                                    <div class="flex items-center gap-3">
+                                        <template x-if="message.tokens">
+                                            <div class="token-counter">
+                                                <span class="material-symbols-rounded text-xs">memory</span>
+                                                <span x-text="message.tokens"></span> tokens
+                                            </div>
+                                        </template>
+                                        <template x-if="message.files && message.files.length > 0">
+                                            <div class="token-counter">
+                                                <span class="material-symbols-rounded text-xs">attach_file</span>
+                                                <span x-text="message.files.length"></span> fichiers
+                                            </div>
+                                        </template>
+                                    </div>
+                                    
+                                    <template x-if="message.needsExpansion">
+                                        <button @click="toggleMessageExpand(index)" 
+                                                class="mt-2 flex items-center gap-1 text-[13px] text-blue-600 hover:text-blue-800 font-medium">
+                                            <span x-text="message.expanded ? 'Voir moins' : 'Voir plus'"></span>
+                                            <span class="material-symbols-rounded text-sm transition-transform" 
+                                                  :class="message.expanded ? 'rotate-180' : ''">expand_more</span>
+                                        </button>
+                                    </template>
+                                </div>
+                                
+                                <template x-if="message.needsExpansion && !message.expanded">
+                                    <div class="message-gradient"></div>
+                                </template>
+                            </div>
+                        </template>
+                        <template x-if="message.type === 'assistant'">
+                            <div class="flex gap-4 w-full">
+                                <div class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center shrink-0 border border-gray-200">
+                                    <span class="material-symbols-rounded text-gray-400 text-2xl">smart_toy</span>
+                                </div>
+                                <div class="flex-1 space-y-6 text-gray-800 leading-relaxed text-[16px]" 
+                                     :class="message.needsExpansion && !message.expanded ? 'message-collapsed' : 'message-expanded'">
+                                    <div class="relative markdown-content">
+                                        <div x-html="convertMarkdown(message.content)"></div>
+                                    </div>
+                                    
+                                    <template x-if="message.needsExpansion">
+                                        <button @click="toggleMessageExpand(index)" 
+                                                class="flex items-center gap-1 text-[13px] text-gray-500 hover:text-gray-700 font-medium">
+                                            <span x-text="message.expanded ? 'Voir moins' : 'Voir plus'"></span>
+                                            <span class="material-symbols-rounded text-sm transition-transform" 
+                                                  :class="message.expanded ? 'rotate-180' : ''">expand_more</span>
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
             </div>
-        </section>
+        </div>
 
-        <section class="advantages-section">
-            <h2 class="section-title" data-translate-key="whyChooseTitle">Why Choose GitForge?</h2>
-            <div class="advantages-grid">
-                <div class="advantage-card">
-                    <h3 class="card-title"><i class="ri-rocket-2-fill"></i> <span data-translate-key="adv1Title">Simplified Deployment</span></h3>
-                    <p data-translate-key="adv1Text">Host **all types of websites** (static and dynamic) with optimal performance. Focus on the code, we handle the rest.</p>
-                </div>
-                <div class="advantage-card">
-                    <h3 class="card-title"><i class="ri-team-fill"></i> <span data-translate-key="adv2Title">Unlimited Collaboration</span></h3>
-                    <p data-translate-key="adv2Text">Create unlimited Git repositories and work as a team with advanced tools like Pull Requests and Issue Management, easily.</p>
-                </div>
-                <div class="advantage-card">
-                    <h3 class="card-title"><i class="ri-money-dollar-circle-fill"></i> <span data-translate-key="adv3Title">Generous Free Plan</span></h3>
-                    <p data-translate-key="adv3Text">Access 2 GB of free storage for your repositories and get 1 GB of RAM for your dynamic web applications.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="tech-support-section">
-            <h2 class="section-title" data-translate-key="techSupportTitle">Supported Technologies</h2>
-            <div class="tech-logos">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React Logo" title="React.js">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="Node.js Logo" title="Node.js">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python Logo" title="Python">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Go_logo_blue.svg" alt="Go Logo" title="Go">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Angular_logo.svg" alt="Angular Logo" title="Angular">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg" alt="Vue.js Logo" title="Vue.js">
-            </div>
-        </section>
-
-        <section class="features-section">
-            <h2 class="section-title" data-translate-key="featuresTitle">Advanced Integrated Features</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <h3 class="card-title"><i class="ri-git-branch-line"></i> <span data-translate-key="feat1Title">Unlimited Git Repositories</span></h3>
-                    <p data-translate-key="feat1Text">Store all your projects without any restriction on the number of private or public repositories.</p>
-                </div>
-                <div class="feature-card">
-                    <h3 class="card-title"><i class="ri-code-s-slash-fill"></i> <span data-translate-key="feat2Title">Dynamic Environment</span></h3>
-                    <p data-translate-key="feat2Text">Hosting for dynamic applications with a dedicated allocation of 1 GB of RAM.</p>
-                </div>
-                <div class="feature-card">
-                    <h3 class="card-title"><i class="ri-hand-coin-fill"></i> <span data-translate-key="feat3Title">Collaboration Tools</span></h3>
-                    <p data-translate-key="feat3Text">Native integration of Pull Requests and a complete Issue Tracking system for smooth teamwork.</p>
-                </div>
-                <div class="feature-card">
-                    <h3 class="card-title"><i class="ri-server-fill"></i> <span data-translate-key="feat4Title">Versatile Hosting</span></h3>
-                    <p data-translate-key="feat4Text">Full support for hosting ultra-fast static websites and dynamic applications.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="ambassador-callout">
-            <h2 data-translate-key="ambassadorTitle">Become a Pillar of the GitForge Community</h2>
-            <p data-translate-key="ambassadorText">
-                Join our ambassador program before launch to play a key role in our growth. In return, you will receive **full and unlimited access (Premium Plan)** to our platform for one year. Seize this opportunity!
-            </p>
-            <a href="#ambassador-form-anchor" class="button" data-translate-key="ambassadorButton">Apply Now</a>
-        </section>
-        
-        <section class="faq-section">
-            <h2 class="section-title" data-translate-key="faqTitle">Frequently Asked Questions (FAQ)</h2>
-
-            <div class="faq-item">
-                <div class="faq-question" data-translate-key="faqQ1">
-                    How fast is the deployment process?
-                    <i class="ri-arrow-down-s-line"></i>
-                </div>
-                <div class="faq-answer">
-                    <p data-translate-key="faqA1">Our infrastructure is optimized for CI/CD, allowing for near-instantaneous deployments after a Git push. We use global CDN for maximum speed.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" data-translate-key="faqQ2">
-                    Can I use a custom domain?
-                    <i class="ri-arrow-down-s-line"></i>
-                </div>
-                <div class="faq-answer">
-                    <p data-translate-key="faqA2">Yes, absolutely. Custom domain configuration is fully supported, including free SSL/TLS certificates via Let's Encrypt for all your projects.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" data-translate-key="faqQ3">
-                    What about security?
-                    <i class="ri-arrow-down-s-line"></i>
-                </div>
-                <div class="faq-answer">
-                    <p data-translate-key="faqA3">Security is our priority. Our infrastructure is protected by advanced firewalls, and all communications are encrypted. Repositories are isolated and constantly monitored.</p>
-                </div>
-            </div>
-        </section>
-
-
-        <section id="ambassador-form-anchor" class="form-section">
-            <h2 data-translate-key="formTitle">GitForge Ambassador Program Application</h2>
-            <p class="description" style="text-align: center; margin-bottom: 30px; color: var(--color-light-text);" data-translate-key="formDescription">
-                Thank you for your interest in GitForge! Please fill in the information below to apply for the program and get your one-year unlimited plan.
-            </p>
-            
-            <form id="ambassadorForm" action="https://formsubmit.co/parisienres@gmail.com" method="POST">
+        <footer class="p-4 md:p-6 bg-white shrink-0">
+            <div class="max-w-3xl mx-auto relative">
                 
-                <div class="form-group">
-                    <label for="fullName" data-translate-key="labelFullName">Full Name (Nom complet)</label>
-                    <input type="text" id="fullName" name="fullName" required>
-                </div>
+                <!-- Carte de sélection de modèle (existante) -->
+                <div 
+                    x-show="modelMenuOpen" 
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                    @click.outside="modelMenuOpen = false"
+                    class="fixed inset-0 z-50 flex items-center justify-center sm:absolute sm:inset-auto sm:bottom-full sm:right-0 sm:mb-4 w-full sm:w-[320px] p-4 sm:p-0"
+                    x-cloak
+                >
+                    <div class="bg-white w-full rounded-2xl model-card overflow-hidden flex flex-col max-h-[90vh]">
+                        <div class="flex items-center justify-between p-4 border-b border-gray-100 sm:hidden">
+                            <span class="font-bold">Select Model</span>
+                            <button @click="modelMenuOpen = false" class="p-1">
+                                <span class="material-symbols-rounded">close</span>
+                            </button>
+                        </div>
 
-                <div class="form-group">
-                    <label for="emailAddress" data-translate-key="labelEmail">Email Address (Adresse e-mail)</label>
-                    <input type="email" id="emailAddress" name="emailAddress" required>
-                </div>
+                        <div class="overflow-y-auto custom-scrollbar p-2">
+                            <div class="px-3 py-2 text-[11px] font-bold text-gray-400 uppercase">Fast and cost-efficient</div>
+                            <button @click="selectedModel = 'GPT-5 mini'; modelMenuOpen = false" class="w-full flex items-center justify-between px-3 py-2.5 hover:bg-gray-50 rounded-xl transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-6 h-6 bg-gray-100 rounded flex items-center justify-center text-[10px] font-bold">G5</div>
+                                    <span class="text-[14px] text-gray-700">GPT-5 mini</span>
+                                </div>
+                            </button>
 
-                <div class="form-group">
-                    <label for="githubUsername" data-translate-key="labelUsername">GitHub/GitLab Username (Nom d'utilisateur)</label>
-                    <input type="text" id="githubUsername" name="githubUsername">
-                </div>
+                            <div class="h-[1px] bg-gray-50 my-2"></div>
 
-                <div class="form-group">
-                    <label for="socialMediaHandles" data-translate-key="labelSocial">Social Media Handles (Profils Sociaux principaux)</label>
-                    <input type="text" id="socialMediaHandles" name="socialMediaHandles" placeholder="Ex: @votre_profil_x, linkedin.com/in/...">
-                </div>
+                            <div class="px-3 py-2 text-[11px] font-bold text-gray-400 uppercase">Versatile and highly intelligent</div>
+                            <button @click="selectedModel = 'Claude Haiku 4.5'; modelMenuOpen = false" class="w-full flex items-center justify-between px-3 py-2.5 bg-gray-50 rounded-xl transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-6 h-6 bg-orange-100 text-orange-600 rounded flex items-center justify-center text-[10px] font-bold">A</div>
+                                    <span class="text-[14px] font-medium text-gray-900">Claude Haiku 4.5</span>
+                                </div>
+                                <span class="material-symbols-rounded text-blue-500 text-sm">check</span>
+                            </button>
+                            
+                            <button @click="selectedModel = 'GPT-4o'; modelMenuOpen = false" class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-xl transition-colors">
+                                <div class="w-6 h-6 bg-green-100 text-green-600 rounded flex items-center justify-center text-[10px] font-bold">O</div>
+                                <span class="text-[14px] text-gray-700">GPT-4o</span>
+                            </button>
 
-                <div class="form-group">
-                    <label for="occupationStatus" data-translate-key="labelOccupation">Current Occupation/Status (Statut actuel)</label>
-                    <select id="occupationStatus" name="occupationStatus" required>
-                        <option value="" data-translate-key="selectOccupationDefault">Select your status...</option>
-                        <option value="Developer" data-translate-key="optionDeveloper">Developer</option>
-                        <option value="Student" data-translate-key="optionStudent">Student</option>
-                        <option value="Open Source Contributor" data-translate-key="optionContributor">Open Source Contributor</option>
-                        <option value="Tech Educator" data-translate-key="optionEducator">Tech Educator (Trainer/Teacher)</option>
-                        <option value="Marketing/Community" data-translate-key="optionMarketing">Marketing/Community Manager</option>
-                        <option value="Other" data-translate-key="optionOther">Other</option>
-                    </select>
+                            <div class="h-[1px] bg-gray-50 my-2"></div>
+
+                            <div class="px-3 py-2 text-[11px] font-bold text-gray-400 uppercase">Most powerful at complex tasks</div>
+                            <button @click="selectedModel = 'Claude Opus 4.1'; modelMenuOpen = false" class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-xl transition-colors">
+                                <div class="w-6 h-6 bg-purple-100 text-purple-600 rounded flex items-center justify-center text-[10px] font-bold">Op</div>
+                                <span class="text-[14px] text-gray-700">Claude Opus 4.1</span>
+                            </button>
+                            <button @click="selectedModel = 'Gemini 2.5 Pro'; modelMenuOpen = false" class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-xl transition-colors">
+                                <div class="w-6 h-6 bg-blue-100 text-blue-600 rounded flex items-center justify-center text-[10px] font-bold">G</div>
+                                <span class="text-[14px] text-gray-700">Gemini 2.5 Pro</span>
+                            </button>
+                        </div>
+                        
+                        <div class="p-3 bg-gray-50 border-t border-gray-100">
+                            <button class="text-[12px] text-blue-600 font-medium hover:underline">Upgrade to access more models</button>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="whyGitForge" data-translate-key="labelWhy">Why GitForge? (Pourquoi souhaitez-vous devenir ambassadeur ?)</label>
-                    <textarea id="whyGitForge" name="whyGitForge" required data-translate-placeholder="textareaWhy" placeholder="Describe your motivation and how you can help GitForge..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label data-translate-key="labelActivities">Ambassador Activities (Activités préférées en tant qu'ambassadeur)</label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="betaTesting" name="activities" value="Beta Testing">
-                            <label for="betaTesting" data-translate-key="activityBeta">Beta Testing</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="contentCreation" name="activities" value="Content Creation">
-                            <label for="contentCreation" data-translate-key="activityContent">Content Creation (Blogs, Videos)</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="communityManagement" name="activities" value="Community Management">
-                            <label for="communityManagement" data-translate-key="activityCommunity">Community Management</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="eventHosting" name="activities" value="Event Hosting">
-                            <label for="eventHosting" data-translate-key="activityEvent">Event Hosting (Meetups, Webinars)</label>
-                        </div>
+                <!-- Carte d'importation (nouvelle) -->
+                <div 
+                    x-show="importMenuOpen" 
+                    x-transition:enter="import-card-enter"
+                    x-transition:enter-start="import-card-enter"
+                    x-transition:enter-end="import-card-enter-active"
+                    x-transition:leave="import-card-leave"
+                    x-transition:leave-start="import-card-leave"
+                    x-transition:leave-end="import-card-leave-active"
+                    @click.outside="importMenuOpen = false"
+                    class="absolute bottom-full left-0 mb-3 z-40 w-80 bg-white rounded-2xl model-card overflow-hidden"
+                    x-cloak
+                >
+                    <div class="p-4 border-b border-gray-100">
+                        <h3 class="font-bold text-gray-900">Importer des fichiers</h3>
+                        <p class="text-[13px] text-gray-500 mt-1">Ajoutez des fichiers ou des dépôts pour les utiliser dans votre conversation</p>
+                    </div>
+                    
+                    <div class="p-2">
+                        <!-- Bouton pour importer depuis l'ordinateur -->
+                        <button @click="addFileFromComputer" class="w-full flex items-center gap-3 px-3 py-3 hover:bg-gray-50 rounded-xl transition-colors text-left">
+                            <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
+                                <span class="material-symbols-rounded">upload</span>
+                            </div>
+                            <div class="flex-1">
+                                <span class="text-[14px] font-medium text-gray-900">Depuis votre ordinateur</span>
+                                <p class="text-[12px] text-gray-500">Importer des fichiers depuis votre PC</p>
+                            </div>
+                        </button>
+                        
+                        <button @click="addRepository" class="w-full flex items-center gap-3 px-3 py-3 hover:bg-gray-50 rounded-xl transition-colors text-left">
+                            <div class="w-10 h-10 bg-green-100 text-green-600 rounded-xl flex items-center justify-center">
+                                <span class="material-symbols-rounded">folder</span>
+                            </div>
+                            <div class="flex-1">
+                                <span class="text-[14px] font-medium text-gray-900">Depuis un dépôt Git</span>
+                                <p class="text-[12px] text-gray-500">Connecter un dépôt GitHub, GitLab, etc.</p>
+                            </div>
+                        </button>
+                        
+                        <button @click="addSpace" class="w-full flex items-center gap-3 px-3 py-3 hover:bg-gray-50 rounded-xl transition-colors text-left">
+                            <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center">
+                                <span class="material-symbols-rounded">dataset</span>
+                            </div>
+                            <div class="flex-1">
+                                <span class="text-[14px] font-medium text-gray-900">Depuis un espace</span>
+                                <p class="text-[12px] text-gray-500">Sélectionner des fichiers depuis vos espaces</p>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="p-3 bg-gray-50 border-t border-gray-100">
+                        <p class="text-[12px] text-gray-500">Les fichiers sont ajoutés à la conversation actuelle</p>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label data-translate-key="labelLanguages">Preferred Programming Languages (Langages préférés)</label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item"><input type="checkbox" id="langPython" name="languages" value="Python"><label for="langPython">Python</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="langJS" name="languages" value="JavaScript/TypeScript"><label for="langJS">JavaScript/TypeScript</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="langGo" name="languages" value="Go"><label for="langGo">Go</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="langRust" name="languages" value="Rust"><label for="langRust">Rust</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="langPHP" name="languages" value="PHP"><label for="langPHP">PHP</label></div>
-                        <div class="checkbox-item"><input type="checkbox" id="langOther" name="languages" value="Other"><label for="langOther" data-translate-key="langOther">Other</label></div>
+                <!-- Zone de saisie principale avec affichage des fichiers importés -->
+                <div id="chatInputContainer" 
+                     class="border border-gray-200 rounded-2xl focus-within:border-gray-300 transition-all duration-200 shadow-sm bg-white overflow-hidden" 
+                     :class="isDragging ? 'drag-active' : (chatInputFocused ? 'chat-input-focused' : '')"
+                     :style="{ maxHeight: chatInputHeight === 'auto' ? 'none' : '400px' }"
+                     @dragover.prevent="handleDragOver" @dragleave="handleContainerDragLeave" @drop.prevent="handleDrop">
+                    
+                    <!-- Section pour afficher les fichiers importés (avec limite de 10) -->
+                    <div x-show="importedFiles.length > 0" class="border-b border-gray-100">
+                        <div class="px-4 pt-3 pb-2 flex items-center justify-between">
+                            <h4 class="text-[13px] font-medium text-gray-700">
+                                Fichiers à envoyer <span x-text="'(' + importedFiles.length + '/10)'"></span>
+                            </h4>
+                            <button @click="clearAllFiles" class="text-[11px] text-gray-500 hover:text-gray-700">Tout effacer</button>
+                        </div>
+                        
+                        <div class="px-3 pb-3">
+                            <div class="files-container">
+                                <template x-for="(file, index) in importedFiles.slice(0, 10)" :key="index">
+                                    <div class="file-preview-card">
+                                        <div class="flex items-start gap-2">
+                                            <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+                                                <template x-if="file.type === 'code'">
+                                                    <span class="material-symbols-rounded text-gray-600">code</span>
+                                                </template>
+                                                <template x-if="file.type === 'document'">
+                                                    <span class="material-symbols-rounded text-gray-600">description</span>
+                                                </template>
+                                                <template x-if="file.type === 'image'">
+                                                    <span class="material-symbols-rounded text-gray-600">image</span>
+                                                </template>
+                                                <template x-if="file.type === 'repository'">
+                                                    <span class="material-symbols-rounded text-gray-600">folder</span>
+                                                </template>
+                                                <template x-if="file.type === 'archive'">
+                                                    <span class="material-symbols-rounded text-gray-600">folder_zip</span>
+                                                </template>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="text-[13px] font-medium text-gray-800 truncate" x-text="file.name"></div>
+                                                <div class="text-[11px] text-gray-500" x-text="file.size"></div>
+                                            </div>
+                                            <button @click="removeFile(index)" class="p-1 hover:bg-gray-100 rounded" title="Supprimer">
+                                                <span class="material-symbols-rounded text-gray-400 text-sm">close</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </template>
+                                
+                                <!-- Message si plus de 10 fichiers -->
+                                <div x-show="importedFiles.length > 10" class="text-sm text-amber-600 italic">
+                                    + <span x-text="importedFiles.length - 10"></span> fichier(s) supplémentaire(s)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Zone de texte -->
+                    <div class="relative">
+                        <textarea 
+                            id="chatInput"
+                            class="w-full p-4 pr-16 bg-transparent outline-none text-[16px] resize-none overflow-y-auto custom-scrollbar" 
+                            placeholder="Ask anything"
+                            rows="1"
+                            style="max-height: 200px;"
+                            @input="adjustTextareaHeight"
+                            @focus="chatInputFocused = true; importMenuOpen = false; modelMenuOpen = false;"
+                            @blur="chatInputFocused = false"></textarea>
+                        
+                        <!-- Indicateur de caractères -->
+                        <div class="absolute right-4 bottom-16">
+                            <div x-show="estimateTokens() > 0" class="token-counter">
+                                <span x-text="estimateTokens()"></span> tokens estimés
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Barre d'outils -->
+                    <div class="flex items-center justify-between px-4 pb-3">
+                        <div class="flex items-center gap-4 text-gray-400">
+                            <div class="relative">
+                                <button 
+                                    @click="importMenuOpen = !importMenuOpen"
+                                    class="flex items-center gap-1.5 hover:text-gray-600 text-[14px] transition-colors"
+                                    :class="importMenuOpen ? 'text-blue-600' : ''"
+                                >
+                                    <span class="material-symbols-rounded text-xl">add</span>
+                                    <span class="hidden sm:inline">Add files...</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div 
+                                @click="modelMenuOpen = !modelMenuOpen"
+                                class="flex items-center gap-1 text-[13px] text-gray-600 font-medium bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg cursor-pointer transition-colors"
+                                :class="modelMenuOpen ? 'bg-gray-200' : ''"
+                            >
+                                <span x-text="selectedModel">Claude Haiku 4.5</span> 
+                                <span class="material-symbols-rounded text-sm" :class="modelMenuOpen ? 'rotate-180' : ''">expand_more</span>
+                            </div>
+                            <button @click="sendMessage" 
+                                    class="text-gray-300 transition-colors" 
+                                    :class="(document.getElementById('chatInput').value.trim() || importedFiles.length > 0) ? 'text-blue-500 hover:text-blue-600' : ''">
+                                <span class="material-symbols-rounded text-[28px]">send</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="referralSource" data-translate-key="labelReferral">Referral Source (Comment avez-vous entendu parler de nous ?)</label>
-                    <select id="referralSource" name="referralSource">
-                        <option value="" data-translate-key="selectReferralDefault">Select an option...</option>
-                        <option value="Social Media" data-translate-key="optionSocial">Social Media</option>
-                        <option value="Friend/Colleague" data-translate-key="optionFriend">Friend/Colleague</option>
-                        <option value="Online Article" data-translate-key="optionArticle">Online Article</option>
-                        <option value="Directly from GitForge" data-translate-key="optionDirect">Directly from GitForge</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="agreement" name="agreement" required>
-                        <label for="agreement" data-translate-key="labelAgreement">Agreement: I agree to abide by the terms of the ambassador program (link to be added).</label>
-                    </div>
-                </div>
-
-                <input type="hidden" name="_subject" data-translate-key="formSubject" value="New GitForge Ambassador Application">
-                <input type="hidden" name="_next" value="[Insert the URL of the page you want to redirect the user to after submission here]">
-                <input type="hidden" name="_replyto" value="emailAddress">
-
-                <button type="submit" data-translate-key="buttonSubmit">Submit my application</button>
-                <div id="message"></div> 
-            </form>
-
-        </section>
-
-        <footer class="footer">
-            &copy; 2025 GitForge. <span data-translate-key="footerText">All rights reserved. Launch in 30 days!</span>
+            </div>
         </footer>
 
-    </div>
+    </main>
+
+    <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black/20 z-30 lg:hidden" x-transition.opacity x-cloak></div>
 
     <script>
-        // Implémentation du Multilingue
-        const translations = {
-            'fr': {
-                'pageTitle': 'GitForge: Créez, Déployez, Collaborez | Lancement J-30',
-                'countdownBanner': 'Lancement Officiel J-30',
-                'heroTitle': 'Construisez l\'Avenir du Code. Déployez avec <span style="color: var(--color-secondary);">GitForge.</span>',
-                'heroTagline': 'Votre plateforme tout-en-un pour un développement collaboratif illimité et l\'hébergement de sites web statiques et dynamiques.',
-                'whyChooseTitle': 'Pourquoi Choisir GitForge ?',
-                'adv1Title': 'Déploiement Simplifié',
-                'adv1Text': 'Hébergez **tous types de sites web** (statiques et dynamiques) avec des performances optimales. Concentrez-vous sur le code, nous nous occupons du reste.',
-                'adv2Title': 'Collaboration Illimitée',
-                'adv2Text': 'Créez des dépôts Git illimités et travaillez en équipe avec des outils avancés comme les Pull Requests et la gestion d\'Issues, en toute simplicité.',
-                'adv3Title': 'Plan Gratuit Généreux',
-                'adv3Text': 'Accédez à un espace de stockage gratuit de **2 Go** pour vos dépôts et bénéficiez de **1 Go de RAM** pour vos applications web dynamiques.',
-                'techSupportTitle': 'Technologies Supportées',
-                'featuresTitle': 'Fonctionnalités Intégrées Avancées',
-                'feat1Title': 'Dépôts Git Illimités',
-                'feat1Text': 'Stockez tous vos projets sans aucune restriction sur le nombre de dépôts privés ou publics.',
-                'feat2Title': 'Environnement Dynamique',
-                'feat2Text': 'Hébergement pour applications dynamiques avec une allocation dédiée de 1 Go de RAM.',
-                'feat3Title': 'Outils de Collaboration',
-                'feat3Text': 'Intégration native des Pull Requests et d\'un système d\'Issue Tracking complet pour un travail d\'équipe fluide.',
-                'feat4Title': 'Hébergement Polyvalent',
-                'feat4Text': 'Support complet pour l\'hébergement de sites web statiques ultra-rapides et d\'applications dynamiques.',
-                'ambassadorTitle': 'Devenez un Pilier de la Communauté GitForge',
-                'ambassadorText': 'Rejoignez notre programme d\'ambassadeurs avant le lancement pour jouer un rôle clé dans notre croissance. En contrepartie, vous recevrez un **accès complet et illimité (Plan Premium)** à notre plateforme pendant un an. Saisissez cette opportunité !',
-                'ambassadorButton': 'Postuler Maintenant',
-                'faqTitle': 'Questions Fréquemment Posées (FAQ)',
-                'faqQ1': 'Quelle est la vitesse de déploiement ?',
-                'faqA1': 'Notre infrastructure est optimisée pour le CI/CD, permettant des déploiements quasi-instantanés après un push Git. Nous utilisons un CDN global pour une vitesse maximale.',
-                'faqQ2': 'Puis-je utiliser un domaine personnalisé ?',
-                'faqA2': 'Oui, absolument. La configuration de domaine personnalisé est entièrement prise en charge, y compris les certificats SSL/TLS gratuits via Let\'s Encrypt pour tous vos projets.',
-                'faqQ3': 'Qu\'en est-il de la sécurité ?',
-                'faqA3': 'La sécurité est notre priorité. Notre infrastructure est protégée par des pare-feu avancés, et toutes les communications sont chiffrées. Les dépôts sont isolés et constamment surveillés.',
-                'formTitle': 'Candidature au Programme Ambassadeur GitForge',
-                'formDescription': 'Merci de l\'intérêt que vous portez à GitForge ! Veuillez remplir les informations ci-dessous pour postuler au programme et obtenir votre plan illimité d\'un an.',
-                'labelFullName': 'Nom complet (Full Name)',
-                'labelEmail': 'Adresse e-mail (Email Address)',
-                'labelUsername': 'Nom d\'utilisateur GitHub/GitLab (Username)',
-                'labelSocial': 'Profils Sociaux principaux (Social Media Handles)',
-                'labelOccupation': 'Statut actuel (Current Occupation/Status)',
-                'selectOccupationDefault': 'Sélectionner votre statut...',
-                'optionDeveloper': 'Développeur',
-                'optionStudent': 'Étudiant',
-                'optionContributor': 'Contributeur Open Source',
-                'optionEducator': 'Formateur/Enseignant en Tech',
-                'optionMarketing': 'Marketing/Community Manager',
-                'optionOther': 'Autre',
-                'labelWhy': 'Pourquoi GitForge? (Why GitForge?)',
-                'textareaWhy': 'Décrivez votre motivation et comment vous pouvez aider GitForge...',
-                'labelActivities': 'Activités Ambassadeur (Ambassador Activities)',
-                'activityBeta': 'Tests Beta',
-                'activityContent': 'Création de Contenu (Blogs, Vidéos)',
-                'activityCommunity': 'Gestion de Communauté',
-                'activityEvent': 'Organisation d\'Événements (Meetups, Webinaires)',
-                'labelLanguages': 'Langages de Programmation Préférés (Preferred Programming Languages)',
-                'langOther': 'Autre',
-                'labelReferral': 'Source de Référence (Referral Source)',
-                'selectReferralDefault': 'Sélectionner une option...',
-                'optionSocial': 'Réseaux Sociaux',
-                'optionFriend': 'Ami/Collègue',
-                'optionArticle': 'Article en ligne',
-                'optionDirect': 'Directement de GitForge',
-                'labelAgreement': 'Accord: J\'accepte de respecter les conditions du programme d\'ambassadeurs (lien à ajouter).',
-                'buttonSubmit': 'Soumettre ma candidature',
-                'formSubject': 'Nouvelle Candidature Ambassadeur GitForge',
-                'footerText': 'Tous droits réservés. Lancement dans 30 jours !',
-            },
-            'es': {
-                'pageTitle': 'GitForge: Crea, Despliega, Colabora | Lanzamiento D-30',
-                'countdownBanner': 'Lanzamiento Oficial D-30',
-                'heroTitle': 'Construye el Futuro del Código. Despliega con <span style="color: var(--color-secondary);">GitForge.</span>',
-                'heroTagline': 'Su plataforma todo en uno para un desarrollo colaborativo ilimitado y alojamiento de sitios web estáticos y dinámicos.',
-                'whyChooseTitle': '¿Por Qué Elegir GitForge?',
-                'adv1Title': 'Despliegue Simplificado',
-                'adv1Text': 'Aloje **todo tipo de sitios web** (estáticos y dinámicos) con un rendimiento óptimo. Concéntrese en el código, nosotros nos encargamos del resto.',
-                'adv2Title': 'Colaboración Ilimitada',
-                'adv2Text': 'Cree repositorios Git ilimitados y trabaje en equipo con herramientas avanzadas como Pull Requests y Gestión de Issues, con facilidad.',
-                'adv3Title': 'Plan Gratuito Generoso',
-                'adv3Text': 'Acceda a **2 GB** de almacenamiento gratuito para sus repositorios y obtenga **1 GB de RAM** para sus aplicaciones web dinámicas.',
-                'techSupportTitle': 'Tecnologías Soportadas',
-                'featuresTitle': 'Características Integradas Avanzadas',
-                'feat1Title': 'Repositorios Git Ilimitados',
-                'feat1Text': 'Almacene todos sus proyectos sin ninguna restricción en el número de repositorios privados o públicos.',
-                'feat2Title': 'Entorno Dinámico',
-                'feat2Text': 'Alojamiento para aplicaciones dinámicas con una asignación dedicada de 1 GB de RAM.',
-                'feat3Title': 'Herramientas de Colaboración',
-                'feat3Text': 'Integración nativa de Pull Requests y un sistema completo de Seguimiento de Issues para un trabajo en equipo fluido.',
-                'feat4Title': 'Alojamiento Versátil',
-                'feat4Text': 'Soporte completo para el alojamiento de sitios web estáticos ultrarrápidos y aplicaciones dinámicas.',
-                'ambassadorTitle': 'Conviértase en un Pilar de la Comunidad GitForge',
-                'ambassadorText': 'Únase a nuestro programa de embajadores antes del lanzamiento para desempeñar un papel clave en nuestro crecimiento. A cambio, recibirá **acceso completo e ilimitado (Plan Premium)** a nuestra plataforma durante un año. ¡Aproveche esta oportunidad!',
-                'ambassadorButton': 'Aplicar Ahora',
-                'faqTitle': 'Preguntas Frecuentes (FAQ)',
-                'faqQ1': '¿Qué tan rápido es el proceso de despliegue?',
-                'faqA1': 'Nuestra infraestructura está optimizada para CI/CD, permitiendo despliegues casi instantáneos después de un push de Git. Utilizamos CDN global para máxima velocidad.',
-                'faqQ2': '¿Puedo usar un dominio personalizado?',
-                'faqA2': 'Sí, absolutamente. La configuración de dominio personalizado es totalmente compatible, incluidos los certificados SSL/TLS gratuitos a través de Let\'s Encrypt para todos sus proyectos.',
-                'faqQ3': '¿Qué hay de la seguridad?',
-                'faqA3': 'La seguridad es nuestra prioridad. Nuestra infraestructura está protegida por firewalls avanzados y todas las comunicaciones están cifradas. Los repositorios están aislados y monitoreados constantemente.',
-                'formTitle': 'Solicitud al Programa de Embajadores GitForge',
-                'formDescription': '¡Gracias por su interés en GitForge! Por favor, complete la siguiente información para postularse al programa y obtener su plan ilimitado de un año.',
-                'labelFullName': 'Nombre completo (Full Name)',
-                'labelEmail': 'Dirección de correo electrónico (Email Address)',
-                'labelUsername': 'Nombre de usuario GitHub/GitLab (Username)',
-                'labelSocial': 'Perfiles Sociales principales (Social Media Handles)',
-                'labelOccupation': 'Estado actual (Current Occupation/Status)',
-                'selectOccupationDefault': 'Seleccione su estado...',
-                'optionDeveloper': 'Desarrollador',
-                'optionStudent': 'Estudiante',
-                'optionContributor': 'Colaborador de Código Abierto',
-                'optionEducator': 'Educador/Profesor de Tecnología',
-                'optionMarketing': 'Gerente de Marketing/Comunidad',
-                'optionOther': 'Otro',
-                'labelWhy': '¿Por qué GitForge? (Why GitForge?)',
-                'textareaWhy': 'Describa su motivación y cómo puede ayudar a GitForge...',
-                'labelActivities': 'Actividades de Embajador (Ambassador Activities)',
-                'activityBeta': 'Pruebas Beta',
-                'activityContent': 'Creación de Contenido (Blogs, Videos)',
-                'activityCommunity': 'Gestión Comunitaria',
-                'activityEvent': 'Organización de Eventos (Meetups, Seminarios web)',
-                'labelLanguages': 'Lenguajes de Programación Preferidos (Preferred Programming Languages)',
-                'langOther': 'Otro',
-                'labelReferral': 'Fuente de Referencia (Referral Source)',
-                'selectReferralDefault': 'Seleccione una opción...',
-                'optionSocial': 'Redes Sociales',
-                'optionFriend': 'Amigo/Colega',
-                'optionArticle': 'Artículo en Línea',
-                'optionDirect': 'Directamente de GitForge',
-                'labelAgreement': 'Acuerdo: Acepto cumplir con los términos del programa de embajadores (enlace a agregar).',
-                'buttonSubmit': 'Enviar mi solicitud',
-                'formSubject': 'Nueva Solicitud de Embajador GitForge',
-                'footerText': 'Todos los derechos reservados. ¡Lanzamiento en 30 días!',
-            }
-        };
-
-        function switchLanguage(lang) {
-            const elements = document.querySelectorAll('[data-translate-key]');
-            const langData = translations[lang] || {};
+        // Fonction pour convertir le markdown en HTML
+        function convertMarkdown(text) {
+            if (!text) return '';
             
-            // Mettre à jour la balise <html>
-            document.documentElement.lang = lang;
+            let html = text;
             
-            // Mettre à jour l'URL de la bannière du compte à rebours
-            const countdownBanner = document.querySelector('.launch-countdown');
-            if (countdownBanner) {
-                countdownBanner.textContent = langData[countdownBanner.getAttribute('data-translate-key')] || countdownBanner.textContent;
-            }
-
-            elements.forEach(el => {
-                const key = el.getAttribute('data-translate-key');
-                const translation = langData[key];
-
-                if (translation !== undefined) {
-                    if (el.tagName === 'INPUT' && el.type === 'submit') {
-                        // Pour les boutons submit avec data-translate-key
-                        el.value = translation;
-                    } else if (el.tagName === 'BUTTON' && el.type === 'submit') {
-                        // Pour les balises <button>
-                         el.innerHTML = translation;
-                    } else if (el.tagName === 'A') {
-                        // Pour les liens comme le bouton ambassadeur
-                        el.innerHTML = translation;
-                    } else if (el.tagName === 'OPTION') {
-                        // Pour les options de sélection
-                        el.textContent = translation;
-                    } else if (el.hasAttribute('data-translate-placeholder')) {
-                        // Pour les placeholders (comme la textarea)
-                        el.setAttribute('placeholder', translation);
-                    } else {
-                        // Pour le contenu normal
-                        el.innerHTML = translation;
+            // Titres
+            html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+            
+            // Gras
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/__(.*?)__/g, '<strong>$1</strong>');
+            
+            // Italique
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            html = html.replace(/_(.*?)_/g, '<em>$1</em>');
+            
+            // Listes non ordonnées
+            html = html.replace(/^\s*\*\s+(.*$)/gm, '<li>$1</li>');
+            html = html.replace(/^\s*-\s+(.*$)/gm, '<li>$1</li>');
+            
+            // Bloquer les listes
+            const lines = html.split('\n');
+            let inList = false;
+            let newHtml = '';
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                
+                if (line.startsWith('<li>')) {
+                    if (!inList) {
+                        newHtml += '<ul>\n';
+                        inList = true;
                     }
+                    newHtml += line + '\n';
+                } else {
+                    if (inList) {
+                        newHtml += '</ul>\n';
+                        inList = false;
+                    }
+                    newHtml += line + '\n';
                 }
+            }
+            
+            if (inList) {
+                newHtml += '</ul>\n';
+            }
+            
+            html = newHtml;
+            
+            // Code inline
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Blocs de code
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, function(match, lang, code) {
+                return '<pre><code class="language-' + (lang || 'plaintext') + '">' + 
+                       escapeHtml(code) + '</code></pre>';
+            });
+            
+            // Liens
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:underline">$1</a>');
+            
+            // Paragraphes
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = html.replace(/^\s*(<\/?[^>]+>)?\s*$/gm, '$1');
+            
+            // Ajouter la balise <p> initiale si nécessaire
+            if (!html.startsWith('<') || html.startsWith('<p>')) {
+                html = '<p>' + html;
+            }
+            
+            if (!html.endsWith('</p>')) {
+                html += '</p>';
+            }
+            
+            return html;
+        }
+        
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+        
+        // Fonctions pour gérer l'importation de fichiers
+        function addFileFromComputer() {
+            // Vérifier la limite de fichiers
+            if (Alpine.$data(document.body).importedFiles.length >= 10) {
+                alert('Vous ne pouvez importer que 10 fichiers maximum.');
+                Alpine.$data(document.body).importMenuOpen = false;
+                return;
+            }
+            
+            // Simuler un clic sur un input file caché
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.multiple = true;
+            fileInput.style.display = 'none';
+            document.body.appendChild(fileInput);
+            
+            fileInput.addEventListener('change', function(e) {
+                const files = e.target.files;
+                handleFileUpload(files);
+                document.body.removeChild(fileInput);
+            });
+            
+            fileInput.click();
+        }
+        
+        function addRepository() {
+            // Vérifier la limite de fichiers
+            if (Alpine.$data(document.body).importedFiles.length >= 10) {
+                alert('Vous ne pouvez importer que 10 fichiers maximum.');
+                Alpine.$data(document.body).importMenuOpen = false;
+                return;
+            }
+            
+            // Simuler l'ajout d'un dépôt
+            Alpine.$data(document.body).importedFiles.push({
+                name: 'mon-depot-git',
+                size: 'Dépôt Git',
+                type: 'repository'
+            });
+            
+            Alpine.$data(document.body).importMenuOpen = false;
+            Alpine.$data(document.body).adjustTextareaHeight();
+            
+            alert("Dans une implémentation complète, cela ouvrirait une connexion à l'API pour sélectionner un dépôt Git.");
+        }
+        
+        function addSpace() {
+            // Vérifier la limite de fichiers
+            if (Alpine.$data(document.body).importedFiles.length >= 10) {
+                alert('Vous ne pouvez importer que 10 fichiers maximum.');
+                Alpine.$data(document.body).importMenuOpen = false;
+                return;
+            }
+            
+            // Simuler l'ajout d'un espace
+            Alpine.$data(document.body).importedFiles.push({
+                name: 'Espace de travail principal',
+                size: 'Espace Gitforge',
+                type: 'document'
+            });
+            
+            Alpine.$data(document.body).importMenuOpen = false;
+            Alpine.$data(document.body).adjustTextareaHeight();
+            
+            alert("Dans une implémentation complète, cela ouvrirait une sélection d'espace avec les fichiers disponibles.");
+        }
+        
+        function removeFile(index) {
+            Alpine.$data(document.body).importedFiles.splice(index, 1);
+            Alpine.$data(document.body).adjustTextareaHeight();
+        }
+        
+        function clearAllFiles() {
+            Alpine.$data(document.body).importedFiles = [];
+            Alpine.$data(document.body).adjustTextareaHeight();
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Estimer le nombre de tokens
+        function estimateTokens() {
+            const textarea = document.getElementById('chatInput');
+            const text = textarea.value.trim();
+            
+            if (!text) return 0;
+            
+            const tokens = Math.ceil(text.length / 4);
+            return tokens;
+        }
+        
+        // Ajuster la hauteur de la zone de texte
+        function adjustTextareaHeight() {
+            const textarea = document.getElementById('chatInput');
+            const fileCount = Alpine.$data(document.body).importedFiles.length;
+            
+            textarea.style.height = 'auto';
+            const scrollHeight = textarea.scrollHeight;
+            const maxHeight = 200;
+            let newHeight = Math.min(scrollHeight, maxHeight);
+            
+            if (fileCount > 0) {
+                Alpine.$data(document.body).chatInputHeight = '400px';
+            } else {
+                Alpine.$data(document.body).chatInputHeight = 'auto';
+            }
+            
+            textarea.style.height = newHeight + 'px';
+        }
+        
+        // Fonction pour envoyer un message
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value.trim();
+            
+            if (!message && Alpine.$data(document.body).importedFiles.length === 0) {
+                return;
+            }
+            
+            let messageContent = '';
+            let needsExpansion = false;
+            const tokens = estimateTokens();
+            
+            if (message) {
+                messageContent = message;
+                needsExpansion = message.length > 500;
+            }
+            
+            const filesToSend = [...Alpine.$data(document.body).importedFiles];
+            
+            Alpine.$data(document.body).messages.push({
+                type: 'user',
+                content: messageContent,
+                expanded: !needsExpansion,
+                needsExpansion: needsExpansion,
+                tokens: tokens,
+                files: filesToSend
+            });
+            
+            setTimeout(() => {
+                let assistantResponse = 'J\'ai bien reçu votre message' + (message ? ' : "' + message.substring(0, 100) + (message.length > 100 ? '...' : '') + '"' : '') + 
+                        (filesToSend.length > 0 ? ' ainsi que vos ' + filesToSend.length + ' fichier(s).' : '.') + 
+                        '\n\n## Comment puis-je vous aider ?\n\nJe suis prêt à vous assister avec :\n- L\'analyse de vos fichiers\n- Des explications détaillées\n- Des suggestions d\'amélioration\n- La génération de code\n\nN\'hésitez pas à me poser des questions spécifiques !';
+                
+                let assistantNeedsExpansion = assistantResponse.length > 500;
+                
+                Alpine.$data(document.body).messages.push({
+                    type: 'assistant',
+                    content: assistantResponse,
+                    expanded: !assistantNeedsExpansion,
+                    needsExpansion: assistantNeedsExpansion
+                });
+                
+                scrollToNewMessage();
+            }, 1000);
+            
+            chatInput.value = '';
+            Alpine.$data(document.body).importedFiles = [];
+            adjustTextareaHeight();
+            
+            Alpine.$data(document.body).importMenuOpen = false;
+            Alpine.$data(document.body).modelMenuOpen = false;
+            
+            if (Alpine.$data(document.body).newChatMode) {
+                Alpine.$data(document.body).newChatMode = false;
+                if (message) {
+                    const shortMessage = message.substring(0, 40) + (message.length > 40 ? '...' : '');
+                    Alpine.$data(document.body).currentChatTitle = shortMessage;
+                }
+            }
+            
+            setTimeout(scrollToNewMessage, 50);
+        }
+        
+        // Basculer l'expansion d'un message
+        function toggleMessageExpand(index) {
+            Alpine.$data(document.body).messages[index].expanded = !Alpine.$data(document.body).messages[index].expanded;
+        }
+        
+        // Copier un message
+        function copyMessage(index) {
+            const message = Alpine.$data(document.body).messages[index];
+            const textToCopy = message.content.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '');
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const copyBtn = event.target.closest('.copy-message-btn');
+                const originalHtml = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<span class="material-symbols-rounded text-green-500 text-sm">check</span>';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHtml;
+                }, 2000);
             });
         }
         
-        // Configuration initiale (démarrer en Anglais par défaut)
-        document.addEventListener('DOMContentLoaded', () => {
-            const initialLang = document.getElementById('languageSelect').value;
-            // On s'assure que tout le contenu en est est bien appliqué au chargement
-            switchLanguage(initialLang); 
+        // Copier l'URL de partage
+        function copyShareUrl() {
+            navigator.clipboard.writeText(Alpine.$data(document.body).shareUrl).then(() => {
+                alert('URL copiée dans le presse-papiers !');
+                Alpine.$data(document.body).shareMenuOpen = false;
+            });
+        }
+        
+        // Effacer tout l'historique
+        function clearAllHistory() {
+            if (confirm('Êtes-vous sûr de vouloir supprimer tout votre historique de discussions ? Cette action est irréversible.')) {
+                alert('Historique supprimé avec succès !');
+                Alpine.$data(document.body).profileMenuOpen = false;
+            }
+        }
+        
+        // Gérer le redimensionnement de la fenêtre
+        function handleResize() {
+            const isMobile = window.innerWidth < 1024;
+            Alpine.$data(document.body).mobileSidebarControls = isMobile;
+        }
+        
+        // Faire défiler pour voir le dernier message
+        function scrollToNewMessage() {
+            const chatContainer = document.getElementById('chatContainer');
+            if (chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+        
+        // Configuration du drag-and-drop
+        function setupDragAndDrop() {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+        
+        // Gérer le drag over
+        function handleDragOver(e) {
+            Alpine.$data(document.body).dragCounter++;
+            Alpine.$data(document.body).isDragging = true;
+        }
+        
+        // Gérer le drag leave du conteneur
+        function handleContainerDragLeave(e) {
+            if (!e.currentTarget.contains(e.relatedTarget)) {
+                Alpine.$data(document.body).dragCounter--;
+                if (Alpine.$data(document.body).dragCounter <= 0) {
+                    Alpine.$data(document.body).isDragging = false;
+                    Alpine.$data(document.body).dragCounter = 0;
+                }
+            }
+        }
+        
+        // Gérer le drag leave de l'overlay
+        function handleDragLeave(e) {
+            Alpine.$data(document.body).dragCounter--;
+            if (Alpine.$data(document.body).dragCounter <= 0) {
+                Alpine.$data(document.body).isDragging = false;
+                Alpine.$data(document.body).dragCounter = 0;
+            }
+        }
+        
+        // Gérer le drop de fichiers
+        function handleDrop(e) {
+            Alpine.$data(document.body).isDragging = false;
+            Alpine.$data(document.body).dragCounter = 0;
+            
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                handleFileUpload(files);
+            }
+        }
+        
+        // Traiter l'upload de fichiers avec limite de 10
+        function handleFileUpload(files) {
+            const currentCount = Alpine.$data(document.body).importedFiles.length;
+            const remainingSlots = 10 - currentCount;
+            
+            if (files.length > remainingSlots) {
+                alert(`Vous ne pouvez ajouter que ${remainingSlots} fichier(s) supplémentaire(s). La limite est de 10 fichiers.`);
+                files = Array.from(files).slice(0, remainingSlots);
+            }
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                let fileType = 'document';
+                
+                if (file.name.match(/\.(js|ts|java|cpp|py|rb|php|html|css|json|xml|yml|yaml)$/i)) {
+                    fileType = 'code';
+                } else if (file.name.match(/\.(jpg|jpeg|png|gif|svg|bmp|webp)$/i)) {
+                    fileType = 'image';
+                } else if (file.name.match(/\.(zip|rar|tar|gz|7z)$/i)) {
+                    fileType = 'archive';
+                }
+                
+                Alpine.$data(document.body).importedFiles.push({
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    type: fileType
+                });
+            }
+            
+            Alpine.$data(document.body).adjustTextareaHeight();
+        }
+        
+        // Démarrer une nouvelle discussion
+        function startNewChat() {
+            Alpine.$data(document.body).messages = [];
+            Alpine.$data(document.body).importedFiles = [];
+            Alpine.$data(document.body).newChatMode = true;
+            Alpine.$data(document.body).currentChatTitle = 'Nouvelle discussion';
+            
+            const chatInput = document.getElementById('chatInput');
+            chatInput.value = '';
+            adjustTextareaHeight();
+            
+            Alpine.$data(document.body).importMenuOpen = false;
+            Alpine.$data(document.body).modelMenuOpen = false;
+            Alpine.$data(document.body).chatManagementOpen = false;
+            
+            const chatContainer = document.getElementById('chatContainer');
+            if (chatContainer) {
+                chatContainer.scrollTop = 0;
+            }
+        }
+        
+        // Mettre à jour la position du menu de gestion
+        function updateChatMenuPosition(event) {
+            const rect = event.target.getBoundingClientRect();
+            Alpine.$data(document.body).chatManagementPosition = {
+                x: rect.left,
+                y: rect.bottom + window.scrollY
+            };
+        }
+        
+        // Renommer la discussion
+        function renameChat() {
+            const newTitle = prompt('Renommer la discussion:', Alpine.$data(document.body).currentChatTitle);
+            if (newTitle && newTitle.trim()) {
+                Alpine.$data(document.body).currentChatTitle = newTitle.trim();
+            }
+            Alpine.$data(document.body).chatManagementOpen = false;
+        }
+        
+        // Épingler la discussion
+        function pinChat() {
+            alert('Discussion épinglée! (Fonctionnalité à implémenter)');
+            Alpine.$data(document.body).chatManagementOpen = false;
+        }
+        
+        // Supprimer la discussion
+        function deleteChat() {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette discussion ?')) {
+                Alpine.$data(document.body).messages = [];
+                Alpine.$data(document.body).importedFiles = [];
+                Alpine.$data(document.body).currentChatTitle = 'Nouvelle discussion';
+                Alpine.$data(document.body).newChatMode = true;
+                
+                const chatInput = document.getElementById('chatInput');
+                chatInput.value = '';
+                adjustTextareaHeight();
+                
+                alert('Discussion supprimée avec succès!');
+            }
+            Alpine.$data(document.body).chatManagementOpen = false;
+        }
+        
+        // Initialiser les fonctions dans le contexte Alpine
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('appData', () => ({
+                sidebarOpen: false,
+                modelMenuOpen: false,
+                selectedModel: 'Claude Haiku 4.5',
+                importMenuOpen: false,
+                importedFiles: [],
+                chatInputHeight: 'auto',
+                messages: [
+                    { 
+                        type: 'user', 
+                        content: 'Quelles sont les caractéristiques d\'une interface professionnelle et que faut-il respecter pour la barre de défilement ?',
+                        expanded: true,
+                        needsExpansion: false,
+                        tokens: 42,
+                        files: []
+                    },
+                    { 
+                        type: 'assistant', 
+                        content: '# Caractéristiques d\'une interface professionnelle\n\nCréer une interface professionnelle nécessite une attention particulière aux **détails visuels**, à l\'**expérience utilisateur (UX)** et à l\'**ergonomie**. Voici les points essentiels :\n\n## Caractéristiques clés :\n\n- **Design épuré** : Utilisation d\'espaces blancs pour laisser respirer le contenu et réduire la charge cognitive.\n- **Barre de défilement (Scrollbar)** : Elle ne doit pas être la barre standard du navigateur. Elle doit être fine, discrète (souvent grise claire) et ne s\'afficher ou s\'assombrir qu\'au survol pour ne pas distraire l\'utilisateur.\n- **Navigation contextuelle** : Les menus doivent être accessibles là où l\'utilisateur en a besoin, sans encombrer l\'écran.\n- **Typographie** : Utilisation de polices sans-serif modernes avec une hiérarchie claire (tailles de texte différenciées).\n\n## Exemple de code CSS pour une scrollbar personnalisée :\n\n```css\n.custom-scrollbar::-webkit-scrollbar {\n    width: 6px;\n}\n\n.custom-scrollbar::-webkit-scrollbar-track {\n    background: transparent;\n}\n\n.custom-scrollbar::-webkit-scrollbar-thumb {\n    background: #d1d5db;\n    border-radius: 10px;\n}\n```',
+                        expanded: true,
+                        needsExpansion: false 
+                    }
+                ],
+                isDragging: false,
+                newChatMode: false,
+                dragCounter: 0,
+                chatManagementOpen: false,
+                chatInputFocused: false,
+                currentChatTitle: 'Comparaison entre Gitforge Copilot et Git...',
+                chatManagementPosition: { x: 0, y: 0 },
+                shareMenuOpen: false,
+                shareUrl: 'https://gitforge.com/copilot/chat/abc123',
+                shareVisibility: 'private',
+                profileMenuOpen: false,
+                theme: 'light',
+                activeChatMenu: null,
+                mobileSidebarControls: window.innerWidth < 1024,
+                
+                // Fonctions exposées
+                addFileFromComputer,
+                addRepository,
+                addSpace,
+                removeFile,
+                clearAllFiles,
+                adjustTextareaHeight,
+                estimateTokens,
+                sendMessage,
+                handleDragOver,
+                handleContainerDragLeave,
+                handleDragLeave,
+                handleDrop,
+                toggleMessageExpand,
+                copyMessage,
+                startNewChat,
+                updateChatMenuPosition,
+                renameChat,
+                pinChat,
+                deleteChat,
+                convertMarkdown,
+                copyShareUrl,
+                clearAllHistory,
+                handleResize
+            }));
         });
-
-
-        // Logique de la FAQ (accordeon)
-        document.addEventListener('DOMContentLoaded', function() {
-            const faqQuestions = document.querySelectorAll('.faq-question');
-            faqQuestions.forEach(question => {
-                question.addEventListener('click', () => {
-                    const faqItem = question.parentNode;
-                    const answer = question.nextElementSibling;
-                    const isActive = faqItem.classList.contains('active');
-
-                    // Fermer tous les autres
-                    document.querySelectorAll('.faq-item.active').forEach(item => {
-                        if (item !== faqItem) {
-                            item.classList.remove('active');
-                            item.querySelector('.faq-answer').style.maxHeight = 0;
-                        }
-                    });
-
-                    // Ouvrir ou fermer l'élément actuel
-                    if (!isActive) {
-                        faqItem.classList.add('active');
-                        answer.style.maxHeight = answer.scrollHeight + "px"; // Ajustement dynamique de la hauteur
-                    } else {
-                        faqItem.classList.remove('active');
-                        answer.style.maxHeight = 0;
+        
+        // Ajuster la hauteur initiale
+        window.addEventListener('load', () => {
+            adjustTextareaHeight();
+            
+            // Ajouter les écouteurs d'événements pour le drag-and-drop
+            const chatInputContainer = document.getElementById('chatInputContainer');
+            if (chatInputContainer) {
+                chatInputContainer.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    handleDragOver(e);
+                });
+                
+                chatInputContainer.addEventListener('dragleave', (e) => {
+                    handleContainerDragLeave(e);
+                });
+                
+                chatInputContainer.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    handleDrop(e);
+                });
+            }
+            
+            // Permettre d'envoyer avec Ctrl+Entrée ou Cmd+Entrée
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('keydown', (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                        sendMessage();
                     }
                 });
-            });
+            }
+            
+            // Initialiser la détection mobile
+            handleResize();
         });
     </script>
-
 </body>
 </html>
