@@ -385,6 +385,49 @@
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
+
+        /* Mobile-specific improvements */
+        @media (max-width: 640px) {
+            .mobile-padding-fix {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            
+            .mobile-textarea-fix {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+                font-size: 16px !important;
+            }
+            
+            .mobile-header-fix {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+                height: 3.5rem !important;
+            }
+            
+            .mobile-footer-fix {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+                padding-bottom: 1rem !important;
+            }
+            
+            .mobile-input-container-fix {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            
+            .mobile-chat-title-fix {
+                max-width: 150px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .mobile-model-selector-fix {
+                font-size: 11px !important;
+                padding: 0.375rem 0.5rem !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-white h-screen flex overflow-hidden" x-data="appData()" x-init="initApp()">
@@ -489,7 +532,8 @@
 
     <main class="flex-1 flex flex-col relative h-full min-w-0 bg-white">
         
-        <header class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-gray-50 bg-white shrink-0">
+        <!-- Header avec la même couleur de bordure que le reste de la page -->
+        <header class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-gray-100 bg-white shrink-0 mobile-header-fix">
             <div class="flex items-center gap-3 overflow-hidden">
                 <!-- Menu button - hidden on mobile when sidebar open -->
                 <button x-show="!sidebarOpen || !mobileSidebarControls" 
@@ -511,7 +555,7 @@
                         @click="chatManagementOpen = !chatManagementOpen; updateChatMenuPosition($event)"
                         class="flex items-center gap-2 cursor-pointer group truncate" 
                         :class="newChatMode ? 'text-gray-500' : 'text-gray-800'">
-                        <span class="font-semibold text-[15px] truncate max-w-[200px]" x-text="newChatMode ? 'New conversation' : currentChatTitle"></span>
+                        <span class="font-semibold text-[15px] truncate mobile-chat-title-fix" x-text="newChatMode ? 'New conversation' : currentChatTitle"></span>
                         <span class="material-symbols-rounded text-gray-400 text-sm group-hover:rotate-180 transition-transform">arrow_drop_down</span>
                     </button>
                     
@@ -629,13 +673,13 @@
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scrollbar" id="chatContainer">
-            <div class="max-w-3xl mx-auto py-10 px-4 space-y-10">
+            <div class="max-w-3xl mx-auto py-8 sm:py-10 px-3 sm:px-4 space-y-8 sm:space-y-10 mobile-padding-fix">
                 <!-- Messages will be loaded dynamically -->
             </div>
         </div>
 
-        <footer class="p-4 md:p-6 bg-white shrink-0">
-            <div class="max-w-3xl mx-auto relative">
+        <footer class="p-3 sm:p-4 md:p-6 bg-white shrink-0 mobile-footer-fix">
+            <div class="max-w-3xl mx-auto relative mobile-input-container-fix">
                 
                 <!-- Model selection card -->
                 <div 
@@ -816,7 +860,7 @@
                     <div class="relative">
                         <textarea 
                             id="chatInput"
-                            class="w-full p-4 pr-16 bg-transparent outline-none text-[16px] resize-none overflow-y-auto custom-scrollbar" 
+                            class="w-full p-4 pr-16 bg-transparent outline-none text-[16px] resize-none overflow-y-auto custom-scrollbar mobile-textarea-fix" 
                             placeholder="Ask anything"
                             rows="1"
                             style="max-height: 200px;"
@@ -849,7 +893,7 @@
                         <div class="flex items-center gap-3">
                             <div 
                                 @click="modelMenuOpen = !modelMenuOpen"
-                                class="flex items-center gap-1 text-[13px] text-gray-600 font-medium bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg cursor-pointer transition-colors"
+                                class="flex items-center gap-1 text-[13px] text-gray-600 font-medium bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg cursor-pointer transition-colors mobile-model-selector-fix"
                                 :class="modelMenuOpen ? 'bg-gray-200' : ''"
                             >
                                 <span x-text="selectedModel">Claude Haiku 4.5</span> 
@@ -971,6 +1015,11 @@
                     
                     // Setup event listeners
                     this.setupEventListeners();
+                    
+                    // Force initial textarea height adjustment
+                    setTimeout(() => {
+                        this.adjustTextareaHeight();
+                    }, 100);
                 },
 
                 // ===========================================
@@ -1625,6 +1674,19 @@
                     }
                     
                     textarea.style.height = newHeight + 'px';
+                    
+                    // Force a reflow on mobile to ensure proper layout
+                    if (window.innerWidth < 640) {
+                        setTimeout(() => {
+                            const chatContainer = document.getElementById('chatContainer');
+                            if (chatContainer) {
+                                chatContainer.style.height = 'auto';
+                                setTimeout(() => {
+                                    this.scrollToBottom();
+                                }, 50);
+                            }
+                        }, 10);
+                    }
                 },
 
                 // Scroll to bottom
@@ -1688,6 +1750,8 @@
                 // Handle resize
                 handleResize() {
                     this.mobileSidebarControls = window.innerWidth < 1024;
+                    // Re-adjust textarea on resize
+                    this.adjustTextareaHeight();
                 },
 
                 // Setup event listeners
