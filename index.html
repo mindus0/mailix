@@ -6,27 +6,46 @@
     <title>Gitforge Copilot - Professional Interface</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
         .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #d1d5db transparent; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        [x-cloak] { display: none !important; }
         
         .sidebar-transition {
             transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
 
-        /* Style for model card */
+        /* Animation for AI response */
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .typing-dots .dot {
+            width: 6px;
+            height: 6px;
+            background-color: #6b7280;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dots .dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots .dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+        
         .model-card {
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             border: 1px solid #e5e7eb;
         }
         
-        /* Style for imported files */
         .file-item {
             transition: all 0.2s ease;
         }
@@ -35,7 +54,6 @@
             background-color: #f9fafb;
         }
         
-        /* Animation for import card */
         .import-card-enter {
             opacity: 0;
             transform: translateY(-10px) scale(0.95);
@@ -58,7 +76,6 @@
             transition: opacity 0.15s ease, transform 0.15s ease;
         }
         
-        /* Style for drag-and-drop */
         .drag-active {
             border-color: #3b82f6 !important;
             background-color: #eff6ff !important;
@@ -69,7 +86,6 @@
             border: 2px dashed #3b82f6;
         }
         
-        /* Animation for new messages */
         .message-enter {
             opacity: 0;
             transform: translateY(10px);
@@ -81,7 +97,6 @@
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
         
-        /* Style for user messages - LIGHTER */
         .user-message-card {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             border: 1px solid #e2e8f0;
@@ -139,7 +154,6 @@
             display: none;
         }
         
-        /* Style for file cards */
         .file-preview-card {
             background: white;
             border: 1px solid #e5e7eb;
@@ -165,13 +179,11 @@
             margin-bottom: 16px;
         }
         
-        /* Style for input focus */
         .chat-input-focused {
             border-color: #3b82f6 !important;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        /* Style for chat management menu */
         .chat-management-menu {
             background: white;
             border-radius: 12px;
@@ -179,18 +191,6 @@
             border: 1px solid #e5e7eb;
             min-width: 200px;
             z-index: 60;
-        }
-        
-        /* Style for long messages with token management */
-        .token-counter {
-            font-size: 11px;
-            padding: 2px 8px;
-            background: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
         }
         
         .message-content-wrapper {
@@ -210,7 +210,6 @@
             opacity: 1;
         }
         
-        /* Styles for markdown */
         .markdown-content h1 {
             font-size: 1.875rem;
             font-weight: bold;
@@ -281,7 +280,6 @@
             font-style: italic;
         }
         
-        /* Styles for share card */
         .share-card {
             background: white;
             border-radius: 16px;
@@ -291,7 +289,6 @@
             max-width: 400px;
         }
         
-        /* Styles for profile card */
         .profile-card {
             background: white;
             border-radius: 16px;
@@ -301,7 +298,6 @@
             max-width: 320px;
         }
         
-        /* Transition for cards */
         .card-enter {
             opacity: 0;
             transform: scale(0.95) translateY(-10px);
@@ -324,7 +320,6 @@
             transition: opacity 0.15s ease, transform 0.15s ease;
         }
         
-        /* Style for chats in sidebar */
         .chat-item {
             position: relative;
             padding-left: 0.75rem;
@@ -342,95 +337,40 @@
         .chat-item:hover .chat-item-menu {
             opacity: 1;
         }
-
-        /* AI Typing Animation */
+        
         .typing-animation {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 16px;
-            background: #f8fafc;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
+            color: #6b7280;
+            font-style: italic;
         }
-
-        .typing-dots {
-            display: flex;
+        
+        .loading-indicator {
+            display: inline-flex;
+            align-items: center;
             gap: 4px;
         }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: #3b82f6;
+        
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e5e7eb;
+            border-top: 2px solid #3b82f6;
             border-radius: 50%;
-            animation: typingAnimation 1.4s infinite ease-in-out;
+            animation: spin 1s linear infinite;
         }
-
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes typingAnimation {
-            0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
-            40% { transform: scale(1); opacity: 1; }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
-        /* Stop button animation */
-        .stop-button-active {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        /* Mobile-specific improvements */
-        @media (max-width: 640px) {
-            .mobile-padding-fix {
-                padding-left: 0.5rem !important;
-                padding-right: 0.5rem !important;
-            }
-            
-            .mobile-textarea-fix {
-                padding-left: 0.75rem !important;
-                padding-right: 0.75rem !important;
-                font-size: 16px !important;
-            }
-            
-            .mobile-header-fix {
-                padding-left: 0.5rem !important;
-                padding-right: 0.5rem !important;
-                height: 3.5rem !important;
-            }
-            
-            .mobile-footer-fix {
-                padding-left: 0.5rem !important;
-                padding-right: 0.5rem !important;
-                padding-bottom: 1rem !important;
-            }
-            
-            .mobile-input-container-fix {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-            }
-            
-            .mobile-chat-title-fix {
-                max-width: 150px !important;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            
-            .mobile-model-selector-fix {
-                font-size: 11px !important;
-                padding: 0.375rem 0.5rem !important;
-            }
-        }
+        
+        [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="bg-white h-screen flex overflow-hidden" x-data="appData()" x-init="initApp()">
+<body class="bg-white h-screen flex overflow-hidden" x-data="appData()" x-init="init()">
+
     <!-- Sidebar -->
     <aside 
         x-cloak
@@ -440,8 +380,7 @@
         <div class="p-4 mb-4 min-w-[256px] flex items-center justify-between">
             <img src="https://i.postimg.cc/t4NCGNzD/gitforge-png.png" alt="Gitforge Logo" class="h-8 w-auto">
             
-            <!-- Close button visible only on mobile when sidebar is open -->
-            <button x-show="sidebarOpen && mobileSidebarControls" @click="sidebarOpen = false" 
+            <button x-show="sidebarOpen" @click="sidebarOpen = false" 
                     class="p-2 hover:bg-gray-100 rounded-lg text-gray-500 lg:hidden">
                 <span class="material-symbols-rounded">close</span>
             </button>
@@ -459,21 +398,52 @@
             </button>
 
             <div class="mt-8 pt-4">
-                <p class="px-3 text-[12px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Recent conversations</p>
-                <div class="space-y-1" id="recentChatsList">
-                    <!-- Recent chats will be loaded dynamically -->
+                <p class="px-3 text-[12px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Recent Conversations</p>
+                <div class="space-y-1">
+                    <template x-for="chat in recentChats" :key="chat.id">
+                        <div class="chat-item px-3 py-2 text-[15px] text-gray-600 hover:bg-gray-50 rounded-lg cursor-pointer truncate">
+                            <div class="flex items-center justify-between">
+                                <span x-text="chat.title"></span>
+                                <button @click.stop="activeChatMenu = activeChatMenu === chat.id ? null : chat.id" 
+                                        class="chat-item-menu p-1 hover:bg-gray-200 rounded">
+                                    <span class="material-symbols-rounded text-gray-500">more_vert</span>
+                                </button>
+                            </div>
+                            
+                            <div x-show="activeChatMenu === chat.id" @click.outside="activeChatMenu = null"
+                                 class="absolute left-0 right-0 mt-1 z-50 chat-management-menu">
+                                <div class="p-2">
+                                    <button @click="renameChat(chat.id)" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
+                                        <span class="material-symbols-rounded text-[20px] text-gray-500">edit</span>
+                                        Rename
+                                    </button>
+                                    <button @click="pinChat(chat.id)" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
+                                        <span class="material-symbols-rounded text-[20px] text-gray-500">push_pin</span>
+                                        Pin chat
+                                    </button>
+                                    <div class="h-px bg-gray-100 my-1"></div>
+                                    <button @click="deleteChat(chat.id)" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-red-50 rounded-lg text-[14px] text-red-600 transition-colors">
+                                        <span class="material-symbols-rounded text-[20px]">delete</span>
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <div x-show="recentChats.length === 0" class="px-3 py-2 text-[14px] text-gray-400 italic">
+                        No recent conversations
+                    </div>
                 </div>
             </div>
         </nav>
 
-        <!-- Stable section at bottom of sidebar -->
         <div class="mt-auto border-t border-gray-50 min-w-[256px]">
             <div class="p-3 space-y-1">
                 <button @click="sidebarOpen = false" class="w-full flex items-center gap-3 px-3 py-2 text-gray-500 hover:bg-gray-50 rounded-lg text-sm">
                     <span class="material-symbols-rounded">dock_to_left</span> Collapse
                 </button>
                 
-                <!-- User profile -->
                 <div class="relative">
                     <button @click="profileMenuOpen = !profileMenuOpen" 
                             class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors">
@@ -488,7 +458,6 @@
                               :class="profileMenuOpen ? 'rotate-180' : ''">expand_more</span>
                     </button>
                     
-                    <!-- Profile menu -->
                     <div x-show="profileMenuOpen" @click.outside="profileMenuOpen = false"
                          x-transition:enter="card-enter"
                          x-transition:enter-start="card-enter"
@@ -532,19 +501,15 @@
 
     <main class="flex-1 flex flex-col relative h-full min-w-0 bg-white">
         
-        <!-- Header avec la même couleur de bordure que le reste de la page -->
-        <header class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-gray-100 bg-white shrink-0 mobile-header-fix">
+        <header class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-gray-50 bg-white shrink-0">
             <div class="flex items-center gap-3 overflow-hidden">
-                <!-- Menu button - hidden on mobile when sidebar open -->
-                <button x-show="!sidebarOpen || !mobileSidebarControls" 
-                        @click="sidebarOpen = !sidebarOpen" 
-                        class="p-2 hover:bg-gray-100 rounded-lg text-gray-500 lg:hidden">
-                    <span class="material-symbols-rounded">menu</span>
+                <!-- Unified Menu Button -->
+                <button @click="sidebarOpen = !sidebarOpen" 
+                        class="p-2 hover:bg-gray-100 rounded-lg text-gray-500">
+                    <span class="material-symbols-rounded" x-text="sidebarOpen ? 'close' : 'menu'"></span>
                 </button>
                 
-                <!-- New chat button - hidden on mobile when sidebar open -->
-                <button x-show="!sidebarOpen || !mobileSidebarControls" 
-                        @click="startNewChat" 
+                <button @click="startNewChat" 
                         class="p-2 hover:bg-gray-100 rounded-lg text-gray-500" 
                         title="New chat">
                     <span class="material-symbols-rounded">edit_square</span>
@@ -555,11 +520,10 @@
                         @click="chatManagementOpen = !chatManagementOpen; updateChatMenuPosition($event)"
                         class="flex items-center gap-2 cursor-pointer group truncate" 
                         :class="newChatMode ? 'text-gray-500' : 'text-gray-800'">
-                        <span class="font-semibold text-[15px] truncate mobile-chat-title-fix" x-text="newChatMode ? 'New conversation' : currentChatTitle"></span>
+                        <span class="font-semibold text-[15px] truncate max-w-[200px]" x-text="newChatMode ? 'New chat' : currentChatTitle"></span>
                         <span class="material-symbols-rounded text-gray-400 text-sm group-hover:rotate-180 transition-transform">arrow_drop_down</span>
                     </button>
                     
-                    <!-- Chat management menu -->
                     <div 
                         x-show="chatManagementOpen && !newChatMode" 
                         @click.outside="chatManagementOpen = false"
@@ -571,16 +535,16 @@
                         x-transition:enter-end="opacity-100 scale-100"
                     >
                         <div class="p-2">
-                            <button @click="renameChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
+                            <button @click="renameCurrentChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
                                 <span class="material-symbols-rounded text-[20px] text-gray-500">edit</span>
                                 Rename
                             </button>
-                            <button @click="pinChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
+                            <button @click="pinCurrentChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-[14px] text-gray-700 transition-colors">
                                 <span class="material-symbols-rounded text-[20px] text-gray-500">push_pin</span>
                                 Pin chat
                             </button>
                             <div class="h-px bg-gray-100 my-1"></div>
-                            <button @click="deleteChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-red-50 rounded-lg text-[14px] text-red-600 transition-colors">
+                            <button @click="deleteCurrentChat" class="w-full flex items-center gap-3 px-3 py-2 hover:bg-red-50 rounded-lg text-[14px] text-red-600 transition-colors">
                                 <span class="material-symbols-rounded text-[20px]">delete</span>
                                 Delete
                             </button>
@@ -588,22 +552,13 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- NEW: Menu icon in top right -->
             <div class="flex items-center gap-3">
-                <button @click="sidebarOpen = !sidebarOpen" 
-                        class="p-2 hover:bg-gray-100 rounded-lg text-gray-500 hidden lg:block"
-                        :title="sidebarOpen ? 'Close sidebar' : 'Open sidebar'">
-                    <span class="material-symbols-rounded" x-text="sidebarOpen ? 'menu_open' : 'menu'"></span>
-                </button>
-                
                 <div class="relative">
                     <button @click="shareMenuOpen = !shareMenuOpen" 
                             class="flex items-center gap-2 border border-gray-200 px-3 py-1.5 rounded-lg text-[13px] font-medium hover:bg-gray-50">
                         <span class="material-symbols-rounded text-sm">share</span> Share
                     </button>
                     
-                    <!-- Share card -->
                     <div x-show="shareMenuOpen" @click.outside="shareMenuOpen = false"
                          x-transition:enter="card-enter"
                          x-transition:enter-start="card-enter"
@@ -638,7 +593,7 @@
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Link</label>
                                 <div class="flex items-center gap-2">
-                                    <input type="text" x-model="shareUrl" readonly 
+                                    <input type="text" :value="shareUrl" readonly 
                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50">
                                     <button @click="copyShareUrl" 
                                             class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
@@ -661,7 +616,7 @@
             </div>
         </header>
 
-        <!-- Overlay for drag-and-drop -->
+        <!-- Drag and Drop Overlay -->
         <div x-show="isDragging" @dragover.prevent @drop.prevent="handleDrop" @dragleave="handleDragLeave"
              class="fixed inset-0 z-50 bg-white/90 flex items-center justify-center pointer-events-auto"
              x-cloak>
@@ -672,16 +627,134 @@
             </div>
         </div>
 
+        <!-- Chat Container -->
         <div class="flex-1 overflow-y-auto custom-scrollbar" id="chatContainer">
-            <div class="max-w-3xl mx-auto py-8 sm:py-10 px-3 sm:px-4 space-y-8 sm:space-y-10 mobile-padding-fix">
-                <!-- Messages will be loaded dynamically -->
+            <div class="max-w-3xl mx-auto py-10 px-4 space-y-10">
+                <!-- Welcome message when empty -->
+                <template x-if="messages.length === 0 && !isLoading">
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="material-symbols-rounded text-gray-400 text-2xl">smart_toy</span>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Welcome to Gitforge Copilot</h3>
+                        <p class="text-gray-600 max-w-md mx-auto mb-6">
+                            I'm your AI coding assistant. I can help you with code analysis, debugging, 
+                            explanations, and generating code snippets.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 max-w-sm mx-auto">
+                            <button @click="suggestedPrompt('How to optimize React performance?')" 
+                                    class="p-3 bg-gray-50 rounded-lg text-left hover:bg-gray-100">
+                                <span class="text-sm font-medium text-gray-900">React optimization</span>
+                            </button>
+                            <button @click="suggestedPrompt('Explain this Python function')" 
+                                    class="p-3 bg-gray-50 rounded-lg text-left hover:bg-gray-100">
+                                <span class="text-sm font-medium text-gray-900">Code explanation</span>
+                            </button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Messages -->
+                <template x-for="(message, index) in messages" :key="index">
+                    <div x-data="{ isVisible: false }" x-init="setTimeout(() => isVisible = true, 50)" 
+                         :class="isVisible ? 'message-enter-active' : 'message-enter'"
+                         class="flex gap-4" :class="message.type === 'user' ? 'flex-col items-end' : ''">
+                        <template x-if="message.type === 'user'">
+                            <div class="user-message-card px-6 py-4 text-gray-800 text-[16px] leading-relaxed w-full"
+                                 :class="message.needsExpansion && !message.expanded ? 'message-collapsed' : 'message-expanded'">
+                                <div class="message-content-wrapper">
+                                    <p x-text="message.content"></p>
+                                    <button @click="copyMessage(index)" class="copy-message-btn p-1 hover:bg-white/50 rounded-lg" title="Copy message">
+                                        <span class="material-symbols-rounded text-gray-500 text-sm">content_copy</span>
+                                    </button>
+                                </div>
+                                
+                                <template x-if="message.files && message.files.length > 0">
+                                    <div class="files-container">
+                                        <template x-for="(file, fileIndex) in message.files" :key="fileIndex">
+                                            <div class="file-preview-card">
+                                                <div class="flex items-start gap-2">
+                                                    <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+                                                        <span class="material-symbols-rounded text-gray-600" :x-text="getFileIcon(file.type)"></span>
+                                                    </div>
+                                                    <div class="flex-1 min-w-0">
+                                                        <div class="text-[13px] font-medium text-gray-800 truncate" x-text="file.name"></div>
+                                                        <div class="text-[11px] text-gray-500" x-text="file.size"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                
+                                <template x-if="message.needsExpansion">
+                                    <button @click="toggleMessageExpand(index)" 
+                                            class="mt-2 flex items-center gap-1 text-[13px] text-blue-600 hover:text-blue-800 font-medium">
+                                        <span x-text="message.expanded ? 'Show less' : 'Show more'"></span>
+                                        <span class="material-symbols-rounded text-sm transition-transform" 
+                                              :class="message.expanded ? 'rotate-180' : ''">expand_more</span>
+                                    </button>
+                                </template>
+                                
+                                <template x-if="message.needsExpansion && !message.expanded">
+                                    <div class="message-gradient"></div>
+                                </template>
+                            </div>
+                        </template>
+                        <template x-if="message.type === 'assistant'">
+                            <div class="flex gap-4 w-full">
+                                <div class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center shrink-0 border border-gray-200">
+                                    <span class="material-symbols-rounded text-gray-400 text-2xl">smart_toy</span>
+                                </div>
+                                <div class="flex-1 space-y-6 text-gray-800 leading-relaxed text-[16px]" 
+                                     :class="message.needsExpansion && !message.expanded ? 'message-collapsed' : 'message-expanded'">
+                                    <div class="relative markdown-content">
+                                        <template x-if="message.isStreaming">
+                                            <div class="typing-animation">
+                                                <div class="typing-dots">
+                                                    <div class="dot"></div>
+                                                    <div class="dot"></div>
+                                                    <div class="dot"></div>
+                                                </div>
+                                                <span>Gitforge is thinking...</span>
+                                            </div>
+                                        </template>
+                                        <template x-if="!message.isStreaming">
+                                            <div x-html="convertMarkdown(message.content)"></div>
+                                        </template>
+                                    </div>
+                                    
+                                    <template x-if="message.needsExpansion">
+                                        <button @click="toggleMessageExpand(index)" 
+                                                class="flex items-center gap-1 text-[13px] text-gray-500 hover:text-gray-700 font-medium">
+                                            <span x-text="message.expanded ? 'Show less' : 'Show more'"></span>
+                                            <span class="material-symbols-rounded text-sm transition-transform" 
+                                                  :class="message.expanded ? 'rotate-180' : ''">expand_more</span>
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Loading indicator -->
+                <template x-if="isLoading">
+                    <div class="flex justify-center items-center py-8">
+                        <div class="loading-indicator">
+                            <div class="loading-spinner"></div>
+                            <span class="text-gray-500">Loading conversation...</span>
+                        </div>
+                    </div>
+                </template>
             </div>
         </div>
 
-        <footer class="p-3 sm:p-4 md:p-6 bg-white shrink-0 mobile-footer-fix">
-            <div class="max-w-3xl mx-auto relative mobile-input-container-fix">
+        <!-- Footer with Input -->
+        <footer class="p-4 md:p-6 bg-white shrink-0">
+            <div class="max-w-3xl mx-auto relative">
                 
-                <!-- Model selection card -->
+                <!-- Model Selection Card -->
                 <div 
                     x-show="modelMenuOpen" 
                     x-transition:enter="transition ease-out duration-200"
@@ -743,7 +816,7 @@
                     </div>
                 </div>
                 
-                <!-- Import card -->
+                <!-- Import File Card -->
                 <div 
                     x-show="importMenuOpen" 
                     x-transition:enter="import-card-enter"
@@ -762,7 +835,6 @@
                     </div>
                     
                     <div class="p-2">
-                        <!-- Button to import from computer -->
                         <button @click="addFileFromComputer" class="w-full flex items-center gap-3 px-3 py-3 hover:bg-gray-50 rounded-xl transition-colors text-left">
                             <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
                                 <span class="material-symbols-rounded">upload</span>
@@ -799,14 +871,12 @@
                     </div>
                 </div>
 
-                <!-- Main input area with imported files display -->
+                <!-- Input Container -->
                 <div id="chatInputContainer" 
                      class="border border-gray-200 rounded-2xl focus-within:border-gray-300 transition-all duration-200 shadow-sm bg-white overflow-hidden" 
                      :class="isDragging ? 'drag-active' : (chatInputFocused ? 'chat-input-focused' : '')"
-                     :style="{ maxHeight: chatInputHeight === 'auto' ? 'none' : '400px' }"
                      @dragover.prevent="handleDragOver" @dragleave="handleContainerDragLeave" @drop.prevent="handleDrop">
                     
-                    <!-- Section to display imported files (with limit of 10) -->
                     <div x-show="importedFiles.length > 0" class="border-b border-gray-100">
                         <div class="px-4 pt-3 pb-2 flex items-center justify-between">
                             <h4 class="text-[13px] font-medium text-gray-700">
@@ -821,21 +891,7 @@
                                     <div class="file-preview-card">
                                         <div class="flex items-start gap-2">
                                             <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
-                                                <template x-if="file.type === 'code'">
-                                                    <span class="material-symbols-rounded text-gray-600">code</span>
-                                                </template>
-                                                <template x-if="file.type === 'document'">
-                                                    <span class="material-symbols-rounded text-gray-600">description</span>
-                                                </template>
-                                                <template x-if="file.type === 'image'">
-                                                    <span class="material-symbols-rounded text-gray-600">image</span>
-                                                </template>
-                                                <template x-if="file.type === 'repository'">
-                                                    <span class="material-symbols-rounded text-gray-600">folder</span>
-                                                </template>
-                                                <template x-if="file.type === 'archive'">
-                                                    <span class="material-symbols-rounded text-gray-600">folder_zip</span>
-                                                </template>
+                                                <span class="material-symbols-rounded text-gray-600" :x-text="getFileIcon(file.type)"></span>
                                             </div>
                                             <div class="flex-1 min-w-0">
                                                 <div class="text-[13px] font-medium text-gray-800 truncate" x-text="file.name"></div>
@@ -848,35 +904,27 @@
                                     </div>
                                 </template>
                                 
-                                <!-- Message if more than 10 files -->
                                 <div x-show="importedFiles.length > 10" class="text-sm text-amber-600 italic">
-                                    + <span x-text="importedFiles.length - 10"></span> additional file(s)
+                                    + <span x-text="importedFiles.length - 10"></span> more file(s)
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Text area -->
                     <div class="relative">
                         <textarea 
                             id="chatInput"
-                            class="w-full p-4 pr-16 bg-transparent outline-none text-[16px] resize-none overflow-y-auto custom-scrollbar mobile-textarea-fix" 
-                            placeholder="Ask anything"
+                            class="w-full p-4 pr-16 bg-transparent outline-none text-[16px] resize-none overflow-y-auto custom-scrollbar" 
+                            placeholder="Ask anything..."
                             rows="1"
                             style="max-height: 200px;"
                             @input="adjustTextareaHeight"
                             @focus="chatInputFocused = true; importMenuOpen = false; modelMenuOpen = false;"
-                            @blur="chatInputFocused = false"></textarea>
-                        
-                        <!-- Token estimator -->
-                        <div class="absolute right-4 bottom-16">
-                            <div x-show="estimateTokens() > 0" class="token-counter">
-                                <span x-text="estimateTokens()"></span> estimated tokens
-                            </div>
-                        </div>
+                            @blur="chatInputFocused = false"
+                            @keydown.ctrl.enter="sendMessage"
+                            @keydown.cmd.enter="sendMessage"></textarea>
                     </div>
                     
-                    <!-- Toolbar -->
                     <div class="flex items-center justify-between px-4 pb-3">
                         <div class="flex items-center gap-4 text-gray-400">
                             <div class="relative">
@@ -893,614 +941,380 @@
                         <div class="flex items-center gap-3">
                             <div 
                                 @click="modelMenuOpen = !modelMenuOpen"
-                                class="flex items-center gap-1 text-[13px] text-gray-600 font-medium bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg cursor-pointer transition-colors mobile-model-selector-fix"
+                                class="flex items-center gap-1 text-[13px] text-gray-600 font-medium bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg cursor-pointer transition-colors"
                                 :class="modelMenuOpen ? 'bg-gray-200' : ''"
                             >
                                 <span x-text="selectedModel">Claude Haiku 4.5</span> 
                                 <span class="material-symbols-rounded text-sm" :class="modelMenuOpen ? 'rotate-180' : ''">expand_more</span>
                             </div>
                             <button @click="sendMessage" 
-                                    class="text-gray-300 transition-colors" 
-                                    :class="(document.getElementById('chatInput').value.trim() || importedFiles.length > 0) ? 'text-blue-500 hover:text-blue-600' : ''">
-                                <span id="sendButtonIcon" class="material-symbols-rounded text-[28px]">send</span>
+                                    class="transition-colors" 
+                                    :class="(chatInputValue.trim() || importedFiles.length > 0) && !isGenerating ? 'text-blue-500 hover:text-blue-600' : 'text-gray-300'">
+                                <span class="material-symbols-rounded text-[28px]" 
+                                      x-text="isGenerating ? 'stop' : 'send'"></span>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
         </footer>
-
     </main>
 
+    <!-- Mobile overlay for sidebar -->
     <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black/20 z-30 lg:hidden" x-transition.opacity x-cloak></div>
 
     <script>
-        // ===========================================
-        // API CONFIGURATION
-        // ===========================================
-        const API_CONFIG = {
-            MESSAGE_URL: "/api/gemini/chat/message",                     // Streaming text
-            MESSAGE_WITH_FILES_URL: "/api/gemini/chat/message_with_files", // With files
-            HISTORY_URL: "/api/gemini/chat/history",                     // GET conversation history
-            SAVE_URL: "/api/gemini/chat/save",                           // POST save conversation
-            LIST_URL: "/api/gemini/chat/list",                           // GET list conversations
-            DELETE_SINGLE_URL: "/api/gemini/chat/delete",                // DELETE single conversation
-            DELETE_ALL_URL: "/api/gemini/chat/delete_all",               // DELETE all conversations
-            FRONTEND_BASE_PATH: "/mindus/nexus/gitforge_copilot"
-        };
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('appData', () => ({
+                // API Routes
+                API_MESSAGE_URL: "/api/gemini/chat/message",
+                API_MESSAGE_WITH_FILES_URL: "/api/gemini/chat/message_with_files",
+                API_HISTORY_URL: "/api/gemini/chat/history",
+                API_SAVE_URL: "/api/gemini/chat/save",
+                API_LIST_URL: "/api/gemini/chat/list",
+                API_DELETE_SINGLE_URL: "/api/gemini/chat/delete",
+                API_DELETE_ALL_URL: "/api/gemini/chat/delete_all",
+                FRONTEND_BASE_PATH: "/mindus/nexus/gitforge_copilot",
 
-        // ===========================================
-        // UTILITY FUNCTIONS
-        // ===========================================
-        
-        // Generate UUID
-        function generateUUID() {
-            return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-            );
-        }
-
-        // Get conversation ID from URL
-        function getInitialConversationId() {
-            const pathSegments = window.location.pathname.split('/').filter(segment => segment.length > 0);
-            const copilotIndex = pathSegments.indexOf('gitforge_copilot');
-            if (copilotIndex !== -1 && copilotIndex + 1 < pathSegments.length) {
-                return pathSegments[copilotIndex + 1];
-            }
-            return null;
-        }
-
-        // Format file size
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        // Convert markdown to HTML
-        function convertMarkdown(text) {
-            if (!text) return '';
-            return marked.parse(text, { breaks: true });
-        }
-
-        // ===========================================
-        // ALPINE.JS APP DATA
-        // ===========================================
-        function appData() {
-            return {
-                // State variables
+                // State
                 sidebarOpen: false,
                 modelMenuOpen: false,
                 selectedModel: 'Claude Haiku 4.5',
                 importMenuOpen: false,
                 importedFiles: [],
-                chatInputHeight: 'auto',
                 messages: [],
+                isLoading: false,
+                isGenerating: false,
                 isDragging: false,
                 newChatMode: true,
                 dragCounter: 0,
                 chatManagementOpen: false,
                 chatInputFocused: false,
-                currentChatTitle: 'New conversation',
+                currentChatTitle: 'New chat',
+                currentConversationId: null,
                 chatManagementPosition: { x: 0, y: 0 },
                 shareMenuOpen: false,
-                shareUrl: '',
+                shareUrl: 'https://gitforge.com/copilot/chat/abc123',
                 shareVisibility: 'private',
                 profileMenuOpen: false,
                 activeChatMenu: null,
-                mobileSidebarControls: window.innerWidth < 1024,
-                isGenerating: false,
-                currentConversationId: getInitialConversationId() || generateUUID(),
                 recentChats: [],
+                streamController: null,
 
-                // ===========================================
-                // INITIALIZATION
-                // ===========================================
-                async initApp() {
-                    console.log('Initializing app...');
-                    
-                    // Load initial conversation history if ID exists
-                    if (this.currentConversationId) {
-                        await this.loadConversationHistory(this.currentConversationId);
-                        this.newChatMode = false;
-                    }
-                    
-                    // Load recent chats
-                    await this.loadRecentChats();
-                    
-                    // Update URL if needed
-                    this.updateURL();
-                    
-                    // Setup event listeners
-                    this.setupEventListeners();
-                    
-                    // Force initial textarea height adjustment
-                    setTimeout(() => {
-                        this.adjustTextareaHeight();
-                    }, 100);
+                // Initialization
+                init() {
+                    this.setupDragAndDrop();
+                    this.loadConversationId();
+                    this.loadRecentChats();
+                    this.handleResize();
+                    window.addEventListener('resize', () => this.handleResize());
                 },
 
-                // ===========================================
-                // API FUNCTIONS
-                // ===========================================
-                
-                // Load conversation history
-                async loadConversationHistory(convId) {
-                    try {
-                        const response = await fetch(`${API_CONFIG.HISTORY_URL}/${convId}`);
-                        if (!response.ok) {
-                            if (response.status === 404) {
-                                console.log(`New conversation: ID ${convId}`);
-                                return;
-                            }
-                            throw new Error(`HTTP error: ${response.status}`);
-                        }
-
-                        const historyData = await response.json();
-                        if (historyData.history && historyData.history.length > 0) {
-                            this.messages = [];
-                            historyData.history.forEach(turn => {
-                                // User message
-                                this.messages.push({
-                                    type: 'user',
-                                    content: turn.messages[0]?.text || '',
-                                    expanded: true,
-                                    needsExpansion: false,
-                                    files: []
-                                });
-                                
-                                // AI response
-                                const aiResponse = turn.messages[1]?.text || '';
-                                this.messages.push({
-                                    type: 'assistant',
-                                    content: aiResponse,
-                                    expanded: true,
-                                    needsExpansion: aiResponse.length > 500
-                                });
-                            });
-                            
-                            // Update chat title from first message if available
-                            if (this.messages.length > 0) {
-                                const firstMessage = this.messages[0].content;
-                                this.currentChatTitle = firstMessage.substring(0, 40) + 
-                                    (firstMessage.length > 40 ? '...' : '');
-                            }
-                            
-                            this.scrollToBottom();
-                        }
-                    } catch (error) {
-                        console.error('Error loading conversation history:', error);
-                    }
-                },
-
-                // Load recent chats
+                // API Functions
                 async loadRecentChats() {
                     try {
-                        const response = await fetch(API_CONFIG.LIST_URL);
-                        if (!response.ok) {
-                            console.warn('Could not load chat list');
-                            return;
+                        const response = await fetch(this.API_LIST_URL);
+                        if (response.ok) {
+                            const data = await response.json();
+                            this.recentChats = data.chats || [];
                         }
-
-                        const data = await response.json();
-                        this.recentChats = data.chats || [];
-                        this.renderRecentChats();
                     } catch (error) {
                         console.error('Error loading recent chats:', error);
                     }
                 },
 
-                // Save conversation turn
-                async saveConversationTurn(userPrompt, aiResponse) {
-                    if (!userPrompt || !aiResponse) return;
-
-                    const requestBody = {
-                        conversation_id: this.currentConversationId,
-                        prompt: userPrompt,
-                        ai_response: aiResponse
-                    };
-
-                    try {
-                        const response = await fetch(API_CONFIG.SAVE_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(requestBody)
-                        });
-
-                        if (!response.ok) {
-                            throw new Error(`HTTP error: ${response.status}`);
-                        }
-                        
-                        // Update URL after first save
-                        if (this.messages.length === 2) {
-                            this.updateURL();
-                        }
-                        
-                        // Refresh recent chats
-                        await this.loadRecentChats();
-                    } catch (error) {
-                        console.error('Error saving conversation:', error);
-                    }
-                },
-
-                // Delete conversation
-                async deleteConversation(convId, element = null) {
-                    if (!confirm('Are you sure you want to delete this conversation?')) {
-                        return;
-                    }
-
-                    try {
-                        const response = await fetch(`${API_CONFIG.DELETE_SINGLE_URL}/${convId}`, {
-                            method: 'DELETE'
-                        });
-
-                        if (!response.ok) {
-                            throw new Error(`HTTP error: ${response.status}`);
-                        }
-
-                        // Remove from recent chats
-                        this.recentChats = this.recentChats.filter(chat => chat.id !== convId);
-                        this.renderRecentChats();
-
-                        // If current conversation is deleted, start new chat
-                        if (convId === this.currentConversationId) {
-                            this.startNewChat();
-                        }
-                    } catch (error) {
-                        console.error('Error deleting conversation:', error);
-                        alert('Error deleting conversation: ' + error.message);
-                    }
-                },
-
-                // Clear all history
-                async clearAllHistory() {
-                    if (!confirm('Are you sure you want to delete ALL conversation history? This action is irreversible.')) {
-                        return;
-                    }
-
-                    try {
-                        const response = await fetch(API_CONFIG.DELETE_ALL_URL, {
-                            method: 'DELETE'
-                        });
-
-                        if (!response.ok) {
-                            throw new Error(`HTTP error: ${response.status}`);
-                        }
-
-                        // Reset state
-                        this.currentConversationId = generateUUID();
-                        this.messages = [];
-                        this.recentChats = [];
-                        this.currentChatTitle = 'New conversation';
-                        this.newChatMode = true;
-                        this.importedFiles = [];
-                        
-                        // Update UI
-                        this.renderRecentChats();
-                        this.updateURL();
-                        this.profileMenuOpen = false;
-                        
-                        alert('All history has been deleted successfully.');
-                    } catch (error) {
-                        console.error('Error clearing history:', error);
-                        alert('Error clearing history: ' + error.message);
-                    }
-                },
-
-                // ===========================================
-                // MESSAGE HANDLING
-                // ===========================================
-                
-                // Send message (main function)
-                async sendMessage() {
-                    const chatInput = document.getElementById('chatInput');
-                    const userText = chatInput.value.trim();
+                async loadConversationHistory(convId) {
+                    if (!convId) return;
                     
+                    this.isLoading = true;
+                    try {
+                        const response = await fetch(`${this.API_HISTORY_URL}/${convId}`);
+                        if (response.ok) {
+                            const data = await response.json();
+                            this.messages = (data.history || []).map(turn => ({
+                                type: 'user',
+                                content: turn.messages[0]?.text || '',
+                                expanded: true,
+                                needsExpansion: false
+                            })).flatMap((userMsg, i) => [
+                                userMsg,
+                                {
+                                    type: 'assistant',
+                                    content: data.history[i]?.messages[1]?.text || '',
+                                    expanded: true,
+                                    needsExpansion: false,
+                                    isStreaming: false
+                                }
+                            ]);
+                            this.newChatMode = false;
+                        } else if (response.status === 404) {
+                            this.messages = [];
+                            this.newChatMode = true;
+                        }
+                    } catch (error) {
+                        console.error('Error loading conversation:', error);
+                        this.messages = [];
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+
+                async sendMessage() {
                     if (this.isGenerating) {
-                        // Stop generation if already generating
                         this.stopGeneration();
                         return;
                     }
 
-                    if (!userText && this.importedFiles.length === 0) {
-                        return;
+                    const input = document.getElementById('chatInput');
+                    const message = input.value.trim();
+                    
+                    if (!message && this.importedFiles.length === 0) return;
+
+                    // Generate conversation ID if new chat
+                    if (this.newChatMode || !this.currentConversationId) {
+                        this.currentConversationId = this.generateUUID();
+                        this.currentChatTitle = message.substring(0, 40) + (message.length > 40 ? '...' : '') || 'New chat';
+                        this.newChatMode = false;
+                        history.replaceState(null, '', `${this.FRONTEND_BASE_PATH}/${this.currentConversationId}`);
                     }
 
                     // Add user message
-                    const needsExpansion = userText.length > 500;
                     this.messages.push({
                         type: 'user',
-                        content: userText,
-                        expanded: !needsExpansion,
-                        needsExpansion: needsExpansion,
+                        content: message,
+                        expanded: true,
+                        needsExpansion: false,
                         files: [...this.importedFiles]
                     });
 
-                    // Clear input
-                    chatInput.value = '';
-                    this.importedFiles = [];
-                    this.adjustTextareaHeight();
-                    
-                    // Close menus
-                    this.importMenuOpen = false;
-                    this.modelMenuOpen = false;
-
-                    // Update chat title if it's a new chat
-                    if (this.newChatMode) {
-                        this.newChatMode = false;
-                        this.currentChatTitle = userText.substring(0, 40) + 
-                            (userText.length > 40 ? '...' : '');
-                    }
-
-                    // Scroll to show new message
-                    this.scrollToBottom();
-                    
-                    // Start AI generation
-                    await this.generateAIResponse(userText);
-                },
-
-                // Generate AI response with streaming
-                async generateAIResponse(userText) {
-                    this.isGenerating = true;
-                    
-                    // Change send button to stop button
-                    const sendButton = document.getElementById('sendButtonIcon');
-                    sendButton.textContent = 'stop';
-                    sendButton.classList.add('stop-button-active');
-                    
-                    // Add typing animation message
-                    this.messages.push({
+                    // Add AI response placeholder
+                    const aiMessageIndex = this.messages.push({
                         type: 'assistant',
                         content: '',
-                        isTyping: true,
                         expanded: true,
-                        needsExpansion: false
-                    });
-                    
-                    this.scrollToBottom();
+                        needsExpansion: false,
+                        isStreaming: true
+                    }) - 1;
+
+                    // Clear input
+                    input.value = '';
+                    this.importedFiles = [];
+                    this.adjustTextareaHeight();
+
+                    this.isGenerating = true;
+                    this.scrollToNewMessage();
 
                     try {
-                        let apiEndpoint = API_CONFIG.MESSAGE_URL;
-                        let requestOptions = {
-                            method: 'POST',
-                        };
-
+                        // Prepare request
+                        let apiEndpoint = this.API_MESSAGE_URL;
+                        let requestOptions = { method: 'POST' };
+                        
                         if (this.importedFiles.length > 0) {
-                            // With files
-                            apiEndpoint = API_CONFIG.MESSAGE_WITH_FILES_URL;
+                            apiEndpoint = this.API_MESSAGE_WITH_FILES_URL;
                             const formData = new FormData();
                             formData.append('conversation_id', this.currentConversationId);
-                            formData.append('prompt', userText);
-                            
-                            // Convert file objects to actual File objects
-                            for (const file of this.importedFiles) {
-                                if (file instanceof File) {
-                                    formData.append('files', file, file.name);
-                                }
-                            }
-                            
+                            formData.append('prompt', message);
+                            this.importedFiles.forEach(file => {
+                                formData.append('files', file);
+                            });
                             requestOptions.body = formData;
                         } else {
-                            // Text only
-                            const requestBody = {
-                                prompt: userText,
+                            requestOptions.headers = { 'Content-Type': 'application/json' };
+                            requestOptions.body = JSON.stringify({
+                                prompt: message,
                                 conversation_id: this.currentConversationId
-                            };
-                            requestOptions.headers = {
-                                'Content-Type': 'application/json'
-                            };
-                            requestOptions.body = JSON.stringify(requestBody);
+                            });
                         }
 
                         const response = await fetch(apiEndpoint, requestOptions);
                         
                         if (!response.ok) {
-                            throw new Error(`HTTP error: ${response.status}`);
+                            throw new Error(`HTTP ${response.status}`);
                         }
 
                         const reader = response.body.getReader();
-                        const decoder = new TextDecoder("utf-8");
-                        let buffer = "";
-                        let fullResponse = "";
+                        const decoder = new TextDecoder();
+                        let buffer = '';
+                        let aiResponse = '';
 
-                        // Find the typing message index
-                        const typingIndex = this.messages.length - 1;
-                        
                         while (true) {
                             const { value, done } = await reader.read();
                             if (done) break;
-
+                            
                             buffer += decoder.decode(value, { stream: true });
-                            let events = buffer.split('\n\n');
-                            buffer = events.pop();
+                            const events = buffer.split('\n\n');
+                            buffer = events.pop() || '';
 
                             for (const eventStr of events) {
                                 if (!eventStr) continue;
                                 
-                                let eventData = null;
-                                eventStr.split('\n').forEach(line => {
+                                const lines = eventStr.split('\n');
+                                for (const line of lines) {
                                     if (line.startsWith('data: ')) {
-                                        eventData = line.substring(6).trim();
-                                    }
-                                });
-
-                                if (eventData) {
-                                    try {
-                                        const data = JSON.parse(eventData);
-                                        const eventType = data.type;
-                                        
-                                        if (eventType === 'CONV_ID' && data.id) {
-                                            this.currentConversationId = data.id;
-                                        } else if (eventType === 'CHUNK' && data.text) {
-                                            fullResponse += data.text;
+                                        const eventData = line.substring(6).trim();
+                                        try {
+                                            const data = JSON.parse(eventData);
                                             
-                                            // Update the message content
-                                            this.messages[typingIndex].content = fullResponse;
-                                            this.messages[typingIndex].isTyping = false;
-                                            this.messages[typingIndex].needsExpansion = fullResponse.length > 500;
-                                            
-                                            // Force Alpine to update
-                                            this.messages = [...this.messages];
-                                            
-                                            this.scrollToBottom();
-                                        } else if (eventType === 'END') {
-                                            // Save conversation
-                                            await this.saveConversationTurn(userText, fullResponse);
-                                            break;
-                                        } else if (eventType === 'ERROR' && data.text) {
-                                            throw new Error(data.text);
+                                            if (data.type === 'CHUNK' && data.text) {
+                                                aiResponse += data.text;
+                                                this.messages[aiMessageIndex].content = aiResponse;
+                                                this.messages[aiMessageIndex].isStreaming = true;
+                                                this.scrollToNewMessage();
+                                            } else if (data.type === 'END') {
+                                                this.messages[aiMessageIndex].isStreaming = false;
+                                                this.saveConversationTurn(message, aiResponse);
+                                                this.loadRecentChats();
+                                                this.isGenerating = false;
+                                                return;
+                                            } else if (data.type === 'ERROR') {
+                                                this.messages[aiMessageIndex].content = `Error: ${data.text}`;
+                                                this.messages[aiMessageIndex].isStreaming = false;
+                                                this.isGenerating = false;
+                                                return;
+                                            }
+                                        } catch (e) {
+                                            console.error('Error parsing SSE:', e);
                                         }
-                                    } catch (e) {
-                                        console.error('Error parsing event:', e);
                                     }
                                 }
                             }
                         }
-                    } catch (error) {
-                        console.error('Error generating response:', error);
+
+                        this.messages[aiMessageIndex].isStreaming = false;
+                        this.saveConversationTurn(message, aiResponse);
+                        this.loadRecentChats();
                         
-                        // Replace typing message with error
-                        const errorIndex = this.messages.length - 1;
-                        this.messages[errorIndex] = {
-                            type: 'assistant',
-                            content: `Sorry, an error occurred: ${error.message}`,
-                            isTyping: false,
-                            expanded: true,
-                            needsExpansion: false
-                        };
-                        this.messages = [...this.messages];
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                        this.messages[aiMessageIndex].content = `Sorry, an error occurred: ${error.message}`;
+                        this.messages[aiMessageIndex].isStreaming = false;
                     } finally {
                         this.isGenerating = false;
-                        
-                        // Reset send button
-                        const sendButton = document.getElementById('sendButtonIcon');
-                        sendButton.textContent = 'send';
-                        sendButton.classList.remove('stop-button-active');
-                        
-                        this.scrollToBottom();
                     }
                 },
 
-                // Stop generation
-                stopGeneration() {
-                    this.isGenerating = false;
-                    
-                    // Reset send button
-                    const sendButton = document.getElementById('sendButtonIcon');
-                    sendButton.textContent = 'send';
-                    sendButton.classList.remove('stop-button-active');
-                    
-                    // Remove typing message if exists
-                    const lastMessage = this.messages[this.messages.length - 1];
-                    if (lastMessage && lastMessage.isTyping) {
-                        this.messages.pop();
-                        this.messages = [...this.messages];
-                    }
-                },
+                async saveConversationTurn(userPrompt, aiResponse) {
+                    if (!userPrompt || !aiResponse || !this.currentConversationId) return;
 
-                // ===========================================
-                // UI FUNCTIONS
-                // ===========================================
-                
-                // Update URL
-                updateURL() {
-                    const newUrl = `${API_CONFIG.FRONTEND_BASE_PATH}/${this.currentConversationId}`;
-                    window.history.replaceState(null, '', newUrl);
-                },
-
-                // Render recent chats in sidebar
-                renderRecentChats() {
-                    const container = document.getElementById('recentChatsList');
-                    if (!container) return;
-                    
-                    container.innerHTML = '';
-                    
-                    if (this.recentChats.length === 0) {
-                        container.innerHTML = '<div class="px-3 py-2 text-gray-500 text-sm">No recent conversations</div>';
-                        return;
-                    }
-                    
-                    this.recentChats.forEach(chat => {
-                        const div = document.createElement('div');
-                        div.className = 'chat-item px-3 py-2 text-[15px] text-gray-600 hover:bg-gray-50 rounded-lg cursor-pointer truncate';
-                        div.innerHTML = `
-                            <div class="flex items-center justify-between">
-                                <span>${chat.title || 'Untitled'}</span>
-                                <button @click.stop="deleteChatItem('${chat.id}', this)" 
-                                        class="chat-item-menu p-1 hover:bg-gray-200 rounded">
-                                    <span class="material-symbols-rounded text-gray-500">delete</span>
-                                </button>
-                            </div>
-                        `;
-                        
-                        // Add click event to load chat
-                        div.addEventListener('click', (e) => {
-                            if (!e.target.closest('button')) {
-                                window.location.href = `${API_CONFIG.FRONTEND_BASE_PATH}/${chat.id}`;
-                            }
+                    try {
+                        const response = await fetch(this.API_SAVE_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                conversation_id: this.currentConversationId,
+                                prompt: userPrompt,
+                                ai_response: aiResponse
+                            })
                         });
                         
-                        container.appendChild(div);
-                    });
+                        if (!response.ok) {
+                            console.error('Failed to save conversation');
+                        }
+                    } catch (error) {
+                        console.error('Error saving conversation:', error);
+                    }
                 },
 
-                // Delete chat item
-                deleteChatItem(chatId, element) {
-                    event.stopPropagation();
-                    this.deleteConversation(chatId, element);
+                stopGeneration() {
+                    this.isGenerating = false;
+                    if (this.streamController) {
+                        this.streamController.abort();
+                        this.streamController = null;
+                    }
+                    
+                    // Find and update the streaming message
+                    const streamingMessage = this.messages.find(m => m.isStreaming);
+                    if (streamingMessage) {
+                        streamingMessage.isStreaming = false;
+                        if (streamingMessage.content === '') {
+                            streamingMessage.content = 'Generation stopped by user.';
+                        }
+                    }
                 },
 
-                // Start new chat
+                // Conversation Management
                 startNewChat() {
-                    this.currentConversationId = generateUUID();
                     this.messages = [];
                     this.importedFiles = [];
-                    this.currentChatTitle = 'New conversation';
                     this.newChatMode = true;
+                    this.currentChatTitle = 'New chat';
+                    this.currentConversationId = this.generateUUID();
                     
-                    const chatInput = document.getElementById('chatInput');
-                    chatInput.value = '';
+                    const input = document.getElementById('chatInput');
+                    input.value = '';
                     this.adjustTextareaHeight();
                     
                     this.importMenuOpen = false;
                     this.modelMenuOpen = false;
                     this.chatManagementOpen = false;
                     
-                    this.updateURL();
+                    history.replaceState(null, '', this.FRONTEND_BASE_PATH);
                     this.scrollToTop();
                 },
 
-                // Rename chat
-                renameChat() {
-                    const newTitle = prompt('Rename conversation:', this.currentChatTitle);
+                async renameCurrentChat() {
+                    const newTitle = prompt('Rename chat:', this.currentChatTitle);
                     if (newTitle && newTitle.trim()) {
                         this.currentChatTitle = newTitle.trim();
                     }
                     this.chatManagementOpen = false;
                 },
 
-                // Pin chat
-                pinChat() {
-                    alert('Chat pinned! (Feature to implement)');
+                pinCurrentChat() {
+                    alert('Chat pinned! (Feature to be implemented)');
                     this.chatManagementOpen = false;
                 },
 
-                // Delete current chat
-                async deleteChat() {
-                    if (confirm('Are you sure you want to delete this conversation?')) {
-                        await this.deleteConversation(this.currentConversationId);
-                        this.startNewChat();
+                async deleteCurrentChat() {
+                    if (!confirm('Are you sure you want to delete this chat?')) {
+                        this.chatManagementOpen = false;
+                        return;
                     }
+
+                    if (this.currentConversationId) {
+                        try {
+                            const response = await fetch(`${this.API_DELETE_SINGLE_URL}/${this.currentConversationId}`, {
+                                method: 'DELETE'
+                            });
+                            
+                            if (response.ok) {
+                                this.startNewChat();
+                                this.loadRecentChats();
+                                alert('Chat deleted successfully!');
+                            }
+                        } catch (error) {
+                            console.error('Error deleting chat:', error);
+                            alert('Error deleting chat');
+                        }
+                    }
+                    
                     this.chatManagementOpen = false;
                 },
 
-                // ===========================================
-                // FILE HANDLING
-                // ===========================================
-                
-                // Add file from computer
+                async clearAllHistory() {
+                    if (!confirm('Are you sure you want to delete ALL your chat history? This action cannot be undone.')) {
+                        this.profileMenuOpen = false;
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(this.API_DELETE_ALL_URL, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (response.ok) {
+                            this.startNewChat();
+                            this.recentChats = [];
+                            this.profileMenuOpen = false;
+                            alert('All history cleared successfully!');
+                        }
+                    } catch (error) {
+                        console.error('Error clearing history:', error);
+                        alert('Error clearing history');
+                    }
+                },
+
+                // File Management
                 addFileFromComputer() {
                     if (this.importedFiles.length >= 10) {
                         alert('You can only import up to 10 files.');
@@ -1515,15 +1329,13 @@
                     document.body.appendChild(fileInput);
                     
                     fileInput.addEventListener('change', (e) => {
-                        const files = e.target.files;
-                        this.handleFileUpload(files);
+                        this.handleFileUpload(e.target.files);
                         document.body.removeChild(fileInput);
                     });
                     
                     fileInput.click();
                 },
 
-                // Add repository
                 addRepository() {
                     if (this.importedFiles.length >= 10) {
                         alert('You can only import up to 10 files.');
@@ -1531,17 +1343,10 @@
                         return;
                     }
                     
-                    this.importedFiles.push({
-                        name: 'git-repository',
-                        size: 'Git Repository',
-                        type: 'repository'
-                    });
-                    
+                    alert("In a full implementation, this would open a connection to the API to select a Git repository.");
                     this.importMenuOpen = false;
-                    this.adjustTextareaHeight();
                 },
 
-                // Add space
                 addSpace() {
                     if (this.importedFiles.length >= 10) {
                         alert('You can only import up to 10 files.');
@@ -1549,17 +1354,20 @@
                         return;
                     }
                     
-                    this.importedFiles.push({
-                        name: 'Workspace Main',
-                        size: 'Gitforge Space',
-                        type: 'document'
-                    });
-                    
+                    alert("In a full implementation, this would open a space selection with available files.");
                     this.importMenuOpen = false;
+                },
+
+                removeFile(index) {
+                    this.importedFiles.splice(index, 1);
                     this.adjustTextareaHeight();
                 },
 
-                // Handle file upload
+                clearAllFiles() {
+                    this.importedFiles = [];
+                    this.adjustTextareaHeight();
+                },
+
                 handleFileUpload(files) {
                     const currentCount = this.importedFiles.length;
                     const remainingSlots = 10 - currentCount;
@@ -1582,138 +1390,66 @@
                         }
                         
                         this.importedFiles.push({
+                            file: file,
                             name: file.name,
-                            size: formatFileSize(file.size),
-                            type: fileType,
-                            fileObject: file
+                            size: this.formatFileSize(file.size),
+                            type: fileType
                         });
                     }
                     
                     this.adjustTextareaHeight();
                 },
 
-                // Remove file
-                removeFile(index) {
-                    this.importedFiles.splice(index, 1);
-                    this.adjustTextareaHeight();
+                // Helper Functions
+                formatFileSize(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
                 },
 
-                // Clear all files
-                clearAllFiles() {
-                    this.importedFiles = [];
-                    this.adjustTextareaHeight();
+                getFileIcon(type) {
+                    const icons = {
+                        'code': 'code',
+                        'document': 'description',
+                        'image': 'image',
+                        'repository': 'folder',
+                        'archive': 'folder_zip'
+                    };
+                    return icons[type] || 'description';
                 },
 
-                // Handle drag over
-                handleDragOver(e) {
-                    this.dragCounter++;
-                    this.isDragging = true;
-                },
-
-                // Handle container drag leave
-                handleContainerDragLeave(e) {
-                    if (!e.currentTarget.contains(e.relatedTarget)) {
-                        this.dragCounter--;
-                        if (this.dragCounter <= 0) {
-                            this.isDragging = false;
-                            this.dragCounter = 0;
-                        }
-                    }
-                },
-
-                // Handle drag leave
-                handleDragLeave(e) {
-                    this.dragCounter--;
-                    if (this.dragCounter <= 0) {
-                        this.isDragging = false;
-                        this.dragCounter = 0;
-                    }
-                },
-
-                // Handle drop
-                handleDrop(e) {
-                    this.isDragging = false;
-                    this.dragCounter = 0;
-                    
-                    const dt = e.dataTransfer;
-                    const files = dt.files;
-                    
-                    if (files.length > 0) {
-                        this.handleFileUpload(files);
-                    }
-                },
-
-                // ===========================================
-                // UTILITY FUNCTIONS
-                // ===========================================
-                
-                // Estimate tokens
-                estimateTokens() {
-                    const textarea = document.getElementById('chatInput');
-                    const text = textarea.value.trim();
-                    
-                    if (!text) return 0;
-                    
-                    return Math.ceil(text.length / 4);
-                },
-
-                // Adjust textarea height
                 adjustTextareaHeight() {
                     const textarea = document.getElementById('chatInput');
-                    const fileCount = this.importedFiles.length;
+                    if (!textarea) return;
                     
                     textarea.style.height = 'auto';
                     const scrollHeight = textarea.scrollHeight;
                     const maxHeight = 200;
-                    let newHeight = Math.min(scrollHeight, maxHeight);
-                    
-                    if (fileCount > 0) {
-                        this.chatInputHeight = '400px';
-                    } else {
-                        this.chatInputHeight = 'auto';
-                    }
-                    
-                    textarea.style.height = newHeight + 'px';
-                    
-                    // Force a reflow on mobile to ensure proper layout
-                    if (window.innerWidth < 640) {
-                        setTimeout(() => {
-                            const chatContainer = document.getElementById('chatContainer');
-                            if (chatContainer) {
-                                chatContainer.style.height = 'auto';
-                                setTimeout(() => {
-                                    this.scrollToBottom();
-                                }, 50);
-                            }
-                        }, 10);
-                    }
+                    textarea.style.height = Math.min(scrollHeight, maxHeight) + 'px';
                 },
 
-                // Scroll to bottom
-                scrollToBottom() {
+                scrollToNewMessage() {
                     setTimeout(() => {
-                        const chatContainer = document.getElementById('chatContainer');
-                        if (chatContainer) {
-                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                        const container = document.getElementById('chatContainer');
+                        if (container) {
+                            container.scrollTop = container.scrollHeight;
                         }
                     }, 100);
                 },
 
-                // Scroll to top
                 scrollToTop() {
-                    const chatContainer = document.getElementById('chatContainer');
-                    if (chatContainer) {
-                        chatContainer.scrollTop = 0;
+                    const container = document.getElementById('chatContainer');
+                    if (container) {
+                        container.scrollTop = 0;
                     }
                 },
 
-                // Toggle message expand
                 toggleMessageExpand(index) {
                     this.messages[index].expanded = !this.messages[index].expanded;
-                    this.messages = [...this.messages];
                 },
 
-                // Copy message
                 copyMessage(index) {
                     const message = this.messages[index];
                     const textToCopy = message.content.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '');
@@ -1729,16 +1465,20 @@
                     });
                 },
 
-                // Copy share URL
                 copyShareUrl() {
-                    this.shareUrl = `${window.location.origin}${API_CONFIG.FRONTEND_BASE_PATH}/${this.currentConversationId}`;
                     navigator.clipboard.writeText(this.shareUrl).then(() => {
                         alert('URL copied to clipboard!');
                         this.shareMenuOpen = false;
                     });
                 },
 
-                // Update chat menu position
+                suggestedPrompt(prompt) {
+                    const input = document.getElementById('chatInput');
+                    input.value = prompt;
+                    this.adjustTextareaHeight();
+                    input.focus();
+                },
+
                 updateChatMenuPosition(event) {
                     const rect = event.target.getBoundingClientRect();
                     this.chatManagementPosition = {
@@ -1747,55 +1487,116 @@
                     };
                 },
 
-                // Handle resize
-                handleResize() {
-                    this.mobileSidebarControls = window.innerWidth < 1024;
-                    // Re-adjust textarea on resize
-                    this.adjustTextareaHeight();
+                // Drag and Drop
+                setupDragAndDrop() {
+                    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                        document.addEventListener(eventName, this.preventDefaults, false);
+                    });
                 },
 
-                // Setup event listeners
-                setupEventListeners() {
-                    // Setup drag and drop
-                    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                        document.body.addEventListener(eventName, (e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }, false);
-                    });
+                preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                },
 
-                    // Send with Ctrl+Enter or Cmd+Enter
-                    const chatInput = document.getElementById('chatInput');
-                    if (chatInput) {
-                        chatInput.addEventListener('keydown', (e) => {
-                            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                                this.sendMessage();
-                            }
-                        });
+                handleDragOver(e) {
+                    this.dragCounter++;
+                    this.isDragging = true;
+                },
+
+                handleContainerDragLeave(e) {
+                    if (!e.currentTarget.contains(e.relatedTarget)) {
+                        this.dragCounter--;
+                        if (this.dragCounter <= 0) {
+                            this.isDragging = false;
+                            this.dragCounter = 0;
+                        }
                     }
+                },
 
-                    // Window resize
-                    window.addEventListener('resize', () => {
-                        this.handleResize();
-                    });
+                handleDragLeave(e) {
+                    this.dragCounter--;
+                    if (this.dragCounter <= 0) {
+                        this.isDragging = false;
+                        this.dragCounter = 0;
+                    }
+                },
+
+                handleDrop(e) {
+                    this.isDragging = false;
+                    this.dragCounter = 0;
+                    
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    
+                    if (files.length > 0) {
+                        this.handleFileUpload(files);
+                    }
+                },
+
+                // Utility Functions
+                generateUUID() {
+                    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+                    );
+                },
+
+                loadConversationId() {
+                    const pathSegments = window.location.pathname.split('/').filter(segment => segment.length > 0);
+                    const copilotIndex = pathSegments.indexOf('gitforge_copilot');
+                    
+                    if (copilotIndex !== -1 && copilotIndex + 1 < pathSegments.length) {
+                        this.currentConversationId = pathSegments[copilotIndex + 1];
+                        this.loadConversationHistory(this.currentConversationId);
+                        this.newChatMode = false;
+                    } else {
+                        this.currentConversationId = this.generateUUID();
+                        this.newChatMode = true;
+                    }
+                },
+
+                handleResize() {
+                    const isMobile = window.innerWidth < 1024;
+                    // Mobile-specific adjustments if needed
+                },
+
+                get chatInputValue() {
+                    const input = document.getElementById('chatInput');
+                    return input ? input.value : '';
+                },
+
+                // Markdown Conversion
+                convertMarkdown(text) {
+                    if (!text) return '';
+                    
+                    try {
+                        const html = marked.parse(text, { breaks: true });
+                        
+                        // Process code blocks with highlight.js
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html;
+                        
+                        tempDiv.querySelectorAll('pre code').forEach(codeElement => {
+                            hljs.highlightElement(codeElement);
+                        });
+                        
+                        return tempDiv.innerHTML;
+                    } catch (error) {
+                        console.error('Error converting markdown:', error);
+                        return text;
+                    }
                 }
-            };
-        }
-        
-        // Initialize Alpine
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('appData', appData);
+            }));
         });
 
-        // Initialize app on load
+        // Initialize on load
         window.addEventListener('load', () => {
-            // Adjust textarea height initially
-            setTimeout(() => {
-                if (window.app && window.app.adjustTextareaHeight) {
-                    window.app.adjustTextareaHeight();
-                }
-            }, 100);
+            const app = Alpine.$data(document.body);
+            if (app && app.adjustTextareaHeight) {
+                app.adjustTextareaHeight();
+            }
         });
     </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
