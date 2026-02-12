@@ -9,7 +9,7 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Tailwind CSS via CDN (play mode) -->
+  <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
   <!-- Lucide Icons -->
@@ -121,6 +121,8 @@
       font-family: 'Inter', sans-serif;
       background: #0a0a0a;
       color: #fff;
+      margin: 0;
+      padding: 0;
     }
     
     h1, h2, h3, h4 {
@@ -146,14 +148,18 @@
     .accordion-content {
       transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
     }
+
+    .animation-delay-2000 {
+      animation-delay: 2s;
+    }
   </style>
 </head>
-<body class="animated-gradient text-white antialiased">
+<body class="animated-gradient text-white antialiased min-h-screen">
 
 <div id="root"></div>
 
 <script type="text/babel">
-  // Lemon Squeezy configuration with dynamic user ID
+  // Lemon Squeezy configuration
   window.createLemonSqueezy = () => {
     if (window.LemonSqueezy) {
       window.LemonSqueezy.Setup({
@@ -175,9 +181,20 @@
       
       // Initialize Lucide icons
       if (window.lucide) {
-        lucide.createIcons();
+        setTimeout(() => {
+          lucide.createIcons();
+        }, 10);
       }
     }, []);
+
+    React.useEffect(() => {
+      // Re-run Lucide icons when mobile menu toggles
+      if (window.lucide) {
+        setTimeout(() => {
+          lucide.createIcons();
+        }, 10);
+      }
+    }, [isMobileMenuOpen, openFaqIndex]);
 
     // Pricing plans with Lemon Squeezy links
     const plans = [
@@ -226,6 +243,22 @@
         window.open(url, '_blank');
       }
     };
+
+    // Features data without dynamic tailwind classes
+    const features = [
+      { icon: 'bot', title: 'Agent Autonome', desc: 'Génère, teste et corrige sans supervision humaine', colorClass: 'bg-blue-500/20 group-hover:bg-blue-500/30', iconClass: 'text-blue-400' },
+      { icon: 'sparkles', title: 'Prompt Enhancer Gemini', desc: 'Amplifie vos requêtes avec l\'IA contextuelle de Google', colorClass: 'bg-purple-500/20 group-hover:bg-purple-500/30', iconClass: 'text-purple-400' },
+      { icon: 'git-branch', title: 'Git Sync', desc: 'Push automatique vers dépôts existants ou nouveaux', colorClass: 'bg-emerald-500/20 group-hover:bg-emerald-500/30', iconClass: 'text-emerald-400' },
+      { icon: 'refresh-cw', title: 'Bouton Continuer', desc: 'Reprend exactement là où vous vous êtes arrêté', colorClass: 'bg-pink-500/20 group-hover:bg-pink-500/30', iconClass: 'text-pink-400' }
+    ];
+
+    const techStack = [
+      { name: 'Gemini', icon: 'sparkles', colorClass: 'bg-blue-500/10 border-blue-500/30', iconClass: 'text-blue-400' },
+      { name: 'Python', icon: 'terminal', colorClass: 'bg-yellow-500/10 border-yellow-500/30', iconClass: 'text-yellow-400' },
+      { name: 'React', icon: 'code-2', colorClass: 'bg-cyan-500/10 border-cyan-500/30', iconClass: 'text-cyan-400' },
+      { name: 'Baserow', icon: 'database', colorClass: 'bg-emerald-500/10 border-emerald-500/30', iconClass: 'text-emerald-400' },
+      { name: 'Git', icon: 'git-branch', colorClass: 'bg-orange-500/10 border-orange-500/30', iconClass: 'text-orange-400' }
+    ];
 
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
@@ -326,12 +359,12 @@
                     <span className="text-sm text-gray-400 ml-2">forge_generation.tsx</span>
                   </div>
                   <div className="font-mono text-sm space-y-2">
-                    <div className="text-blue-400">const MindusForge = async (repo: Repository) => {{'{'}</div>
+                    <div className="text-blue-400">const MindusForge = async (repo: Repository) =&gt; {'{'}</div>
                     <div className="ml-4 text-gray-300">const analysis = <span className="text-purple-400">await Gemini.analyze</span>(repo);</div>
                     <div className="ml-4 text-gray-300">const newModule = <span className="text-emerald-400">generate.architecture</span>(analysis);</div>
                     <div className="ml-4 text-gray-300">await <span className="text-blue-400">Git.sync</span>(newModule, 'forge/new-feature');</div>
                     <div className="text-blue-400">{'}'}</div>
-                    <div className="text-emerald-400 mt-4 code-visualizer">> Résilience activée · Sauvegarde locale · Prêt pour déploiement</div>
+                    <div className="text-emerald-400 mt-4 code-visualizer">&gt; Résilience activée · Sauvegarde locale · Prêt pour déploiement</div>
                   </div>
                 </div>
                 <div className="absolute -top-6 -right-6 w-32 h-32 bg-blue-500/30 rounded-full blur-2xl"></div>
@@ -351,15 +384,10 @@
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                { icon: 'bot', title: 'Agent Autonome', desc: 'Génère, teste et corrige sans supervision humaine', color: 'blue' },
-                { icon: 'sparkles', title: 'Prompt Enhancer Gemini', desc: 'Amplifie vos requêtes avec l\'IA contextuelle de Google', color: 'purple' },
-                { icon: 'git-branch', title: 'Git Sync', desc: 'Push automatique vers dépôts existants ou nouveaux', color: 'emerald' },
-                { icon: 'refresh-cw', title: 'Bouton Continuer', desc: 'Reprend exactement là où vous vous êtes arrêté', color: 'pink' }
-              ].map((feature, idx) => (
+              {features.map((feature, idx) => (
                 <div key={idx} className="glass-card rounded-2xl p-8 hover:scale-105 transition-all duration-300 group">
-                  <div className={`w-14 h-14 bg-${feature.color}-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-${feature.color}-500/30 transition-all`}>
-                    <i data-lucide={feature.icon} className={`w-7 h-7 text-${feature.color}-400`}></i>
+                  <div className={`w-14 h-14 ${feature.colorClass} rounded-xl flex items-center justify-center mb-6 transition-all`}>
+                    <i data-lucide={feature.icon} className={`w-7 h-7 ${feature.iconClass}`}></i>
                   </div>
                   <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
                   <p className="text-gray-400">{feature.desc}</p>
@@ -448,16 +476,10 @@
             </div>
             
             <div className="flex flex-wrap justify-center items-center gap-16">
-              {[
-                { name: 'Gemini', icon: 'sparkles', color: 'blue' },
-                { name: 'Python', icon: 'terminal', color: 'yellow' },
-                { name: 'React', icon: 'code-2', color: 'cyan' },
-                { name: 'Baserow', icon: 'database', color: 'emerald' },
-                { name: 'Git', icon: 'git-branch', color: 'orange' }
-              ].map((tech, idx) => (
+              {techStack.map((tech, idx) => (
                 <div key={idx} className="flex flex-col items-center group">
-                  <div className={`w-20 h-20 bg-${tech.color}-500/10 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform border border-${tech.color}-500/30`}>
-                    <i data-lucide={tech.icon} className={`w-10 h-10 text-${tech.color}-400`}></i>
+                  <div className={`w-20 h-20 ${tech.colorClass} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform border`}>
+                    <i data-lucide={tech.icon} className={`w-10 h-10 ${tech.iconClass}`}></i>
                   </div>
                   <span className="text-xl font-semibold text-gray-200">{tech.name}</span>
                 </div>
@@ -705,17 +727,26 @@
   };
 
   // Render the app
-  const root = ReactDOM.createRoot(document.getElementById('root'));
-  root.render(<MindusForgeApp />);
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<MindusForgeApp />);
+  }
 </script>
 
 <script>
   // Re-run Lucide icons after React render
-  setTimeout(() => {
+  function initLucide() {
     if (window.lucide) {
       lucide.createIcons();
     }
-  }, 100);
+  }
+  
+  // Multiple attempts to ensure icons load
+  window.addEventListener('load', initLucide);
+  setTimeout(initLucide, 100);
+  setTimeout(initLucide, 300);
+  setTimeout(initLucide, 500);
 </script>
 
 </body>
