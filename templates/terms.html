@@ -165,7 +165,7 @@
 <!-- Navigation -->
 <nav class="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
   <div class="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
-    <!-- Logo avec lien vers l'accueil (route '/') -->
+    <!-- Logo avec lien vers l'accueil -->
     <a href="/" class="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
       <div class="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
         <span class="text-white font-bold text-lg md:text-xl">MF</span>
@@ -177,7 +177,6 @@
 
     <!-- Desktop Menu -->
     <div class="hidden md:flex items-center space-x-10">
-      <!-- Routes adaptées aux endpoints Flask -->
       <a href="/" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
       <a href="/pricing" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">Tarifs</a>
       <a href="/terme" class="text-blue-700 font-semibold border-b-2 border-blue-600 pb-1">CGU</a>
@@ -187,7 +186,6 @@
 
     <!-- Auth Button + Burger -->
     <div class="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
-      <!-- Lien vers la page de connexion (route '/connect') -->
       <a href="/connect" class="hidden md:flex items-center space-x-2 bg-white border border-slate-200 hover:border-blue-300 px-5 py-2.5 rounded-xl text-slate-700 hover:text-blue-600 transition-all shadow-sm hover:shadow">
         <i data-lucide="github" class="w-5 h-5"></i>
         <span class="font-medium">Connexion</span>
