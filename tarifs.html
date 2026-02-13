@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Mindus Forge | Tarifs & Plans</title>
+  <meta name="description" content="Tarifs transparents pour Mindus Forge. Indie, Startup, Scale, Enterprise. Générez du code IA sans limites.">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- React, ReactDOM, Babel -->
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Lemon Squeezy -->
+  <script src="https://assets.lemonsqueezy.com/lemon.js"></script>
+  
+  <style>
+    /* Custom styles beyond Tailwind */
+    .glass {
+      background: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+    }
+    
+    .glass-card {
+      background: rgba(15, 15, 15, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+    }
+    
+    .glow-border {
+      position: relative;
+      border: 1px solid transparent;
+      background-clip: padding-box;
+      border-radius: 1rem;
+    }
+    
+    .glow-border::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      margin: -2px;
+      border-radius: inherit;
+      background: linear-gradient(45deg, #3b82f6, #8b5cf6, #10b981, #3b82f6);
+      background-size: 300% 300%;
+      animation: borderGlow 8s ease infinite;
+      z-index: -1;
+    }
+    
+    @keyframes borderGlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .animated-gradient {
+      background: linear-gradient(-45deg, #0a0a0a, #1a1a1a, #0f172a, #0a0a0a);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+    }
+    
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .text-gradient {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #10b981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+      border-radius: 4px;
+    }
+
+    .animation-delay-2000 {
+      animation-delay: 2s;
+    }
+    
+    /* Pricing table styling */
+    .comparison-table th {
+      background: rgba(15, 15, 15, 0.8);
+      padding: 1rem;
+      text-align: left;
+    }
+    
+    .comparison-table td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+  </style>
+</head>
+<body class="animated-gradient text-white antialiased min-h-screen">
+
+<div id="root"></div>
+
+<script type="text/babel">
+  // Lemon Squeezy configuration
+  window.createLemonSqueezy = () => {
+    if (window.LemonSqueezy) {
+      window.LemonSqueezy.Setup({
+        eventHandler: (event) => {
+          console.log('LemonSqueezy Event:', event);
+        }
+      });
+    }
+  };
+
+  const PricingPage = () => {
+    const [userId] = React.useState('user_' + Math.random().toString(36).substr(2, 9));
+    
+    React.useEffect(() => {
+      // Initialize Lemon Squeezy
+      window.createLemonSqueezy();
+      
+      // Initialize Lucide icons
+      if (window.lucide) {
+        setTimeout(() => {
+          lucide.createIcons();
+        }, 10);
+        setTimeout(() => {
+          lucide.createIcons();
+        }, 100);
+      }
+    }, []);
+
+    // Pricing plans with actual Lemon Squeezy links (placeholders)
+    const plans = [
+      { 
+        name: 'Indie', 
+        price: '29€', 
+        description: 'Pour freelances et projets personnels', 
+        features: [
+          '100 générations/mois',
+          'Git Sync basique',
+          'Support communautaire',
+          '1 dépôt actif',
+          'Historique 7 jours'
+        ],
+        lemonUrl: `https://mindus.lemonsqueezy.com/checkout/buy/indie_123?user_id=${userId}`
+      },
+      { 
+        name: 'Startup', 
+        price: '79€', 
+        description: 'Pour équipes en croissance', 
+        features: [
+          '500 générations/mois',
+          'Prompt Enhancer Gemini',
+          'Git Sync avancé',
+          'Support prioritaire',
+          '5 dépôts actifs',
+          'Historique 30 jours',
+          'Métriques d’utilisation'
+        ],
+        lemonUrl: `https://mindus.lemonsqueezy.com/checkout/buy/startup_456?user_id=${userId}`,
+        popular: true
+      },
+      { 
+        name: 'Scale', 
+        price: '199€', 
+        description: 'Pour scale-ups et PME', 
+        features: [
+          '2000 générations/mois',
+          'Dépôts illimités',
+          'Résilience avancée',
+          'API dédiée',
+          'SSO',
+          'Historique 90 jours',
+          'Analyse de code personnalisée'
+        ],
+        lemonUrl: `https://mindus.lemonsqueezy.com/checkout/buy/scale_789?user_id=${userId}`
+      },
+      { 
+        name: 'Enterprise', 
+        price: 'Sur mesure', 
+        description: 'Pour grandes entreprises', 
+        features: [
+          'Générations illimitées',
+          'Déploiement on-premise',
+          'SLA 99.9%',
+          'Support dédié 24/7',
+          'Formation équipe',
+          'Audit de sécurité',
+          'Intégration sur-mesure'
+        ],
+        lemonUrl: `https://mindus.lemonsqueezy.com/checkout/buy/enterprise_custom?user_id=${userId}`
+      }
+    ];
+
+    // Comparaison détaillée pour la section 1
+    const detailedComparison = [
+      { feature: 'Générations mensuelles', indie: '100', startup: '500', scale: '2000', enterprise: 'Illimité' },
+      { feature: 'Dépôts Git actifs', indie: '1', startup: '5', scale: 'Illimité', enterprise: 'Illimité' },
+      { feature: 'Résilience hors ligne', indie: 'Basique', startup: 'Standard', scale: 'Avancée', enterprise: 'Temps réel' },
+      { feature: 'Gemini Prompt Enhancer', indie: 'Non', startup: 'Oui', scale: 'Oui', enterprise: 'Oui + clé perso' },
+      { feature: 'API publique', indie: 'Non', startup: 'Lecture seule', scale: 'Lecture/écriture', enterprise: 'Dédiée' },
+      { feature: 'Support', indie: 'Communauté', startup: 'Prioritaire (24h)', scale: 'Prioritaire (4h)', enterprise: 'Dédié 24/7' },
+      { feature: 'Historique versions', indie: '7 jours', startup: '30 jours', scale: '90 jours', enterprise: 'Illimité' },
+      { feature: 'Déploiement on-premise', indie: 'Non', startup: 'Non', scale: 'Option', enterprise: 'Oui' },
+    ];
+
+    const handlePayment = (url) => {
+      if (window.LemonSqueezy) {
+        window.LemonSqueezy.Url.Open(url);
+      } else {
+        window.open(url, '_blank');
+      }
+    };
+
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+        {/* Background glow effects */}
+        <div className="fixed top-0 left-0 w-full h-full pointer-events-none">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-600/10 rounded-full blur-3xl"></div>
+        </div>
+
+        {/* Navigation simplifiée */}
+        <nav className="glass fixed top-0 left-0 right-0 z-50 px-6 py-4">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xl">MF</span>
+              </div>
+              <span className="font-bold text-2xl tracking-tight bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
+                Mindus Forge
+              </span>
+            </div>
+            <div className="flex items-center space-x-6">
+              <a href="https://mindusforge.dev" className="text-gray-300 hover:text-white transition-colors">← Retour au site</a>
+              <button className="bg-white/10 hover:bg-white/20 px-5 py-2 rounded-full transition-all border border-blue-500/30">
+                <i data-lucide="github" className="w-5 h-5 inline mr-2"></i>
+                Connexion
+              </button>
+            </div>
+          </div>
+        </nav>
+
+        <main className="pt-28 pb-20 relative z-10 max-w-7xl mx-auto px-6">
+          
+          {/* === SECTION 1 : TABLEAU COMPARATIF DÉTAILLÉ (très textuel) === */}
+          <section id="comparaison" className="mb-32">
+            <div className="text-center mb-16">
+              <h1 className="text-5xl md:text-6xl font-black mb-6">
+                Tarifs <span className="text-gradient">transparents</span>
+              </h1>
+              <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+                Pas de frais cachés. Pas d'engagement. Payez uniquement pour ce dont vous avez besoin.
+              </p>
+            </div>
+
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-blue-500/20 overflow-x-auto">
+              <h2 className="text-3xl font-bold mb-8 flex items-center">
+                <i data-lucide="scale" className="w-8 h-8 text-blue-400 mr-3"></i>
+                Comparaison détaillée des formules
+              </h2>
+              <table className="w-full comparison-table">
+                <thead>
+                  <tr className="border-b border-white/20">
+                    <th className="text-left text-gray-300 font-semibold">Fonctionnalité</th>
+                    <th className="text-left text-gray-300 font-semibold">Indie</th>
+                    <th className="text-left text-gray-300 font-semibold">Startup</th>
+                    <th className="text-left text-gray-300 font-semibold">Scale</th>
+                    <th className="text-left text-gray-300 font-semibold">Enterprise</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {detailedComparison.map((row, idx) => (
+                    <tr key={idx} className="hover:bg-white/5 transition-colors">
+                      <td className="font-medium">{row.feature}</td>
+                      <td>{row.indie}</td>
+                      <td>{row.startup}</td>
+                      <td>{row.scale}</td>
+                      <td>{row.enterprise}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="text-gray-400 text-sm mt-8 border-t border-white/10 pt-6">
+                * Les générations sont comptabilisées par requête complète (analyse + génération). Les dépôts privés et publics sont supportés. 
+                Tous les plans incluent la sauvegarde locale automatique et le chiffrement AES-256.
+              </p>
+            </div>
+          </section>
+
+          {/* === CARTES DE PRIX (originales) === */}
+          <section id="pricing-cards" className="mb-32">
+            <div className="grid lg:grid-cols-4 gap-6">
+              {plans.map((plan, idx) => (
+                <div key={idx} className={`glass-card rounded-2xl p-6 ${plan.popular ? 'border-2 border-blue-500 relative' : ''} hover:scale-105 transition-transform duration-300`}>
+                  {plan.popular && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-1 rounded-full text-sm font-semibold shadow-lg">
+                      🔥 Populaire
+                    </div>
+                  )}
+                  <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
+                  <div className="text-3xl font-black mb-4">
+                    {plan.price}
+                    <span className="text-base font-normal text-gray-400 ml-1">/mois</span>
+                  </div>
+                  <p className="text-gray-400 text-sm mb-6">{plan.description}</p>
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, fidx) => (
+                      <li key={fidx} className="flex items-start space-x-2">
+                        <i data-lucide="check-circle" className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+                        <span className="text-gray-300 text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button 
+                    onClick={() => handlePayment(plan.lemonUrl)}
+                    className={`w-full py-3 rounded-xl font-semibold transition-all ${
+                      plan.popular 
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg hover:shadow-blue-600/25' 
+                        : 'bg-white/10 hover:bg-white/20 border border-white/20'
+                    }`}
+                  >
+                    {plan.name === 'Enterprise' ? 'Contacter les ventes' : 'Souscrire'}
+                  </button>
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex justify-center mt-12">
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-full px-6 py-3 inline-flex items-center text-sm">
+                <i data-lucide="shield" className="w-4 h-4 mr-2 text-blue-400"></i>
+                Paiement sécurisé via Lemon Squeezy · TVA applicable · Facture fournie
+              </div>
+            </div>
+          </section>
+
+          {/* === SECTION 2 : FOIRE AUX QUESTIONS SUR LES TARIFS (très textuelle) === */}
+          <section id="faq-tarifs" className="mb-32">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-purple-500/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 flex items-center">
+                <i data-lucide="help-circle" className="w-8 h-8 text-purple-400 mr-3"></i>
+                Questions fréquentes sur les tarifs
+              </h2>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <div className="border-b border-white/10 pb-4">
+                    <h3 className="text-xl font-semibold mb-2">💶 Comment sont facturées les générations ?</h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      Une génération correspond à une session complète où Forge analyse votre contexte (dépôt, instruction) 
+                      et produit du code. Les petites corrections itératives dans une même session ne comptent pas 
+                      comme une nouvelle génération. Les générations inutilisées ne sont pas reportées au mois suivant.
+                    </p>
+                  </div>
+                  <div className="border-b border-white/10 pb-4">
+                    <h3 className="text-xl font-semibold mb-2">🔄 Puis-je changer de plan à tout moment ?</h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      Oui, l’upgrade est instantanée (au prorata temporis). Le downgrade prend effet en fin de cycle. 
+                      Vous conservez toutes vos données et historique. Aucune pénalité.
+                    </p>
+                  </div>
+                  <div className="border-b border-white/10 pb-4">
+                    <h3 className="text-xl font-semibold mb-2">🏢 Comment fonctionne le plan Enterprise ?</h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      Le plan Enterprise est entièrement personnalisable : volume de générations, nombre de sièges, 
+                      déploiement on‑premise ou VPC, contrats SLA, onboarding technique, et intégration avec vos 
+                      outils internes (Jira, GitLab EE, etc.). Contactez-nous pour un devis.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="border-b border-white/10 pb-4">
+                    <h3 className="text-xl font-semibold mb-2">🧾 TVA et facturation</h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      Nous facturons la TVA applicable selon le pays de résidence (auto‑facturation pour les 
+                      professionnels hors UE). Vous recevez une facture détaillée par email. Tous nos prix sont 
+                      indiqués hors taxes (HT).
+                    </p>
+                  </div>
+                  <div className="border-b border-white/10 pb-4">
+                    <h3 className="text-xl font-semibold mb-2">💳 Quels moyens de paiement ?</h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      Carte bancaire (Visa, Mastercard, American Express), Apple Pay, Google Pay, et virement bancaire 
+                      pour les contrats Enterprise. Le prélèvement est mensuel, avec option annuelle (2 mois offerts) 
+                      sur certains plans – contactez le support.
+                    </p>
+                  </div>
+                  <div className="border-b border-white/10 pb-4">
+                    <h3 className="text-xl font-semibold mb-2">📊 Y a-t-il un essai gratuit ?</h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      Oui, nous offrons 50 générations de découverte sans engagement, sans avoir à saisir de carte 
+                      bancaire. Créez simplement un compte et commencez à forger.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* === SECTION 3 : INFORMATIONS LÉGALES ET CONDITIONS (très textuelle) === */}
+          <section id="legal-info" className="mb-20">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-emerald-500/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 flex items-center">
+                <i data-lucide="file-text" className="w-8 h-8 text-emerald-400 mr-3"></i>
+                Informations légales et conditions d'abonnement
+              </h2>
+              
+              <div className="prose prose-invert max-w-none text-gray-300 space-y-6">
+                <p className="text-lg leading-relaxed">
+                  <span className="text-white font-semibold">1. Modalités de résiliation.</span> Vous pouvez résilier votre abonnement à tout moment depuis votre espace client. 
+                  La résiliation prend effet à la fin de la période de facturation en cours. Aucun remboursement partiel n'est effectué pour les jours non utilisés. 
+                  En cas de non-paiement, l'accès au service est suspendu après 10 jours, puis définitivement supprimé après 30 jours.
+                </p>
+                
+                <p className="text-lg leading-relaxed">
+                  <span className="text-white font-semibold">2. Utilisation responsable et fair use.</span> Les générations sont limitées par plan afin de garantir la qualité de service pour tous. 
+                  Une utilisation anormale (bots, reverse engineering, partage de compte) peut entraîner une limitation temporaire ou une résiliation. 
+                  Les dépôts publics sont analysés avec respect des licenses open-source.
+                </p>
+                
+                <p className="text-lg leading-relaxed">
+                  <span className="text-white font-semibold">3. Données et confidentialité.</span> Mindus Forge ne stocke jamais votre code sur nos serveurs de manière permanente. 
+                  L'analyse est effectuée en mémoire et seuls les métadonnées et fichiers générés dans /forge/ sont conservés selon la durée de votre plan. 
+                  Nous sommes conformes RGPD. Aucune revente de données.
+                </p>
+                
+                <p className="text-lg leading-relaxed">
+                  <span className="text-white font-semibold">4. Garantie et SLA.</span> Les plans payants bénéficient d'une disponibilité de 99.5% (hors maintenance planifiée). 
+                  Le plan Enterprise offre un SLA contractuel avec pénalités. Le service est fourni "en l'état", sans garantie d'absence d'erreur de génération. 
+                  L'IA peut générer du code nécessitant une revue humaine – notre rôle est d'accélérer, pas de remplacer l'expertise.
+                </p>
+                
+                <p className="text-lg leading-relaxed">
+                  <span className="text-white font-semibold">5. Propriété intellectuelle.</span> Vous êtes l'unique propriétaire du code généré par Mindus Forge. 
+                  Nous ne revendiquons aucun droit sur vos créations. Les modèles d'IA sont entraînés sur des données publiques et sous licence.
+                </p>
+                
+                <div className="bg-white/5 p-6 rounded-xl mt-8 border-l-4 border-blue-500">
+                  <p className="text-lg italic text-gray-300">
+                    "Nous croyons en une tarification éthique : vous payez pour la valeur que vous créez, pas pour du vent. 
+                    Pas de surprise, pas de frais cachés. Forgez en confiance."
+                  </p>
+                  <p className="mt-2 text-gray-400">— L'équipe Mindus</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer allégé */}
+          <footer className="border-t border-white/10 pt-12 pb-8">
+            <div className="max-w-7xl mx-auto text-center text-gray-500 text-sm">
+              <p className="mb-4">© {new Date().getFullYear()} Mindus Forge. Tous droits réservés.</p>
+              <div className="flex justify-center space-x-6">
+                <a href="#" className="hover:text-white transition-colors">Mentions légales</a>
+                <a href="#" className="hover:text-white transition-colors">CGV</a>
+                <a href="#" className="hover:text-white transition-colors">Politique de confidentialité</a>
+                <a href="#" className="hover:text-white transition-colors">Contact</a>
+              </div>
+            </div>
+          </footer>
+
+        </main>
+      </div>
+    );
+  };
+
+  // Render the app
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<PricingPage />);
+  }
+</script>
+
+<script>
+  // Re-run Lucide icons after React render
+  function initLucide() {
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  }
+  window.addEventListener('load', initLucide);
+  setTimeout(initLucide, 200);
+  setTimeout(initLucide, 500);
+</script>
+
+</body>
+</html>
