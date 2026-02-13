@@ -103,82 +103,6 @@
       margin-right: 0;
     }
 
-    /* --- CORRECTIONS SPÉCIFIQUES MOBILE (demandées) --- */
-
-    /* 1) Sous-titre héro : coupe forcée à 29 caractères puis retour à la ligne */
-    .hero-subtitle {
-      font-size: 1.125rem;
-      line-height: 1.6;
-    }
-    @media (max-width: 640px) {
-      .hero-subtitle {
-        word-break: break-word;
-        white-space: pre-line; /* Permet les retours via \n ou entités */
-      }
-    }
-
-    /* 2) Forge_generation.tsx carte = même largeur que carte résilience (lg:w-96) */
-    .code-card-fixed {
-      width: 100%;
-    }
-    @media (min-width: 1024px) {
-      .code-card-fixed {
-        max-width: 384px; /* w-96 */
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-
-    /* 3) Points "Comprend votre existant" : chaque puce sur 2 lignes maximum */
-    .two-line-bullet span {
-      display: inline-block;
-      max-width: 100%;
-      word-break: break-word;
-    }
-    @media (max-width: 640px) {
-      .two-line-bullet {
-        display: flex !important;
-        align-items: flex-start;
-        max-width: 100%;
-      }
-      .two-line-bullet span {
-        white-space: normal !important;
-        overflow-wrap: break-word;
-        word-break: break-word;
-        max-width: calc(100% - 2rem); /* laisse place à l'icône */
-        line-height: 1.4;
-      }
-      /* forcer le texte à occuper 2 lignes max – naturelle */
-    }
-
-    /* 4) Carte Gemini Analysis Engine : largeur homogène, seul, alignée */
-    .gemini-card {
-      width: 100%;
-    }
-    @media (min-width: 1024px) {
-      .gemini-card {
-        max-width: 384px; /* même largeur que les autres cartes majeures */
-        width: 100%;
-      }
-    }
-
-    /* Ajustement global pour cartes */
-    .grid-cols-2.md\:grid-cols-3.lg\:grid-cols-7 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-    }
-    @media (min-width: 768px) {
-      .grid-cols-2.md\:grid-cols-3.lg\:grid-cols-7 {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    @media (min-width: 1024px) {
-      .grid-cols-2.md\:grid-cols-3.lg\grid-cols-7 {
-        grid-template-columns: repeat(7, 1fr);
-      }
-    }
-
     /* Pile verticale sur mobile pour les features */
     @media (max-width: 768px) {
       .grid.md\:grid-cols-2.lg\:grid-cols-4 {
@@ -187,6 +111,7 @@
         gap: 1.5rem;
       }
 
+      /* Boutons pleine largeur */
       .btn-primary, .btn-secondary {
         width: 100%;
         justify-content: center;
@@ -197,6 +122,7 @@
         width: 100%;
       }
 
+      /* Éléments réassurance en colonne */
       .flex.items-center.space-x-8 {
         flex-direction: column;
         align-items: flex-start;
@@ -208,20 +134,30 @@
         width: 100%;
       }
 
+      /* Logo et navigation mieux centrés */
+      .glass-white.fixed .flex.justify-between {
+        padding-left: 4px;
+        padding-right: 4px;
+      }
+
+      /* Éviter chevauchement */
       .floating-slow {
         max-width: 100%;
       }
 
+      /* Footer mobile */
       footer .grid {
         gap: 2rem;
       }
       
+      /* Tech stack en grille plus serrée */
       .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-7 {
         grid-template-columns: repeat(2, 1fr);
         gap: 1.5rem;
       }
     }
 
+    /* Très petits écrans */
     @media (max-width: 480px) {
       .max-w-7xl {
         padding-left: 16px;
@@ -233,7 +169,7 @@
       }
     }
 
-    /* Reste du style inchangé (conservé) */
+    /* Style élégant */
     .glass-white {
       background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(12px);
@@ -390,19 +326,6 @@
       50% { opacity: 0.4; }
     }
     
-    .code-visualizer {
-      font-family: 'Courier New', monospace;
-      border-right: 2px solid #3b82f6;
-      white-space: nowrap;
-      overflow: hidden;
-      animation: blinkCursor 1s step-end infinite;
-      max-width: 100%;
-    }
-    
-    @keyframes blinkCursor {
-      50% { border-color: transparent; }
-    }
-    
     h1, h2, h3, h4 {
       font-family: 'Poppins', sans-serif;
     }
@@ -479,6 +402,41 @@
     section, footer, nav > div, .gradient-border, .card-corporate {
       max-width: 100%;
     }
+
+    /* Nouveau bloc de code statique élégant */
+    .code-block-premium {
+      background: #0b1120;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      font-family: 'Courier New', monospace;
+    }
+
+    .code-line {
+      display: flex;
+      align-items: center;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .code-prompt {
+      color: #38bdf8;
+      margin-right: 12px;
+      font-weight: 600;
+    }
+
+    .code-comment {
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    .badge-excellence {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1));
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(37, 99, 235, 0.2);
+    }
   </style>
 </head>
 <body class="bg-white text-slate-900 antialiased min-h-screen w-full overflow-x-hidden">
@@ -497,7 +455,6 @@
   const MindusForgeApp = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
     const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
-    const [activeTab, setActiveTab] = React.useState('features');
     
     React.useEffect(() => {
       if (window.lucide) {
@@ -543,8 +500,6 @@
         icon: 'bot', 
         title: 'Agent Autonome', 
         desc: 'Génère, teste et corrige sans supervision humaine. Architecture complète et tests unitaires inclus.', 
-        colorFrom: 'from-blue-50', 
-        colorTo: 'to-indigo-50',
         iconBg: 'bg-blue-100',
         iconColor: 'text-blue-600' 
       },
@@ -552,8 +507,6 @@
         icon: 'sparkles', 
         title: 'Prompt Enhancer Gemini', 
         desc: 'Amplifie vos requêtes avec l\'IA contextuelle de Google. Transformez une idée vague en spécifications techniques précises.', 
-        colorFrom: 'from-purple-50', 
-        colorTo: 'to-pink-50',
         iconBg: 'bg-purple-100',
         iconColor: 'text-purple-600' 
       },
@@ -561,8 +514,6 @@
         icon: 'git-branch', 
         title: 'Git Sync', 
         desc: 'Push automatique vers dépôts existants ou nouveaux. Création de branches dédiées et pull requests automatisées.', 
-        colorFrom: 'from-emerald-50', 
-        colorTo: 'to-teal-50',
         iconBg: 'bg-emerald-100',
         iconColor: 'text-emerald-600' 
       },
@@ -570,26 +521,14 @@
         icon: 'refresh-cw', 
         title: 'Bouton Continuer', 
         desc: 'Reprenez exactement là où vous vous êtes arrêté. Historique complet et points de restauration.', 
-        colorFrom: 'from-amber-50', 
-        colorTo: 'to-orange-50',
         iconBg: 'bg-amber-100',
         iconColor: 'text-amber-600' 
       }
     ];
 
-    const techStack = [
-      { name: 'Gemini', icon: 'sparkles', bgColor: 'bg-blue-50', iconColor: 'text-blue-600', borderColor: 'border-blue-200' },
-      { name: 'Python', icon: 'terminal', bgColor: 'bg-yellow-50', iconColor: 'text-yellow-600', borderColor: 'border-yellow-200' },
-      { name: 'React', icon: 'code-2', bgColor: 'bg-cyan-50', iconColor: 'text-cyan-600', borderColor: 'border-cyan-200' },
-      { name: 'Baserow', icon: 'database', bgColor: 'bg-emerald-50', iconColor: 'text-emerald-600', borderColor: 'border-emerald-200' },
-      { name: 'Git', icon: 'git-branch', bgColor: 'bg-orange-50', iconColor: 'text-orange-600', borderColor: 'border-orange-200' },
-      { name: 'TypeScript', icon: 'file-code', bgColor: 'bg-blue-50', iconColor: 'text-blue-600', borderColor: 'border-blue-200' },
-      { name: 'Docker', icon: 'container', bgColor: 'bg-sky-50', iconColor: 'text-sky-600', borderColor: 'border-sky-200' }
-    ];
-
     return (
       <div className="min-h-screen bg-white text-slate-900 relative w-full overflow-x-hidden">
-        {/* Navigation - avec padding sécurisé */}
+        {/* Navigation */}
         <nav className="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
           <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
             {/* Logo */}
@@ -628,7 +567,7 @@
             </div>
           </div>
 
-          {/* Mobile Menu - AJOUT DU LIEN TARIFS */}
+          {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg">
               <div className="flex flex-col space-y-2">
@@ -646,9 +585,9 @@
           )}
         </nav>
 
-        {/* Main Content - padding global sécurisé */}
+        {/* Main Content */}
         <main className="pt-28 pb-20 relative z-10 w-full overflow-x-hidden">
-          {/* Hero Section */}
+          {/* Hero Section - Sans la carte forge_generation.tsx */}
           <section id="hero" className="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-24">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
               <div className="animate-enter w-full">
@@ -662,8 +601,7 @@
                     code, sans limites
                   </span>
                 </h1>
-                {/* SOUS-TITRE AVEC CASSURE TOUS LES 29 CARACTÈRES (version mobile) */}
-                <p className="hero-subtitle text-lg md:text-xl text-slate-600 mt-6 leading-relaxed max-w-2xl">
+                <p className="text-lg md:text-xl text-slate-600 mt-6 leading-relaxed max-w-2xl">
                   Mindus Forge est la première plateforme de génération de code autonome et résiliente. 
                   Analysez des dépôts existants, générez des projets complets, et ne perdez jamais une ligne, 
                   même hors ligne.
@@ -690,33 +628,59 @@
                 </div>
               </div>
               
-              {/* Code Visualizer - CARTE FORGE_GENERATION.TSX - largeur contrôlée = même que résilience */}
-              <div className="relative animate-enter w-full lg:w-auto lg:flex lg:justify-end" style={{animationDelay: '0.2s'}}>
-                <div className="gradient-border p-5 md:p-6 bg-white rounded-2xl floating-slow w-full code-card-fixed">
+              {/* NOUVEAU: Bloc de code premium statique - Épuré et élégant */}
+              <div className="relative animate-enter w-full" style={{animationDelay: '0.2s'}}>
+                <div className="code-block-premium w-full">
                   <div className="flex items-center space-x-2 mb-5">
                     <div className="w-3 h-3 bg-rose-500 rounded-full"></div>
                     <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
                     <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                    <span className="text-xs text-slate-500 ml-2 font-mono truncate">forge_generation.tsx</span>
+                    <span className="text-xs text-slate-400 ml-2 font-mono">mindus_forge_cli.py</span>
                   </div>
-                  <div className="font-mono text-xs md:text-sm space-y-3 bg-slate-50 p-4 rounded-xl overflow-x-auto">
-                    <div className="text-blue-700 whitespace-nowrap">const MindusForge = async (repo: Repository) =&gt; {'{'}</div>
-                    <div className="ml-4 text-slate-700 whitespace-nowrap">const analysis = <span className="text-purple-700 font-semibold">await Gemini.analyze</span>(repo);</div>
-                    <div className="ml-4 text-slate-700 whitespace-nowrap">const newModule = <span className="text-emerald-700 font-semibold">generate.architecture</span>(analysis);</div>
-                    <div className="ml-4 text-slate-700 whitespace-nowrap">await <span className="text-blue-700 font-semibold">Git.sync</span>(newModule, 'forge/new-feature');</div>
-                    <div className="text-blue-700 whitespace-nowrap">{'}'}</div>
-                    <div className="text-emerald-700 mt-4 code-visualizer bg-emerald-50 p-2 rounded-lg text-xs md:text-sm w-full overflow-hidden">
-                      &gt; Résilience activée · Sauvegarde locale · Prêt pour déploiement
+                  
+                  <div className="space-y-3">
+                    <div className="code-line">
+                      <span className="code-prompt">$</span>
+                      <span className="text-white">forge init --project nova-api</span>
+                    </div>
+                    <div className="code-line">
+                      <span className="code-prompt">⟫</span>
+                      <span className="text-cyan-400">Analyse du contexte...</span>
+                    </div>
+                    <div className="code-line">
+                      <span className="code-prompt">⟫</span>
+                      <span className="text-emerald-400">Dépôt détecté · Architecture: microservices</span>
+                    </div>
+                    <div className="code-line">
+                      <span className="code-prompt">⟫</span>
+                      <span className="text-purple-400">Génération dans ./forge/auth-module/</span>
+                    </div>
+                    <div className="code-line mt-4">
+                      <span className="code-prompt">✓</span>
+                      <span className="text-white font-medium">Résilience: 3 fichiers en cache local</span>
+                    </div>
+                    <div className="code-line">
+                      <span className="code-prompt">⚡</span>
+                      <span className="text-blue-400">Prêt pour synchronisation Git</span>
                     </div>
                   </div>
+                  
+                  <div className="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between">
+                    <span className="text-xs text-slate-400 flex items-center">
+                      <i data-lucide="shield" className="w-3 h-3 mr-1"></i> Mode résilient
+                    </span>
+                    <span className="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1.5 rounded-full border border-emerald-500/20">
+                      Actif · Hors ligne
+                    </span>
+                  </div>
                 </div>
-                <div className="absolute -top-6 -right-6 w-40 h-40 bg-blue-200/30 rounded-full blur-3xl -z-10"></div>
+                
                 <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-purple-200/30 rounded-full blur-3xl -z-10"></div>
               </div>
             </div>
           </section>
 
-          {/* Features - 4 Piliers (empilés sur mobile) */}
+          {/* Features - 4 Piliers */}
           <section id="features" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
             <div className="text-center mb-16">
               <div className="inline-flex items-center px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 text-sm font-medium mb-4 border border-indigo-200">
@@ -748,7 +712,7 @@
             </div>
           </section>
 
-          {/* How it works */}
+          {/* How it works - Workflow amélioré */}
           <section id="how_it_works" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32 bg-slate-50/50 rounded-3xl">
             <div className="text-center mb-16">
               <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-4 border border-blue-200">
@@ -782,78 +746,60 @@
             </div>
           </section>
 
-          {/* AI Capabilities - SECTION COMPREND VOTRE EXISTANT + GEMINI SEUL ET LARGEUR HOMOGÈNE */}
-          <section id="ai_capabilities" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
-            <div className="gradient-border bg-white rounded-3xl p-6 md:p-12 w-full">
-              <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
-                {/* Colonne de gauche : texte + puces deux lignes */}
-                <div className="w-full">
-                  <div className="inline-flex items-center px-4 py-2 bg-purple-50 rounded-full text-purple-700 text-sm font-medium mb-6 border border-purple-200">
-                    <i data-lucide="brain" className="w-4 h-4 mr-2"></i>
-                    IA contextuelle
+          {/* SECTION REMPLACÉE: Bannière d'excellence (à la place de AI Capabilities) */}
+          <section id="excellence" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
+            <div className="gradient-border bg-white rounded-3xl p-8 md:p-16 w-full overflow-hidden">
+              <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <div className="max-w-2xl">
+                  <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full text-blue-700 text-sm font-medium mb-6 border border-blue-200">
+                    <i data-lucide="gem" className="w-4 h-4 mr-2"></i>
+                    Intelligence contextuelle
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold mb-6 text-slate-900">
-                    Comprend votre <span className="text-gradient-modern">existant</span>
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
+                    L'IA qui <span className="text-gradient-modern">comprend</span> votre existant
                   </h2>
                   <p className="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
-                    Mindus Forge ne part pas de zéro. Il lit, analyse et s'adapte à votre base de code comme le ferait un architecte logiciel expérimenté.
+                    Mindus Forge ne part pas de zéro. Il analyse votre base de code, respecte vos conventions, 
+                    et s'intègre dans votre architecture comme un membre senior de l'équipe.
                   </p>
-                  {/* PUCES AVEC FORCAGE 2 LIGNES MAX */}
-                  <ul className="space-y-4">
-                    {[
-                      'Analyse sémantique des dépôts Git',
-                      'Création de sous-dossiers intelligents',
-                      'Respect des conventions de nommage',
-                      'Réutilisation des composants existants',
-                      'Détection automatique des dépendances'
-                    ].map((item, idx) => (
-                      <li key={idx} className="two-line-bullet flex items-start space-x-3">
-                        <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-0.5">
-                          <i data-lucide="check" className="w-4 h-4 text-emerald-600"></i>
-                        </div>
-                        <span className="text-slate-700 text-base md:text-lg">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  
+                  <div className="grid grid-cols-2 gap-5 mt-8">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="check-circle" className="w-5 h-5 text-blue-600"></i>
+                      </div>
+                      <span className="font-medium text-slate-700">Analyse sémantique</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="check-circle" className="w-5 h-5 text-indigo-600"></i>
+                      </div>
+                      <span className="font-medium text-slate-700">Sous-dossiers intelligents</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="check-circle" className="w-5 h-5 text-purple-600"></i>
+                      </div>
+                      <span className="font-medium text-slate-700">Conventions de nommage</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="check-circle" className="w-5 h-5 text-emerald-600"></i>
+                      </div>
+                      <span className="font-medium text-slate-700">Réutilisation des composants</span>
+                    </div>
+                  </div>
                 </div>
-                {/* Colonne de droite : UNIQUEMENT la carte Gemini, largeur contrôlée = même que résilience */}
-                <div className="w-full lg:flex lg:justify-end">
-                  <div className="gemini-card w-full">
-                    <div className="bg-white p-5 md:p-6 rounded-2xl border border-slate-200 shadow-lg">
-                      <div className="flex items-center space-x-3 mb-6">
-                        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <i data-lucide="gem" className="w-5 h-5 text-purple-600"></i>
-                        </div>
-                        <span className="font-semibold text-lg text-slate-900">Gemini Analysis Engine</span>
-                      </div>
-                      <div className="space-y-3 text-xs md:text-sm font-mono bg-slate-50 p-4 md:p-5 rounded-xl overflow-x-auto">
-                        <div className="text-slate-500 flex items-center whitespace-nowrap">
-                          <i data-lucide="terminal" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                          git clone https://github.com/techcorp/legacy-portal
-                        </div>
-                        <div className="text-blue-600 flex items-center whitespace-nowrap">
-                          <i data-lucide="zap" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                          forge analyze --deep --context
-                        </div>
-                        <div className="text-emerald-600 mt-3 space-y-1">
-                          <div className="flex items-center whitespace-nowrap">
-                            <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                            ✓ 2,847 fichiers analysés
-                          </div>
-                          <div className="flex items-center whitespace-nowrap">
-                            <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                            ✓ Architecture: Next.js + Express + MongoDB
-                          </div>
-                          <div className="flex items-center whitespace-nowrap">
-                            <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                            ✓ Création de /forge/api-optimization-v2/
-                          </div>
-                        </div>
-                        <div className="text-purple-700 mt-4 bg-purple-50 p-3 rounded-lg border border-purple-200 whitespace-nowrap">
-                          <i data-lucide="message-square" className="w-4 h-4 inline mr-2"></i>
-                          "Nouveaux endpoints REST générés avec validation JWT"
-                        </div>
-                      </div>
+                
+                <div className="flex-shrink-0">
+                  <div className="badge-excellence p-8 rounded-2xl text-center">
+                    <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-xl">
+                      <i data-lucide="brain" className="w-12 h-12 text-white"></i>
+                    </div>
+                    <div className="text-4xl font-bold text-gradient-modern mb-2">+340%</div>
+                    <p className="text-slate-600">de productivité</p>
+                    <div className="mt-4 pt-4 border-t border-slate-200">
+                      <span className="text-sm font-medium text-slate-500">Équipes early-access</span>
                     </div>
                   </div>
                 </div>
@@ -861,7 +807,7 @@
             </div>
           </section>
 
-          {/* Resilience Demo - version mobile optimisée, largeur de référence */}
+          {/* Resilience Demo - optimisé */}
           <section id="resilience" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
             <div className="card-corporate rounded-3xl p-6 md:p-10 border border-emerald-200 bg-gradient-to-br from-emerald-50/30 to-transparent hover:border-emerald-300 transition-all w-full">
               <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
@@ -895,8 +841,7 @@
                     </div>
                   </div>
                 </div>
-                {/* Carte résilience - largeur fixe w-96 lg:w-96, utilisée comme étalon */}
-                <div className="bg-white p-5 md:p-6 rounded-xl w-full lg:w-96 border border-slate-200 shadow-md flex-shrink-0">
+                <div className="bg-white p-5 md:p-6 rounded-xl w-full lg:w-96 border border-slate-200 shadow-md">
                   <div className="flex justify-between items-center mb-5">
                     <span className="text-sm font-medium text-slate-700">État synchronisation</span>
                     <span className="text-emerald-700 text-sm flex items-center bg-emerald-50 px-3 py-1.5 rounded-full">
@@ -998,7 +943,7 @@
             </div>
           </section>
 
-          {/* Footer - AJOUT LIEN TARIFS */}
+          {/* Footer */}
           <footer id="footer" className="border-t border-slate-200 mt-20 pt-16 pb-8 px-4 md:px-6 w-full">
             <div className="max-w-7xl mx-auto">
               <div className="grid md:grid-cols-4 gap-10 md:gap-12 mb-16">
@@ -1018,7 +963,7 @@
                   <ul className="space-y-3 text-slate-600">
                     <li><a href="#features" className="hover:text-blue-600 transition-colors flex items-center">Fonctionnalités</a></li>
                     <li><a href="#how_it_works" className="hover:text-blue-600 transition-colors flex items-center">Comment ça marche</a></li>
-                    <li><a href="#tech_stack" className="hover:text-blue-600 transition-colors flex items-center">Technologies</a></li>
+                    <li><a href="#excellence" className="hover:text-blue-600 transition-colors flex items-center">Intelligence IA</a></li>
                     <li><a href="/tarifs" className="hover:text-blue-600 transition-colors flex items-center font-medium text-blue-600">Tarifs</a></li>
                   </ul>
                 </div>
@@ -1093,6 +1038,7 @@
       e.preventDefault();
       const element = document.querySelector(target.hash);
       if (element) {
+        element.scrollTop = 0; // Fix pour Firefox
         element.scrollIntoView({ behavior: 'smooth' });
       }
     }
