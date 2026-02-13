@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Mindus Forge · Connexion</title>
+  <meta name="description" content="Connectez‑vous à Mindus Forge avec GitHub, GitLab ou Bitbucket et commencez à forger votre code.">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- React, ReactDOM, Babel -->
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+      background: #ffffff;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    #root {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Glassmorphism élégant */
+    .glass-auth {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(37, 99, 235, 0.15);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-oauth {
+      transition: all 0.2s ease;
+      border: 1px solid #e2e8f0;
+      background: white;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.875rem 1rem;
+      border-radius: 1rem;
+      width: 100%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .btn-oauth:hover {
+      border-color: #3b82f6;
+      background: #f8fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-oauth i {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 0.75rem;
+    }
+
+    .text-gradient-modern {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Animation subtile */
+    @keyframes fadeSlide {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-card {
+      animation: fadeSlide 0.5s ease-out;
+    }
+
+    .bg-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 50%;
+      opacity: 0.03;
+      filter: blur(60px);
+    }
+
+    .particle-1 { width: 400px; height: 400px; top: -100px; left: -100px; }
+    .particle-2 { width: 500px; height: 500px; bottom: -150px; right: -100px; background: #06b6d4; opacity: 0.02; }
+    .particle-3 { width: 350px; height: 350px; top: 20%; right: 10%; background: #8b5cf6; opacity: 0.02; }
+  </style>
+</head>
+<body class="antialiased">
+
+<!-- Arrière-plan doux -->
+<div class="bg-particles">
+  <div class="particle particle-1"></div>
+  <div class="particle particle-2"></div>
+  <div class="particle particle-3"></div>
+</div>
+
+<div id="root"></div>
+
+<script type="text/babel">
+  const AuthPage = () => {
+    React.useEffect(() => {
+      // Rafraîchir les icônes après rendu
+      if (window.lucide) {
+        setTimeout(() => lucide.createIcons(), 20);
+      }
+    }, []);
+
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 w-full">
+        <div className="glass-auth rounded-3xl p-8 md:p-10 w-full max-w-md animate-card border border-slate-200/50 relative z-10">
+          
+          {/* Logo + titre */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-lg mb-4 mx-auto">
+              <span className="text-white font-bold text-2xl">MF</span>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+              Mindus <span className="text-gradient-modern">Forge</span>
+            </h1>
+            <p className="text-slate-500 mt-3 text-base">
+              Connect or create <span className="text-blue-600 font-medium">your account</span>
+            </p>
+          </div>
+
+          {/* 🚀 TROIS BOUTONS AUTH : GitHub, GitLab, Bitbucket */}
+          <div className="space-y-3.5">
+            {/* GitHub */}
+            <button className="btn-oauth group">
+              <i data-lucide="github" className="text-slate-700 group-hover:text-blue-600 transition-colors"></i>
+              <span className="flex-1 text-left text-slate-800 group-hover:text-blue-700 transition-colors">Continue with GitHub</span>
+            </button>
+
+            {/* GitLab (icône custom via lucide, "gitlab" est disponible) */}
+            <button className="btn-oauth group">
+              <i data-lucide="gitlab" className="text-slate-700 group-hover:text-orange-600 transition-colors"></i>
+              <span className="flex-1 text-left text-slate-800 group-hover:text-orange-700 transition-colors">Continue with GitLab</span>
+            </button>
+
+            {/* Bitbucket (pas d'icône native lucide, utilisation d'un svg inline) */}
+            <button className="btn-oauth group">
+              {/* Icône Bitbucket en SVG (couleur bleue) */}
+              <svg className="w-6 h-6 mr-3 text-slate-700 group-hover:text-blue-700 transition-colors" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.0011 7.387C9.97742 7.387 8.33742 9.027 8.33742 11.05C8.33742 13.073 9.97742 14.713 12.0011 14.713C14.0247 14.713 15.6647 13.073 15.6647 11.05C15.6647 9.027 14.0247 7.387 12.0011 7.387ZM12.0011 13.206C10.8111 13.206 9.84442 12.24 9.84442 11.05C9.84442 9.86 10.8111 8.894 12.0011 8.894C13.1911 8.894 14.1577 9.86 14.1577 11.05C14.1577 12.24 13.1911 13.206 12.0011 13.206Z" />
+                <path d="M21.4767 4.319C20.8537 3.707 19.9837 3.353 19.0687 3.353H4.93142C4.01642 3.353 3.14642 3.707 2.52342 4.319C1.90042 4.932 1.55542 5.789 1.59242 6.703L2.96642 19.248C3.03442 19.939 3.40142 20.556 3.97142 20.941C4.45742 21.272 5.03142 21.448 5.61942 21.448H18.3814C18.9694 21.448 19.5434 21.272 20.0294 20.941C20.5994 20.556 20.9664 19.939 21.0344 19.248L22.4084 6.703C22.4454 5.789 22.1004 4.932 21.4767 4.319ZM19.9234 19.089C19.8994 19.315 19.7794 19.518 19.5974 19.639C19.4654 19.728 19.3114 19.775 19.1564 19.775H4.84442C4.68842 19.775 4.53442 19.728 4.40342 19.639C4.22142 19.518 4.10142 19.315 4.07742 19.089L2.71742 6.663C2.69642 6.444 2.77642 6.228 2.93742 6.077C3.09842 5.926 3.32342 5.844 3.54442 5.844H20.4554C20.6764 5.844 20.9014 5.926 21.0624 6.077C21.2234 6.228 21.3034 6.444 21.2824 6.663L19.9234 19.089Z" />
+              </svg>
+              <span className="flex-1 text-left text-slate-800 group-hover:text-blue-700 transition-colors">Continue with Bitbucket</span>
+            </button>
+          </div>
+
+          {/* Séparateur "ou" élégant */}
+          <div className="flex items-center my-6">
+            <div className="flex-1 h-px bg-slate-200"></div>
+            <span className="px-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Sécurisé</span>
+            <div className="flex-1 h-px bg-slate-200"></div>
+          </div>
+
+          {/* Message secondaire + rappel inscription */}
+          <div className="text-center text-sm text-slate-500">
+            <p className="mb-3">En continuant, vous acceptez nos</p>
+            <div className="flex justify-center space-x-3 text-xs">
+              <a href="#" className="text-blue-600 hover:underline">Conditions</a>
+              <span className="text-slate-300">•</span>
+              <a href="#" className="text-blue-600 hover:underline">Confidentialité</a>
+            </div>
+          </div>
+
+          {/* Lien discret vers la page principale (facultatif) */}
+          <div className="mt-8 text-center">
+            <a href="index.html" className="text-xs text-slate-400 hover:text-blue-600 transition-colors inline-flex items-center">
+              <i data-lucide="arrow-left" className="w-3 h-3 mr-1"></i>
+              Retour à l'accueil
+            </a>
+          </div>
+        </div>
+
+        {/* Badge "productivité" tout en bas (optionnel) */}
+        <p className="absolute bottom-4 text-xs text-slate-400 text-center w-full left-0 px-4">
+          Mindus Forge — L'IA qui comprend votre code
+        </p>
+      </div>
+    );
+  };
+
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(<AuthPage />);
+</script>
+
+<script>
+  // Double appel pour forcer le chargement des icônes
+  function initLucide() {
+    if (window.lucide) lucide.createIcons();
+  }
+  window.addEventListener('load', initLucide);
+  setTimeout(initLucide, 50);
+  setTimeout(initLucide, 150);
+</script>
+
+</body>
+</html>
