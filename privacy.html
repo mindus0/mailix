@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Politique de confidentialité | Mindus Forge</title>
+  <meta name="description" content="Politique de confidentialité de Mindus Forge : protection des données, conformité RGPD, sécurité des projets générés par IA.">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- React, ReactDOM, Babel -->
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <style>
+    /* Reset & corrections mobiles impératives */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    #root, .min-h-screen {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    /* Conteneurs sécurisés */
+    .container-safe {
+      width: 100%;
+      max-width: 100%;
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .max-w-7xl {
+      max-width: 1280px;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    /* Suppression scroll horizontal forcé */
+    img, video, iframe, canvas, svg, i, .lucide {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Titres fluides */
+    h1, .section-title, h2, h3 {
+      word-break: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    h1 span, h2 span {
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    /* Style élégant */
+    .glass-white {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(37, 99, 235, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02);
+    }
+    
+    .card-corporate {
+      background: white;
+      border: 1px solid #eef2f6;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-corporate:hover {
+      border: 1px solid #3b82f6;
+      box-shadow: 0 20px 40px rgba(59, 130, 246, 0.08);
+    }
+    
+    .text-gradient-modern {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #0891b2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .bg-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .particle {
+      position: absolute;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 50%;
+      opacity: 0.03;
+      animation: floatParticle 20s infinite;
+    }
+    
+    .particle-1 {
+      width: 400px;
+      height: 400px;
+      top: -100px;
+      left: -100px;
+      filter: blur(80px);
+      animation-delay: 0s;
+    }
+    
+    .particle-2 {
+      width: 500px;
+      height: 500px;
+      bottom: -150px;
+      right: -100px;
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      opacity: 0.02;
+      filter: blur(100px);
+      animation-delay: -5s;
+    }
+    
+    .particle-3 {
+      width: 300px;
+      height: 300px;
+      top: 40%;
+      left: 20%;
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      opacity: 0.02;
+      filter: blur(70px);
+      animation-delay: -10s;
+    }
+    
+    .particle-4 {
+      width: 450px;
+      height: 450px;
+      top: 60%;
+      right: 15%;
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      opacity: 0.02;
+      filter: blur(90px);
+      animation-delay: -15s;
+    }
+    
+    @keyframes floatParticle {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(50px, 30px); }
+      50% { transform: translate(20px, 80px); }
+      75% { transform: translate(-30px, 20px); }
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+      border-radius: 4px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+      transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: white;
+      border: 1px solid #e2e8f0;
+      color: #1e293b;
+      transition: all 0.3s;
+    }
+    
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #3b82f6;
+      color: #2563eb;
+      transform: translateY(-2px);
+    }
+    
+    .animate-enter {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    section, footer, nav > div, .card-corporate {
+      max-width: 100%;
+    }
+
+    .legal-section {
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid #eef2f6;
+      margin-bottom: 24px;
+    }
+
+    .legal-section h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #0f172a;
+    }
+
+    .legal-section h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 2rem 0 1rem;
+      color: #1e293b;
+    }
+
+    .legal-section p {
+      color: #475569;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+    }
+
+    .legal-section ul {
+      list-style-type: disc;
+      padding-left: 1.8rem;
+      margin: 1.2rem 0;
+      color: #475569;
+    }
+
+    .legal-section li {
+      margin-bottom: 0.5rem;
+      line-height: 1.7;
+    }
+
+    .badge-legal {
+      background: linear-gradient(135deg, #f0f9ff, #eef2ff);
+      border: 1px solid #bae6fd;
+      border-radius: 100px;
+      padding: 0.25rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #0369a1;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 antialiased min-h-screen w-full overflow-x-hidden">
+
+<!-- Particules animées en arrière-plan -->
+<div class="bg-particles">
+  <div class="particle particle-1"></div>
+  <div class="particle particle-2"></div>
+  <div class="particle particle-3"></div>
+  <div class="particle particle-4"></div>
+</div>
+
+<div id="root"></div>
+
+<script type="text/babel">
+  const PrivacyPolicyPage = () => {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+    
+    React.useEffect(() => {
+      if (window.lucide) {
+        setTimeout(() => {
+          lucide.createIcons();
+        }, 10);
+      }
+    }, []);
+
+    React.useEffect(() => {
+      if (window.lucide) {
+        setTimeout(() => {
+          lucide.createIcons();
+        }, 10);
+      }
+    }, [isMobileMenuOpen]);
+
+    // Date de dernière mise à jour
+    const lastUpdate = "15 mars 2025";
+
+    return (
+      <div className="min-h-screen bg-white text-slate-900 relative w-full overflow-x-hidden">
+        {/* Navigation */}
+        <nav className="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
+          <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
+            {/* Logo */}
+            <div className="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
+              <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
+                <span className="text-white font-bold text-lg md:text-xl">MF</span>
+              </div>
+              <span className="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-blue-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent whitespace-nowrap">
+                Mindus Forge
+              </span>
+            </div>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center space-x-10">
+              <a href="index.html" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
+              <a href="privacy.html" className="text-blue-600 font-medium border-b-2 border-blue-600 pb-1">Confidentialité</a>
+            </div>
+
+            {/* Burger */}
+            <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
+              <button 
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden text-slate-700 focus:outline-none p-2 -mr-1"
+              >
+                <i data-lucide={isMobileMenuOpen ? "x" : "menu"} className="w-6 h-6"></i>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg">
+              <div className="flex flex-col space-y-2">
+                <a href="index.html" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Accueil</a>
+                <a href="privacy.html" className="py-3 px-3 bg-blue-50 text-blue-700 rounded-lg font-medium">Confidentialité</a>
+              </div>
+            </div>
+          )}
+        </nav>
+
+        {/* Main Content */}
+        <main className="pt-28 pb-20 relative z-10 w-full overflow-x-hidden">
+          {/* Header */}
+          <section className="max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-16 text-center">
+            <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-6 border border-blue-200">
+              <i data-lucide="shield" className="w-4 h-4 mr-2"></i>
+              Protection des données
+            </div>
+            <h1 className="section-title font-black leading-tight text-[clamp(2.5rem,10vw,4.5rem)] mb-6">
+              Politique de <span className="text-gradient-modern">confidentialité</span>
+            </h1>
+            <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
+              Dernière mise à jour : {lastUpdate}
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <span className="badge-legal"><i data-lucide="check-circle" className="w-4 h-4 mr-1"></i> RGPD compliant</span>
+              <span className="badge-legal"><i data-lucide="check-circle" className="w-4 h-4 mr-1"></i> ISO 27001</span>
+              <span className="badge-legal"><i data-lucide="check-circle" className="w-4 h-4 mr-1"></i> SOC2 Type II</span>
+            </div>
+          </section>
+
+          {/* Contenu légal détaillé */}
+          <section className="max-w-4xl mx-auto px-4 md:px-6 py-8">
+            {/* Introduction */}
+            <div className="legal-section animate-enter">
+              <p className="text-lg font-medium text-slate-700 mb-4">
+                Chez <strong>Mindus Forge</strong> (anciennement "Mindus AI"), nous considérons que la protection de vos données est aussi fondamentale que la génération de code elle-même. En tant que première plateforme de génération de projet complète par IA, nous traitons des informations sensibles — code source, clés API, architectures logicielles — et nous nous engageons à une transparence totale.
+              </p>
+              <p>
+                La présente politique décrit comment nous collectons, utilisons, partageons et protégeons vos données lorsque vous utilisez Mindus Forge, nos API, notre CLI, notre interface web et nos services associés. Elle s'applique à tous les utilisateurs, qu'ils soient développeurs individuels, équipes ou entreprises.
+              </p>
+            </div>
+
+            {/* 1. Données collectées */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.05s'}}>
+              <h2>1. Données que nous collectons</h2>
+              
+              <h3>1.1 Données de compte</h3>
+              <p>
+                Lors de la création d'un compte Mindus Forge, nous collectons : adresse e-mail, nom d'utilisateur, identifiants GitHub/GitLab (si vous choisissez l'authentification OAuth), informations de facturation (adresse, identifiant TVA), et préférences de communication.
+              </p>
+
+              <h3>1.2 Projets et code source</h3>
+              <p>
+                Mindus Forge est conçu pour analyser et générer du code. Nous collectons :
+              </p>
+              <ul>
+                <li><strong>Dépôts connectés</strong> : lorsque vous autorisez l'accès à un dépôt GitHub/GitLab, nous lisons la structure, les fichiers (publics ou privés selon vos droits) pour comprendre le contexte. Nous ne stockons pas l'intégralité de votre code source sauf pour la durée nécessaire à la génération et à la synchronisation.</li>
+                <li><strong>Code généré</strong> : les fichiers créés par Forge sont stockés temporairement pour permettre la révision et le push. Vous gardez la pleine propriété de tout code généré.</li>
+                <li><strong>Métadonnées de projet</strong> : langages utilisés, frameworks, architecture détectée, pour améliorer les suggestions futures.</li>
+              </ul>
+
+              <h3>1.3 Données d'utilisation</h3>
+              <p>
+                Nous collectons des informations sur la façon dont vous interagissez avec Forge : fonctionnalités utilisées, fréquence des générations, erreurs rencontrées, performances de l'IA. Ces données sont anonymisées lorsque possible et servent à améliorer nos modèles.
+              </p>
+
+              <h3>1.4 Données techniques</h3>
+              <p>
+                Adresse IP, type de navigateur, système d'exploitation, pages visitées, horodatage, identifiants uniques de session. Ces données sont nécessaires à la sécurité et au fonctionnement du service.
+              </p>
+            </div>
+
+            {/* 2. Base légale et finalités */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.1s'}}>
+              <h2>2. Base légale et finalités du traitement</h2>
+              <p>
+                Nous traitons vos données sur les bases légales suivantes :
+              </p>
+              <ul>
+                <li><strong>Exécution du contrat</strong> : fournir le service de génération de code, analyser vos dépôts, synchroniser avec Git, facturation.</li>
+                <li><strong>Intérêt légitime</strong> : améliorer nos modèles d'IA, prévenir les fraudes, sécuriser la plateforme, analyser les performances.</li>
+                <li><strong>Consentement</strong> : pour certaines communications marketing ou l'utilisation de cookies non essentiels.</li>
+                <li><strong>Obligation légale</strong> : conservation des factures, réponse aux autorités judiciaires.</li>
+              </ul>
+              <p>
+                En clair, nous utilisons vos données pour :
+              </p>
+              <ul>
+                <li>Permettre la génération contextuelle de code dans vos dépôts</li>
+                <li>Assurer la résilience hors ligne et la synchronisation</li>
+                <li>Facturer les abonnements et gérer votre compte</li>
+                <li>Améliorer continuellement l'IA de Forge</li>
+                <li>Communiquer sur les évolutions majeures</li>
+                <li>Respecter nos obligations légales et fiscales</li>
+              </ul>
+            </div>
+
+            {/* 3. Partage des données */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.15s'}}>
+              <h2>3. Partage des données avec des tiers</h2>
+              <p>
+                Mindus Forge ne vend pas vos données personnelles. Nous pouvons partager certaines informations avec des sous-traitants sélectionnés pour la fourniture du service :
+              </p>
+              <ul>
+                <li><strong>Hébergement et infrastructure</strong> : OVHcloud (France), AWS (UE) pour les données de production, garantissant que vos données restent dans l'Union Européenne par défaut.</li>
+                <li><strong>Paiement</strong> : Stripe (certifié PCI DSS) pour le traitement des cartes bancaires. Nous ne stockons pas vos numéros de carte.</li>
+                <li><strong>Analyse et support</strong> : Sentry (erreurs), Google Analytics (anonymisé), Crisp (chat support).</li>
+                <li><strong>IA et modèles</strong> : Google Cloud (Vertex AI, Gemini) pour l'exécution des modèles. Aucun code source n'est utilisé pour entraîner les modèles publics sans anonymisation stricte.</li>
+              </ul>
+              <p>
+                Tous nos sous-traitants sont contractuellement tenus de respecter le RGPD et de garantir un niveau de sécurité équivalent au nôtre.
+              </p>
+            </div>
+
+            {/* 4. Sécurité */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.2s'}}>
+              <h2>4. Mesures de sécurité</h2>
+              <p>
+                Nous déployons des mesures techniques et organisationnelles avancées pour protéger vos données :
+              </p>
+              <ul>
+                <li>Chiffrement AES-256 au repos pour toutes les bases de données contenant du code ou des données personnelles.</li>
+                <li>Chiffrement TLS 1.3 en transit.</li>
+                <li>Authentification multi-facteurs obligatoire pour les comptes organisation.</li>
+                <li>Isolation stricte des environnements (conteneurs, réseaux privés).</li>
+                <li>Audits de sécurité réguliers et tests d'intrusion.</li>
+                <li>Politique de gestion des accès internes (moindre privilège, journalisation).</li>
+                <li>Sauvegardes chiffrées quotidiennes avec rétention limitée.</li>
+              </ul>
+              <p>
+                En cas d'incident de sécurité affectant vos données, nous nous engageons à vous notifier dans les 72 heures conformément au RGPD.
+              </p>
+            </div>
+
+            {/* 5. Conservation */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.25s'}}>
+              <h2>5. Durée de conservation</h2>
+              <p>
+                Nous conservons vos données aussi longtemps que nécessaire pour fournir le service et respecter nos obligations légales :
+              </p>
+              <ul>
+                <li><strong>Données de compte</strong> : jusqu'à la fermeture du compte, puis suppression sous 30 jours (hors contraintes légales).</li>
+                <li><strong>Projets et code généré</strong> : conservés pendant la durée de votre abonnement. Vous pouvez exporter ou supprimer vos projets à tout moment.</li>
+                <li><strong>Logs techniques</strong> : 6 mois maximum.</li>
+                <li><strong>Factures et données fiscales</strong> : 10 ans (obligation légale).</li>
+                <li><strong>Données anonymisées</strong> : indéfiniment pour améliorer nos modèles, sans possibilité de ré-identification.</li>
+              </ul>
+            </div>
+
+            {/* 6. Vos droits */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.3s'}}>
+              <h2>6. Vos droits (RGPD & CCPA)</h2>
+              <p>
+                En tant qu'utilisateur, vous disposez de droits étendus sur vos données :
+              </p>
+              <ul>
+                <li><strong>Droit d'accès</strong> : obtenir une copie de vos données personnelles.</li>
+                <li><strong>Droit de rectification</strong> : corriger des informations inexactes.</li>
+                <li><strong>Droit à l'effacement</strong> : demander la suppression de vos données (sauf conservation légale).</li>
+                <li><strong>Droit à la limitation</strong> : restreindre temporairement le traitement.</li>
+                <li><strong>Droit à la portabilité</strong> : recevoir vos données dans un format structuré (JSON).</li>
+                <li><strong>Droit d'opposition</strong> : vous opposer au traitement pour prospection ou intérêt légitime.</li>
+                <li><strong>Retrait du consentement</strong> : à tout moment pour les traitements basés sur le consentement.</li>
+              </ul>
+              <p>
+                Pour exercer ces droits, contactez notre Délégué à la Protection des Données (DPO) à <strong>dpo@mindusforge.dev</strong>. Nous répondons sous 30 jours.
+              </p>
+            </div>
+
+            {/* 7. Cookies */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.35s'}}>
+              <h2>7. Cookies et traceurs</h2>
+              <p>
+                Mindus Forge utilise des cookies strictement nécessaires au fonctionnement (authentification, session, sécurité). Nous utilisons également des cookies analytiques (Matomo auto-hébergé) pour comprendre l'utilisation, sans partage avec des tiers. Vous pouvez paramétrer vos préférences via notre bannière de cookies.
+              </p>
+              <p>
+                Aucun cookie publicitaire n'est déposé.
+              </p>
+            </div>
+
+            {/* 8. Spécificités IA */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.4s'}}>
+              <h2>8. IA générative et données d'entraînement</h2>
+              <p>
+                Mindus Forge utilise des modèles propriétaires et des modèles de fondation (Gemini, etc.). Nous tenons à clarifier :
+              </p>
+              <ul>
+                <li>Votre code source n'est pas utilisé pour entraîner les modèles publics de Google sans votre consentement explicite.</li>
+                <li>Les prompts et le code généré peuvent être analysés pour améliorer nos modèles internes, mais après anonymisation stricte (suppression des identifiants, noms de variables, commentaires sensibles).</li>
+                <li>Vous pouvez désactiver l'amélioration basée sur vos données dans les paramètres de confidentialité de votre compte.</li>
+                <li>En cas d'utilisation de votre propre clé API Gemini (plans Scale/Enterprise), aucune donnée n'est partagée avec nous ; l'échange est direct entre vous et Google.</li>
+              </ul>
+            </div>
+
+            {/* 9. Transferts hors UE */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.45s'}}>
+              <h2>9. Transferts de données hors Union Européenne</h2>
+              <p>
+                Nous privilégions des infrastructures localisées en UE. Toutefois, certains sous-traitants (ex: Stripe, Google Cloud) peuvent traiter des données en dehors de l'UE. Dans ce cas, nous nous assurons que des garanties adéquates sont prises :
+              </p>
+              <ul>
+                <li>Clauses contractuelles types de la Commission européenne.</li>
+                <li>Respect du cadre Privacy Shield (pour les transferts US-RGPD).</li>
+                <li>Engagements de confidentialité renforcés.</li>
+              </ul>
+              <p>
+                Vous pouvez obtenir une copie de ces garanties sur demande.
+              </p>
+            </div>
+
+            {/* 10. Responsabilité du traitement */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.5s'}}>
+              <h2>10. Responsable du traitement</h2>
+              <p>
+                Le responsable du traitement est Mindus AI SAS, société immatriculée au RCS de Lyon sous le numéro 928 374 837, dont le siège social est situé 15 rue de la République, 69001 Lyon, France.
+              </p>
+              <p>
+                Notre représentant légal est M. Alexandre Moreau, CEO. Pour toute question relative à la protection des données, vous pouvez également contacter notre DPO à dpo@mindusforge.dev ou par courrier à l'adresse ci-dessus (à l'attention du DPO).
+              </p>
+            </div>
+
+            {/* 11. Réclamations */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.55s'}}>
+              <h2>11. Réclamations</h2>
+              <p>
+                Si vous estimez que nous n'avons pas respecté vos droits, vous avez le droit d'introduire une réclamation auprès de la CNIL (autorité française de protection des données) : <a href="https://www.cnil.fr" target="_blank" rel="noopener" className="text-blue-600 underline">www.cnil.fr</a>.
+              </p>
+            </div>
+
+            {/* 12. Modifications */}
+            <div className="legal-section animate-enter" style={{animationDelay: '0.6s'}}>
+              <h2>12. Modifications de la politique</h2>
+              <p>
+                Nous pouvons être amenés à modifier cette politique pour refléter l'évolution de nos services ou des exigences légales. Toute modification significative vous sera notifiée par email ou via une notification dans l'application. La version en vigueur est toujours disponible sur cette page.
+              </p>
+            </div>
+
+            {/* Contact spécifique */}
+            <div className="legal-section animate-enter bg-gradient-to-br from-blue-50/50 to-indigo-50/50 border-blue-200" style={{animationDelay: '0.65s'}}>
+              <h2 className="flex items-center">
+                <i data-lucide="mail" className="w-8 h-8 text-blue-600 mr-3"></i>
+                Contacter notre DPO
+              </h2>
+              <p>
+                Pour toute question relative à vos données personnelles, à l'exercice de vos droits, ou pour signaler un problème de sécurité, notre Délégué à la Protection des Données est à votre disposition :
+              </p>
+              <div className="mt-6 p-4 bg-white rounded-xl border border-slate-200">
+                <p><strong>Email :</strong> dpo@mindusforge.dev</p>
+                <p><strong>Courrier :</strong> Mindus AI SAS - DPO, 15 rue de la République, 69001 Lyon, France</p>
+                <p><strong>Tél. (standard) :</strong> +33 4 81 68 11 22</p>
+              </div>
+              <p className="mt-4 text-sm">
+                Nous traitons toutes les demandes dans un délai maximum d'un mois.
+              </p>
+            </div>
+
+            {/* Clause de non-responsabilité */}
+            <p className="text-xs text-slate-400 mt-12 text-center italic">
+              Cette politique de confidentialité est fournie à titre informatif et ne constitue pas un conseil juridique. Pour une conformité totale, veuillez consulter votre propre conseil.
+            </p>
+          </section>
+        </main>
+      </div>
+    );
+  };
+
+  // Render the app
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<PrivacyPolicyPage />);
+  }
+</script>
+
+<script>
+  function initLucide() {
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  }
+  
+  window.addEventListener('load', initLucide);
+  setTimeout(initLucide, 100);
+  setTimeout(initLucide, 300);
+  setTimeout(initLucide, 500);
+  
+  // Smooth scroll
+  document.addEventListener('click', function(e) {
+    const target = e.target.closest('a');
+    if (target && target.hash && target.hash.startsWith('#')) {
+      e.preventDefault();
+      const element = document.querySelector(target.hash);
+      if (element) {
+        element.scrollTop = 0;
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
