@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Mindus Forge | À propos · La première forge IA</title>
+  <meta name="description" content="Découvrez Mindus Forge : la maison de logiciels qui a révolutionné la création de projets par prompt unique. Fondée en juin 2025, notre mission est de transformer une idée en code prêt à pusher.">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- React, ReactDOM, Babel -->
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <style>
+    /* Custom styles beyond Tailwind */
+    .glass {
+      background: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+    }
+    
+    .glass-card {
+      background: rgba(15, 15, 15, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+    }
+    
+    .animated-gradient {
+      background: linear-gradient(-45deg, #0a0a0a, #1a1a1a, #0f172a, #0a0a0a);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+    }
+    
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .text-gradient {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #10b981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+      border-radius: 4px;
+    }
+
+    .animation-delay-2000 {
+      animation-delay: 2s;
+    }
+    
+    /* Style pour les longs textes */
+    .prose-about {
+      max-width: 100%;
+      line-height: 1.8;
+    }
+    .prose-about p {
+      margin-bottom: 1.8rem;
+      color: #d1d5db;
+    }
+    .prose-about strong {
+      color: white;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="animated-gradient text-white antialiased min-h-screen">
+
+<div id="root"></div>
+
+<script type="text/babel">
+  const AboutPage = () => {
+    React.useEffect(() => {
+      // Initialize Lucide icons
+      if (window.lucide) {
+        setTimeout(() => {
+          lucide.createIcons();
+        }, 10);
+        setTimeout(() => {
+          lucide.createIcons();
+        }, 100);
+      }
+    }, []);
+
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+        {/* Background glow effects */}
+        <div className="fixed top-0 left-0 w-full h-full pointer-events-none">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-600/10 rounded-full blur-3xl"></div>
+        </div>
+
+        {/* Navigation simplifiée */}
+        <nav className="glass fixed top-0 left-0 right-0 z-50 px-6 py-4">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xl">MF</span>
+              </div>
+              <span className="font-bold text-2xl tracking-tight bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
+                Mindus Forge
+              </span>
+            </div>
+            <div className="flex items-center space-x-6">
+              <a href="https://mindusforge.dev" className="text-gray-300 hover:text-white transition-colors">← Retour au site</a>
+              <button className="bg-white/10 hover:bg-white/20 px-5 py-2 rounded-full transition-all border border-blue-500/30">
+                <i data-lucide="github" className="w-5 h-5 inline mr-2"></i>
+                Connexion
+              </button>
+            </div>
+          </div>
+        </nav>
+
+        <main className="pt-28 pb-20 relative z-10 max-w-7xl mx-auto px-6">
+          
+          {/* === HERO : QUI SOMMES-NOUS ? (très textuel) === */}
+          <section className="mb-32 text-center">
+            <h1 className="text-5xl md:text-7xl font-black mb-8 leading-tight">
+              <span className="text-gradient">Mindus Forge</span> <br/>
+              la forge qui pense avec vous
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Fondée en juin 2025, Mindus est la première maison de logiciels à avoir transformé la création de projets 
+              en une seule instruction. D’une simple phrase à un dépôt fonctionnel : nous avons redéfini le sens du mot prototype.
+            </p>
+          </section>
+
+          {/* === SECTION 1 : NOTRE HISTOIRE (texte long) === */}
+          <section className="mb-32">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-blue-500/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 flex items-center">
+                <i data-lucide="history" className="w-8 h-8 text-blue-400 mr-3"></i>
+                De l'idée au push : notre histoire
+              </h2>
+              
+              <div className="prose-about text-gray-300 text-lg space-y-6">
+                <p>
+                  <strong>Mindus n'est pas née dans un garage, mais dans une réflexion profonde sur le gaspillage technique.</strong> 
+                  En juin 2025, trois ingénieurs parisiens, lassés de voir des sprints entiers engloutis dans la mise en place 
+                  d’architectures génériques, décident de créer un outil qui synthétise des années d’expérience en une seconde. 
+                  L’idée est simple : <em>et si l’on pouvait décrire une application en langage naturel et obtenir un dépôt Git 
+                  prêt à l’emploi, avec tests, CI/CD et documentation ?</em>
+                </p>
+                <p>
+                  Pendant dix‑huit mois, l’équipe travaille dans l’ombre, accumulant les refus, les pivots, et surtout une 
+                  conviction : l’IA ne doit pas remplacer le développeur, mais lui offrir un terrain de jeu déjà structuré. 
+                  Le 1er juin 2025, Mindus Forge ouvre ses portes en version privée. En quelques semaines, des centaines 
+                  de startups l’adoptent pour leur MVP. Aujourd’hui, la forge est utilisée par des milliers d’ingénieurs, 
+                  des indépendants aux grands comptes, et génère plus de 50 000 projets par mois.
+                </p>
+                <p>
+                  Notre spécificité ? <strong>Le "single‑prompt project generation"</strong> : une seule phrase, 
+                  et Forge comprend le stack, les dépendances, le modèle de données, et même les conventions de nommage 
+                  de votre équipe. Plus besoin d’enchaîner dix outils : Mindus est le chef d’orchestre silencieux.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* === SECTION 2 : NOTRE MISSION (texte long) === */}
+          <section className="mb-32">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-purple-500/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 flex items-center">
+                <i data-lucide="target" className="w-8 h-8 text-purple-400 mr-3"></i>
+                Rendre la création logicielle aussi fluide que la pensée
+              </h2>
+              
+              <div className="grid md:grid-cols-2 gap-10 prose-about">
+                <div>
+                  <p className="text-lg">
+                    <strong>Nous vivons une époque où les idées fusent, mais où la traduction en code reste un goulet.</strong> 
+                    Trop de concepts prometteurs meurent dans la phase d’initialisation : quel framework choisir ? 
+                    comment organiser les dossiers ? quelle gestion d’état adopter ? Mindus élimine ce bruit cognitif. 
+                    Notre mission est de faire en sorte que le temps entre "et si on faisait…" et "ça marche, on peut itérer" 
+                    soit mesuré en secondes, pas en jours.
+                  </p>
+                  <p className="text-lg">
+                    Nous ne cherchons pas à produire du code "jetable". Au contraire, Forge intègre nativement les bonnes 
+                    pratiques : tests unitaires, injection de dépendances, sécurité par défaut, et une architecture pensée 
+                    pour évoluer. Le code généré est propre, documenté, et prêt à être repris par une équipe humaine.
+                  </p>
+                </div>
+                <div>
+                  <p className="text-lg">
+                    <strong>Au‑delà de la technique, nous défendons une vision éthique de l’IA.</strong> 
+                    Aucun modèle n’est entraîné sur les dépôts privés de nos utilisateurs. Nous utilisons des modèles 
+                    open‑source optimisés et des techniques de confidentialité différentielle. Le développeur reste 
+                    propriétaire à 100 % de son code. Notre rôle est de l’assister, pas de l’enfermer.
+                  </p>
+                  <p className="text-lg">
+                    En un an, nous avons déjà vu émerger des usages auxquels nous n’avions pas pensé : des enseignants 
+                    qui font générer des exercices personnalisés, des architectes qui explorent des dizaines de variantes 
+                    d’API, des no-codeurs qui deviennent codeurs par la compréhension du code produit. C’est cette 
+                    diversité qui nous motive à continuer.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* === SECTION 3 : LA TECHNOLOGIE DERRIÈRE LA FORGE (beaucoup de texte) === */}
+          <section className="mb-32">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-emerald-500/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 flex items-center">
+                <i data-lucide="cpu" className="w-8 h-8 text-emerald-400 mr-3"></i>
+                Une architecture pensée pour la compréhension, pas seulement la génération
+              </h2>
+              
+              <div className="prose-about space-y-6 text-lg">
+                <p>
+                  <strong>Mindus Forge ne se contente pas de concaténer des tokens.</strong> Sous le capot, nous utilisons 
+                  une chaîne de modèles spécialisés : un premier LLM (fine‑tuné sur des millions de dépôts publics) 
+                  interprète la requête et extrait les intentions, un second propose une structure de projet adaptée, 
+                  et un troisième génère le code composant par composant. Le tout est assemblé par un moteur de règles 
+                  qui garantit la cohérence (nommage, imports, versions).
+                </p>
+                <p>
+                  Pour les gros projets, Forge utilise une résilience asynchrone : vous pouvez fermer l’onglet, 
+                  le projet continue de s’assembler en arrière‑plan. Vous recevez une notification avec le lien du 
+                  dépôt et un rapport d’analyse. L’infrastructure tourne sur un Kubernetes dédié, avec des GPU 
+                  réservés pour garantir la latence.
+                </p>
+                <p>
+                  <strong>L’un de nos brevets (déposé en janvier 2025) concerne le "prompt enhancing contextuel" :</strong> 
+                  Forge ne se base pas seulement sur la phrase, mais analyse votre historique, vos précédents choix 
+                  de stack, et même les issues GitHub ouvertes pour proposer des solutions déjà alignées avec votre 
+                  façon de coder. C’est ce qui rend la génération étonnamment proche de ce qu’aurait écrit un humain 
+                  de l’équipe.
+                </p>
+                <p>
+                  Côté sécurité, chaque génération s’exécute dans un sandbox éphémère. Le code est inspecté 
+                  statiquement pour détecter les failles évidentes (secrets exposés, injections potentielles). 
+                  Nous fournissons également un SBOM (Software Bill of Materials) pour chaque projet généré, 
+                  indispensable pour les entreprises soumises à des normes de cybersécurité.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* === SECTION 4 : NOS VALEURS ET ENGAGEMENTS (très textuel) === */}
+          <section className="mb-32">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-pink-500/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 flex items-center">
+                <i data-lucide="heart" className="w-8 h-8 text-pink-400 mr-3"></i>
+                Une maison de logiciels responsable
+              </h2>
+              
+              <div className="grid md:grid-cols-2 gap-10 prose-about">
+                <div>
+                  <h3 className="text-2xl font-semibold mb-4 text-white">🔐 Transparence radicale</h3>
+                  <p className="text-lg">
+                    Nous publions chaque mois notre "transparency report" : incidents, disponibilité, 
+                    évolutions des modèles, et même les refus de génération (pourquoi une requête a été bloquée). 
+                    Nos clients savent exactement ce qui se passe dans la forge.
+                  </p>
+                  
+                  <h3 className="text-2xl font-semibold mb-4 mt-8 text-white">🌱 Impact environnemental</h3>
+                  <p className="text-lg">
+                    L’entraînement des modèles est compensé via des programmes de reforestation. En production, 
+                    nous mutualisons les inférences pour réduire l’empreinte. Nous visons la neutralité carbone 
+                    en 2026.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="text-2xl font-semibold mb-4 text-white">🤝 Open source first</h3>
+                  <p className="text-lg">
+                    Si le cœur de Forge est propriétaire, nous open‑sourceons un maximum de composants : 
+                    connecteurs, librairies de parsing, outils de validation. Nous finançons également des 
+                    mainteneurs de projets open source que nous utilisons (PyTorch, Transformers, etc.).
+                  </p>
+                  
+                  <h3 className="text-2xl font-semibold mb-4 mt-8 text-white">📚 Pédagogie avant tout</h3>
+                  <p className="text-lg">
+                    Nous ne voulons pas d’une génération aveugle. Chaque projet est livré avec une documentation 
+                    narrative expliquant pourquoi tel pattern a été choisi, comment le modifier, et quelles sont 
+                    les alternatives. Le développeur apprend en même temps qu’il produit.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* === SECTION 5 : L'ÉQUIPE (beaucoup de texte, mais toujours pas de cartes) === */}
+          <section className="mb-32">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-amber-500/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 flex items-center">
+                <i data-lucide="users" className="w-8 h-8 text-amber-400 mr-3"></i>
+                Celles et ceux qui forgent Mindus
+              </h2>
+              
+              <div className="prose-about text-lg">
+                <p className="mb-6">
+                  <strong>Nous sommes aujourd’hui 47 personnes, réparties entre Paris, Lyon et Toulouse.</strong> 
+                  L’équipe est issue de horizons variés : recherche en NLP, ex‑développeurs de jeux vidéo, 
+                  architectes cloud, mais aussi une philosophe des sciences et un ancien musicien. Cette diversité 
+                  est essentielle car Forge ne résout pas qu’un problème technique : elle touche à la manière 
+                  dont les humains conçoivent.
+                </p>
+                <p className="mb-6">
+                  Nos rituels sont simples : pas de réunion le mercredi, du "pair forging" (programmation à deux 
+                  avec l’IA) pour tester nos propres outils, et une semaine de hack tous les deux mois où l’on 
+                  laisse libre cours aux expérimentations. C’est lors d’un hack que le prototype de génération 
+                  mono‑prompt a vu le jour.
+                </p>
+                <p className="mb-6">
+                  Nous recrutons régulièrement, mais avec une exigence : ne pas sacrifier la qualité à la vitesse. 
+                  Chaque nouvelle fonctionnalité est discutée en public dans notre Discord, et les retours utilisateurs 
+                  sont priorisés. Nous considérons que les vrais décideurs de la feuille de route sont les personnes 
+                  qui utilisent Forge au quotidien.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* === SECTION 6 : CHIFFRES ET FAITS MARQUANTS (texte uniquement, pas de graphiques) === */}
+          <section className="mb-32">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-indigo-500/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 flex items-center">
+                <i data-lucide="bar-chart-3" className="w-8 h-8 text-indigo-400 mr-3"></i>
+                La forge en quelques repères
+              </h2>
+              
+              <div className="grid md:grid-cols-3 gap-8 prose-about">
+                <div>
+                  <p className="text-5xl font-black text-gradient mb-2">350+</p>
+                  <p className="text-gray-300 text-lg">entreprises utilisent Forge quotidiennement, de la micro‑startup au CAC40.</p>
+                </div>
+                <div>
+                  <p className="text-5xl font-black text-gradient mb-2">2,3M</p>
+                  <p className="text-gray-300 text-lg">projets générés depuis le lancement, soit plus de 8 millions de fichiers.</p>
+                </div>
+                <div>
+                  <p className="text-5xl font-black text-gradient mb-2">15</p>
+                  <p className="text-gray-300 text-lg">langages supportés nativement, du Rust au COBOL (expérimental).</p>
+                </div>
+              </div>
+              <div className="mt-10 text-gray-400 border-t border-white/10 pt-8">
+                <p className="text-lg italic">
+                  Ces chiffres évoluent chaque mois. Nous les mettons à jour publiquement sur notre page 
+                  de transparence. Ils ne sont pas des objectifs marketing, mais des indicateurs de l’adoption 
+                  réelle.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* === SECTION 7 : TÉMOIGNAGES (sous forme de texte long, pas de cartes) === */}
+          <section className="mb-32">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-teal-500/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 flex items-center">
+                <i data-lucide="message-circle" className="w-8 h-8 text-teal-400 mr-3"></i>
+                Ce que nos utilisateurs nous disent
+              </h2>
+              
+              <div className="space-y-8 prose-about">
+                <blockquote className="text-lg pl-6 border-l-4 border-blue-500">
+                  <p className="italic text-gray-200">
+                    "Mindus a changé notre façon de prototyper. Avant, il fallait trois jours pour sortir une API 
+                    avec les bonnes pratiques. Maintenant, on pose l’idée le matin, l’après‑midi on a une base solide 
+                    et on peut déjà montrer quelque chose au client. C’est un levier de compétitivité énorme."
+                  </p>
+                  <footer className="mt-2 text-gray-400">— Claire D., CTO chez Lumos (startup, 25 devs)</footer>
+                </blockquote>
+                
+                <blockquote className="text-lg pl-6 border-l-4 border-purple-500">
+                  <p className="italic text-gray-200">
+                    "Je suis formateur en développement web. J’utilise Forge pour générer des projets d’exemple 
+                    adaptés au niveau de chaque apprenant. Je peux montrer une architecture MVC, puis la faire 
+                    évoluer vers une clean architecture en deux commandes. C’est un outil pédagogique incroyable."
+                  </p>
+                  <footer className="mt-2 text-gray-400">— Karim M., formateur freelance</footer>
+                </blockquote>
+                
+                <blockquote className="text-lg pl-6 border-l-4 border-emerald-500">
+                  <p className="italic text-gray-200">
+                    "Nous étions sceptiques sur la qualité du code IA. Mais Forge produit un code qui respecte nos 
+                    standards, avec des tests et une doc. Et surtout, il s’intègre dans nos pipelines sans friction. 
+                    On est passé de la preuve de concept à la prod en deux semaines sur un projet critique."
+                  </p>
+                  <footer className="mt-2 text-gray-400">— Antoine R., lead dev chez un grand assureur</footer>
+                </blockquote>
+              </div>
+            </div>
+          </section>
+
+          {/* === SECTION 8 : PERSPECTIVES ET FEUILLE DE ROUTE (long texte) === */}
+          <section className="mb-32">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-rose-500/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-8 flex items-center">
+                <i data-lucide="waypoints" className="w-8 h-8 text-rose-400 mr-3"></i>
+                Où va Mindus ?
+              </h2>
+              
+              <div className="prose-about space-y-6 text-lg">
+                <p>
+                  <strong>Les prochains mois seront consacrés à l’amélioration de la compréhension contextuelle.</strong> 
+                  Nous travaillons sur un modèle capable d’analyser l’ensemble de votre codebase (pas seulement le dernier 
+                  projet) pour proposer des générations qui collent parfaitement à votre stack propriétaire. L’objectif est 
+                  que Forge devienne un membre silencieux de l’équipe, qui connaît vos conventions, vos librairies internes 
+                  et même vos acronymes métier.
+                </p>
+                <p>
+                  Nous investissons aussi dans la génération de tests : non seulement le code, mais aussi des scénarios 
+                  de test pertinents, des mocks, et des jeux de données réalistes. L’idée est d’arriver à un cycle complet : 
+                  idée → code → tests → déploiement, le tout depuis une seule interface conversationnelle.
+                </p>
+                <p>
+                  Enfin, nous préparons une offre "Forge On‑Premise" pour les secteurs régulés (défense, santé, finance) 
+                  qui nécessitent un contrôle total des données et une isolation réseau. Cette version sera déployable 
+                  en Kubernetes privé et inclura des mécanismes d’audit renforcés.
+                </p>
+                <p className="bg-white/5 p-6 rounded-xl border-l-4 border-blue-500 mt-6">
+                  <strong>Une chose ne changera pas :</strong> notre engagement à rester une entreprise indépendante, 
+                  sans levée de fonds démesurée, pour garder le contrôle sur notre éthique et notre produit. 
+                  Nous croyons qu’on peut grandir sans trahir ses utilisateurs.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* === SECTION 9 : INFORMATIONS LÉGALES ET CONTACT (texte) === */}
+          <section className="mb-20">
+            <div className="glass-card rounded-3xl p-8 md:p-12 border border-gray-600/20">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 flex items-center">
+                <i data-lucide="building-2" className="w-8 h-8 text-gray-400 mr-3"></i>
+                Mentions légales et contact
+              </h2>
+              
+              <div className="prose-about grid md:grid-cols-2 gap-8 text-lg">
+                <div>
+                  <p><strong>Mindus SAS</strong> au capital de 50 000 €</p>
+                  <p>15 rue du Faubourg Poissonnière, 75009 Paris</p>
+                  <p>RCS Paris 925 123 456</p>
+                  <p>TVA FR23925123456</p>
+                  <p className="mt-4">contact@mindusforge.dev</p>
+                </div>
+                <div>
+                  <p><strong>Directeur de la publication :</strong> Elena Vasseur, CEO</p>
+                  <p><strong>Hébergement :</strong> Scaleway (région Paris)</p>
+                  <p><strong>Licences :</strong> Modèles sous licence MIT et Apache 2</p>
+                  <p className="mt-4">Notre siège est ouvert aux visibles sur rendez‑vous (pour les curieux et les partenaires).</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer allégé */}
+          <footer className="border-t border-white/10 pt-12 pb-8">
+            <div className="max-w-7xl mx-auto text-center text-gray-500 text-sm">
+              <p className="mb-4">© {new Date().getFullYear()} Mindus Forge. Tous droits réservés.</p>
+              <div className="flex justify-center space-x-6">
+                <a href="#" className="hover:text-white transition-colors">Mentions légales</a>
+                <a href="#" className="hover:text-white transition-colors">CGV</a>
+                <a href="#" className="hover:text-white transition-colors">Politique de confidentialité</a>
+                <a href="#" className="hover:text-white transition-colors">Contact</a>
+              </div>
+            </div>
+          </footer>
+
+        </main>
+      </div>
+    );
+  };
+
+  // Render the app
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<AboutPage />);
+  }
+</script>
+
+<script>
+  // Re-run Lucide icons after React render
+  function initLucide() {
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  }
+  window.addEventListener('load', initLucide);
+  setTimeout(initLucide, 200);
+  setTimeout(initLucide, 500);
+</script>
+
+</body>
+</html>
