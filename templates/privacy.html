@@ -15,11 +15,6 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
-  <!-- React, ReactDOM, Babel -->
-  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  
   <style>
     /* Reset & corrections mobiles impératives */
     * {
@@ -42,7 +37,7 @@
       overflow-x: hidden;
     }
 
-    #root, .min-h-screen {
+    .min-h-screen {
       max-width: 100vw;
       overflow-x: hidden;
     }
@@ -301,6 +296,14 @@
       font-size: 0.9rem;
       color: #0369a1;
     }
+
+    /* Menu mobile */
+    @media (max-width: 768px) {
+      .flex.justify-between.items-center {
+        padding-left: 4px;
+        padding-right: 4px;
+      }
+    }
   </style>
 </head>
 <body class="bg-white text-slate-900 antialiased min-h-screen w-full overflow-x-hidden">
@@ -313,350 +316,402 @@
   <div class="particle particle-4"></div>
 </div>
 
-<div id="root"></div>
+<div class="min-h-screen bg-white text-slate-900 relative w-full overflow-x-hidden">
+  <!-- Navigation -->
+  <nav class="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
+    <div class="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
+      <!-- Logo -->
+      <div class="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
+        <div class="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
+          <span class="text-white font-bold text-lg md:text-xl">MF</span>
+        </div>
+        <span class="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-blue-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent whitespace-nowrap">
+          Mindus Forge
+        </span>
+      </div>
 
-<script type="text/babel">
-  const PrivacyPolicyPage = () => {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-    
-    React.useEffect(() => {
-      if (window.lucide) {
-        setTimeout(() => {
-          lucide.createIcons();
-        }, 10);
-      }
-    }, []);
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-10">
+        <a href="/" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
+        <a href="/privacy" class="text-blue-600 font-medium border-b-2 border-blue-600 pb-1">Confidentialité</a>
+        <a href="/pricing" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">Tarifs</a>
+        <a href="/about" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">À propos</a>
+      </div>
 
-    React.useEffect(() => {
-      if (window.lucide) {
-        setTimeout(() => {
-          lucide.createIcons();
-        }, 10);
-      }
-    }, [isMobileMenuOpen]);
+      <!-- Auth Button + Burger -->
+      <div class="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
+        <a href="/connect" class="hidden md:flex items-center space-x-2 bg-white border border-slate-200 hover:border-blue-300 px-5 py-2.5 rounded-xl text-slate-700 hover:text-blue-600 transition-all shadow-sm hover:shadow">
+          <i data-lucide="github" class="w-5 h-5"></i>
+          <span class="font-medium">Connexion</span>
+        </a>
+        
+        <!-- Mobile menu button -->
+        <button id="mobileMenuBtn" class="md:hidden text-slate-700 focus:outline-none p-2 -mr-1">
+          <i data-lucide="menu" class="w-6 h-6" id="menuIcon"></i>
+        </button>
+      </div>
+    </div>
 
-    // Date de dernière mise à jour
-    const lastUpdate = "15 mars 2025";
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobileMenu" class="hidden md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg">
+      <div class="flex flex-col space-y-2">
+        <a href="/" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Accueil</a>
+        <a href="/privacy" class="py-3 px-3 bg-blue-50 text-blue-700 rounded-lg font-medium">Confidentialité</a>
+        <a href="/pricing" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Tarifs</a>
+        <a href="/about" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">À propos</a>
+        <a href="/connect" class="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-xl text-white mt-2">
+          <i data-lucide="github" class="w-5 h-5"></i>
+          <span>Connexion</span>
+        </a>
+      </div>
+    </div>
+  </nav>
 
-    return (
-      <div className="min-h-screen bg-white text-slate-900 relative w-full overflow-x-hidden">
-        {/* Navigation */}
-        <nav className="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
-          <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
-            {/* Logo */}
-            <div className="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
-              <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-lg md:text-xl">MF</span>
-              </div>
-              <span className="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-blue-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent whitespace-nowrap">
+  <!-- Main Content -->
+  <main class="pt-28 pb-20 relative z-10 w-full overflow-x-hidden">
+    <!-- Header -->
+    <section class="max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-16 text-center">
+      <div class="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-6 border border-blue-200">
+        <i data-lucide="shield" class="w-4 h-4 mr-2"></i>
+        Protection des données
+      </div>
+      <h1 class="section-title font-black leading-tight text-[clamp(2.5rem,10vw,4.5rem)] mb-6">
+        Politique de <span class="text-gradient-modern">confidentialité</span>
+      </h1>
+      <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
+        Dernière mise à jour : 15 mars 2025
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <span class="badge-legal"><i data-lucide="check-circle" class="w-4 h-4 mr-1"></i> RGPD compliant</span>
+        <span class="badge-legal"><i data-lucide="check-circle" class="w-4 h-4 mr-1"></i> ISO 27001</span>
+        <span class="badge-legal"><i data-lucide="check-circle" class="w-4 h-4 mr-1"></i> SOC2 Type II</span>
+      </div>
+    </section>
+
+    <!-- Contenu légal détaillé -->
+    <section class="max-w-4xl mx-auto px-4 md:px-6 py-8">
+      <!-- Introduction -->
+      <div class="legal-section animate-enter">
+        <p class="text-lg font-medium text-slate-700 mb-4">
+          Chez <strong>Mindus Forge</strong> (anciennement "Mindus AI"), nous considérons que la protection de vos données est aussi fondamentale que la génération de code elle-même. En tant que première plateforme de génération de projet complète par IA, nous traitons des informations sensibles — code source, clés API, architectures logicielles — et nous nous engageons à une transparence totale.
+        </p>
+        <p>
+          La présente politique décrit comment nous collectons, utilisons, partageons et protégeons vos données lorsque vous utilisez Mindus Forge, nos API, notre CLI, notre interface web et nos services associés. Elle s'applique à tous les utilisateurs, qu'ils soient développeurs individuels, équipes ou entreprises.
+        </p>
+      </div>
+
+      <!-- 1. Données collectées -->
+      <div class="legal-section animate-enter">
+        <h2>1. Données que nous collectons</h2>
+        
+        <h3>1.1 Données de compte</h3>
+        <p>
+          Lors de la création d'un compte Mindus Forge, nous collectons : adresse e-mail, nom d'utilisateur, identifiants GitHub/GitLab (si vous choisissez l'authentification OAuth), informations de facturation (adresse, identifiant TVA), et préférences de communication.
+        </p>
+
+        <h3>1.2 Projets et code source</h3>
+        <p>
+          Mindus Forge est conçu pour analyser et générer du code. Nous collectons :
+        </p>
+        <ul>
+          <li><strong>Dépôts connectés</strong> : lorsque vous autorisez l'accès à un dépôt GitHub/GitLab, nous lisons la structure, les fichiers (publics ou privés selon vos droits) pour comprendre le contexte. Nous ne stockons pas l'intégralité de votre code source sauf pour la durée nécessaire à la génération et à la synchronisation.</li>
+          <li><strong>Code généré</strong> : les fichiers créés par Forge sont stockés temporairement pour permettre la révision et le push. Vous gardez la pleine propriété de tout code généré.</li>
+          <li><strong>Métadonnées de projet</strong> : langages utilisés, frameworks, architecture détectée, pour améliorer les suggestions futures.</li>
+        </ul>
+
+        <h3>1.3 Données d'utilisation</h3>
+        <p>
+          Nous collectons des informations sur la façon dont vous interagissez avec Forge : fonctionnalités utilisées, fréquence des générations, erreurs rencontrées, performances de l'IA. Ces données sont anonymisées lorsque possible et servent à améliorer nos modèles.
+        </p>
+
+        <h3>1.4 Données techniques</h3>
+        <p>
+          Adresse IP, type de navigateur, système d'exploitation, pages visitées, horodatage, identifiants uniques de session. Ces données sont nécessaires à la sécurité et au fonctionnement du service.
+        </p>
+      </div>
+
+      <!-- 2. Base légale et finalités -->
+      <div class="legal-section animate-enter">
+        <h2>2. Base légale et finalités du traitement</h2>
+        <p>
+          Nous traitons vos données sur les bases légales suivantes :
+        </p>
+        <ul>
+          <li><strong>Exécution du contrat</strong> : fournir le service de génération de code, analyser vos dépôts, synchroniser avec Git, facturation.</li>
+          <li><strong>Intérêt légitime</strong> : améliorer nos modèles d'IA, prévenir les fraudes, sécuriser la plateforme, analyser les performances.</li>
+          <li><strong>Consentement</strong> : pour certaines communications marketing ou l'utilisation de cookies non essentiels.</li>
+          <li><strong>Obligation légale</strong> : conservation des factures, réponse aux autorités judiciaires.</li>
+        </ul>
+        <p>
+          En clair, nous utilisons vos données pour :
+        </p>
+        <ul>
+          <li>Permettre la génération contextuelle de code dans vos dépôts</li>
+          <li>Assurer la résilience hors ligne et la synchronisation</li>
+          <li>Facturer les abonnements et gérer votre compte</li>
+          <li>Améliorer continuellement l'IA de Forge</li>
+          <li>Communiquer sur les évolutions majeures</li>
+          <li>Respecter nos obligations légales et fiscales</li>
+        </ul>
+      </div>
+
+      <!-- 3. Partage des données -->
+      <div class="legal-section animate-enter">
+        <h2>3. Partage des données avec des tiers</h2>
+        <p>
+          Mindus Forge ne vend pas vos données personnelles. Nous pouvons partager certaines informations avec des sous-traitants sélectionnés pour la fourniture du service :
+        </p>
+        <ul>
+          <li><strong>Hébergement et infrastructure</strong> : OVHcloud (France), AWS (UE) pour les données de production, garantissant que vos données restent dans l'Union Européenne par défaut.</li>
+          <li><strong>Paiement</strong> : Stripe (certifié PCI DSS) pour le traitement des cartes bancaires. Nous ne stockons pas vos numéros de carte.</li>
+          <li><strong>Analyse et support</strong> : Sentry (erreurs), Google Analytics (anonymisé), Crisp (chat support).</li>
+          <li><strong>IA et modèles</strong> : Google Cloud (Vertex AI, Gemini) pour l'exécution des modèles. Aucun code source n'est utilisé pour entraîner les modèles publics sans anonymisation stricte.</li>
+        </ul>
+        <p>
+          Tous nos sous-traitants sont contractuellement tenus de respecter le RGPD et de garantir un niveau de sécurité équivalent au nôtre.
+        </p>
+      </div>
+
+      <!-- 4. Sécurité -->
+      <div class="legal-section animate-enter">
+        <h2>4. Mesures de sécurité</h2>
+        <p>
+          Nous déployons des mesures techniques et organisationnelles avancées pour protéger vos données :
+        </p>
+        <ul>
+          <li>Chiffrement AES-256 au repos pour toutes les bases de données contenant du code ou des données personnelles.</li>
+          <li>Chiffrement TLS 1.3 en transit.</li>
+          <li>Authentification multi-facteurs obligatoire pour les comptes organisation.</li>
+          <li>Isolation stricte des environnements (conteneurs, réseaux privés).</li>
+          <li>Audits de sécurité réguliers et tests d'intrusion.</li>
+          <li>Politique de gestion des accès internes (moindre privilège, journalisation).</li>
+          <li>Sauvegardes chiffrées quotidiennes avec rétention limitée.</li>
+        </ul>
+        <p>
+          En cas d'incident de sécurité affectant vos données, nous nous engageons à vous notifier dans les 72 heures conformément au RGPD.
+        </p>
+      </div>
+
+      <!-- 5. Conservation -->
+      <div class="legal-section animate-enter">
+        <h2>5. Durée de conservation</h2>
+        <p>
+          Nous conservons vos données aussi longtemps que nécessaire pour fournir le service et respecter nos obligations légales :
+        </p>
+        <ul>
+          <li><strong>Données de compte</strong> : jusqu'à la fermeture du compte, puis suppression sous 30 jours (hors contraintes légales).</li>
+          <li><strong>Projets et code généré</strong> : conservés pendant la durée de votre abonnement. Vous pouvez exporter ou supprimer vos projets à tout moment.</li>
+          <li><strong>Logs techniques</strong> : 6 mois maximum.</li>
+          <li><strong>Factures et données fiscales</strong> : 10 ans (obligation légale).</li>
+          <li><strong>Données anonymisées</strong> : indéfiniment pour améliorer nos modèles, sans possibilité de ré-identification.</li>
+        </ul>
+      </div>
+
+      <!-- 6. Vos droits -->
+      <div class="legal-section animate-enter">
+        <h2>6. Vos droits (RGPD & CCPA)</h2>
+        <p>
+          En tant qu'utilisateur, vous disposez de droits étendus sur vos données :
+        </p>
+        <ul>
+          <li><strong>Droit d'accès</strong> : obtenir une copie de vos données personnelles.</li>
+          <li><strong>Droit de rectification</strong> : corriger des informations inexactes.</li>
+          <li><strong>Droit à l'effacement</strong> : demander la suppression de vos données (sauf conservation légale).</li>
+          <li><strong>Droit à la limitation</strong> : restreindre temporairement le traitement.</li>
+          <li><strong>Droit à la portabilité</strong> : recevoir vos données dans un format structuré (JSON).</li>
+          <li><strong>Droit d'opposition</strong> : vous opposer au traitement pour prospection ou intérêt légitime.</li>
+          <li><strong>Retrait du consentement</strong> : à tout moment pour les traitements basés sur le consentement.</li>
+        </ul>
+        <p>
+          Pour exercer ces droits, contactez notre Délégué à la Protection des Données (DPO) à <strong>dpo@mindusforge.dev</strong>. Nous répondons sous 30 jours.
+        </p>
+      </div>
+
+      <!-- 7. Cookies -->
+      <div class="legal-section animate-enter">
+        <h2>7. Cookies et traceurs</h2>
+        <p>
+          Mindus Forge utilise des cookies strictement nécessaires au fonctionnement (authentification, session, sécurité). Nous utilisons également des cookies analytiques (Matomo auto-hébergé) pour comprendre l'utilisation, sans partage avec des tiers. Vous pouvez paramétrer vos préférences via notre bannière de cookies.
+        </p>
+        <p>
+          Aucun cookie publicitaire n'est déposé.
+        </p>
+      </div>
+
+      <!-- 8. Spécificités IA -->
+      <div class="legal-section animate-enter">
+        <h2>8. IA générative et données d'entraînement</h2>
+        <p>
+          Mindus Forge utilise des modèles propriétaires et des modèles de fondation (Gemini, etc.). Nous tenons à clarifier :
+        </p>
+        <ul>
+          <li>Votre code source n'est pas utilisé pour entraîner les modèles publics de Google sans votre consentement explicite.</li>
+          <li>Les prompts et le code généré peuvent être analysés pour améliorer nos modèles internes, mais après anonymisation stricte (suppression des identifiants, noms de variables, commentaires sensibles).</li>
+          <li>Vous pouvez désactiver l'amélioration basée sur vos données dans les paramètres de confidentialité de votre compte.</li>
+          <li>En cas d'utilisation de votre propre clé API Gemini (plans Scale/Enterprise), aucune donnée n'est partagée avec nous ; l'échange est direct entre vous et Google.</li>
+        </ul>
+      </div>
+
+      <!-- 9. Transferts hors UE -->
+      <div class="legal-section animate-enter">
+        <h2>9. Transferts de données hors Union Européenne</h2>
+        <p>
+          Nous privilégions des infrastructures localisées en UE. Toutefois, certains sous-traitants (ex: Stripe, Google Cloud) peuvent traiter des données en dehors de l'UE. Dans ce cas, nous nous assurons que des garanties adéquates sont prises :
+        </p>
+        <ul>
+          <li>Clauses contractuelles types de la Commission européenne.</li>
+          <li>Respect du cadre Privacy Shield (pour les transferts US-RGPD).</li>
+          <li>Engagements de confidentialité renforcés.</li>
+        </ul>
+        <p>
+          Vous pouvez obtenir une copie de ces garanties sur demande.
+        </p>
+      </div>
+
+      <!-- 10. Responsabilité du traitement -->
+      <div class="legal-section animate-enter">
+        <h2>10. Responsable du traitement</h2>
+        <p>
+          Le responsable du traitement est Mindus AI SAS, société immatriculée au RCS de Lyon sous le numéro 928 374 837, dont le siège social est situé 15 rue de la République, 69001 Lyon, France.
+        </p>
+        <p>
+          Notre représentant légal est M. Alexandre Moreau, CEO. Pour toute question relative à la protection des données, vous pouvez également contacter notre DPO à dpo@mindusforge.dev ou par courrier à l'adresse ci-dessus (à l'attention du DPO).
+        </p>
+      </div>
+
+      <!-- 11. Réclamations -->
+      <div class="legal-section animate-enter">
+        <h2>11. Réclamations</h2>
+        <p>
+          Si vous estimez que nous n'avons pas respecté vos droits, vous avez le droit d'introduire une réclamation auprès de la CNIL (autorité française de protection des données) : <a href="https://www.cnil.fr" target="_blank" rel="noopener" class="text-blue-600 underline">www.cnil.fr</a>.
+        </p>
+      </div>
+
+      <!-- 12. Modifications -->
+      <div class="legal-section animate-enter">
+        <h2>12. Modifications de la politique</h2>
+        <p>
+          Nous pouvons être amenés à modifier cette politique pour refléter l'évolution de nos services ou des exigences légales. Toute modification significative vous sera notifiée par email ou via une notification dans l'application. La version en vigueur est toujours disponible sur cette page.
+        </p>
+      </div>
+
+      <!-- Contact spécifique -->
+      <div class="legal-section animate-enter bg-gradient-to-br from-blue-50/50 to-indigo-50/50 border-blue-200">
+        <h2 class="flex items-center">
+          <i data-lucide="mail" class="w-8 h-8 text-blue-600 mr-3"></i>
+          Contacter notre DPO
+        </h2>
+        <p>
+          Pour toute question relative à vos données personnelles, à l'exercice de vos droits, ou pour signaler un problème de sécurité, notre Délégué à la Protection des Données est à votre disposition :
+        </p>
+        <div class="mt-6 p-4 bg-white rounded-xl border border-slate-200">
+          <p><strong>Email :</strong> dpo@mindusforge.dev</p>
+          <p><strong>Courrier :</strong> Mindus AI SAS - DPO, 15 rue de la République, 69001 Lyon, France</p>
+          <p><strong>Tél. (standard) :</strong> +33 4 81 68 11 22</p>
+        </div>
+        <p class="mt-4 text-sm">
+          Nous traitons toutes les demandes dans un délai maximum d'un mois.
+        </p>
+      </div>
+
+      <!-- Clause de non-responsabilité -->
+      <p class="text-xs text-slate-400 mt-12 text-center italic">
+        Cette politique de confidentialité est fournie à titre informatif et ne constitue pas un conseil juridique. Pour une conformité totale, veuillez consulter votre propre conseil.
+      </p>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="border-t border-slate-200 mt-20 pt-16 pb-8 px-4 md:px-6 w-full">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-4 gap-10 md:gap-12 mb-16">
+          <div class="w-full">
+            <div class="flex items-center space-x-3 mb-6">
+              <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-md flex-shrink-0"></div>
+              <span class="font-bold text-xl bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
                 Mindus Forge
               </span>
             </div>
-
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-10">
-              <a href="index.html" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
-              <a href="privacy.html" className="text-blue-600 font-medium border-b-2 border-blue-600 pb-1">Confidentialité</a>
-            </div>
-
-            {/* Burger */}
-            <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
-              <button 
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden text-slate-700 focus:outline-none p-2 -mr-1"
-              >
-                <i data-lucide={isMobileMenuOpen ? "x" : "menu"} className="w-6 h-6"></i>
-              </button>
-            </div>
+            <p class="text-slate-600 text-sm leading-relaxed">
+              Génération de code autonome, résiliente et contextuelle. L'IA qui comprend votre existant.
+            </p>
           </div>
-
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg">
-              <div className="flex flex-col space-y-2">
-                <a href="index.html" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Accueil</a>
-                <a href="privacy.html" className="py-3 px-3 bg-blue-50 text-blue-700 rounded-lg font-medium">Confidentialité</a>
-              </div>
-            </div>
-          )}
-        </nav>
-
-        {/* Main Content */}
-        <main className="pt-28 pb-20 relative z-10 w-full overflow-x-hidden">
-          {/* Header */}
-          <section className="max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-16 text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-6 border border-blue-200">
-              <i data-lucide="shield" className="w-4 h-4 mr-2"></i>
-              Protection des données
-            </div>
-            <h1 className="section-title font-black leading-tight text-[clamp(2.5rem,10vw,4.5rem)] mb-6">
-              Politique de <span className="text-gradient-modern">confidentialité</span>
-            </h1>
-            <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
-              Dernière mise à jour : {lastUpdate}
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <span className="badge-legal"><i data-lucide="check-circle" className="w-4 h-4 mr-1"></i> RGPD compliant</span>
-              <span className="badge-legal"><i data-lucide="check-circle" className="w-4 h-4 mr-1"></i> ISO 27001</span>
-              <span className="badge-legal"><i data-lucide="check-circle" className="w-4 h-4 mr-1"></i> SOC2 Type II</span>
-            </div>
-          </section>
-
-          {/* Contenu légal détaillé */}
-          <section className="max-w-4xl mx-auto px-4 md:px-6 py-8">
-            {/* Introduction */}
-            <div className="legal-section animate-enter">
-              <p className="text-lg font-medium text-slate-700 mb-4">
-                Chez <strong>Mindus Forge</strong> (anciennement "Mindus AI"), nous considérons que la protection de vos données est aussi fondamentale que la génération de code elle-même. En tant que première plateforme de génération de projet complète par IA, nous traitons des informations sensibles — code source, clés API, architectures logicielles — et nous nous engageons à une transparence totale.
-              </p>
-              <p>
-                La présente politique décrit comment nous collectons, utilisons, partageons et protégeons vos données lorsque vous utilisez Mindus Forge, nos API, notre CLI, notre interface web et nos services associés. Elle s'applique à tous les utilisateurs, qu'ils soient développeurs individuels, équipes ou entreprises.
-              </p>
-            </div>
-
-            {/* 1. Données collectées */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.05s'}}>
-              <h2>1. Données que nous collectons</h2>
-              
-              <h3>1.1 Données de compte</h3>
-              <p>
-                Lors de la création d'un compte Mindus Forge, nous collectons : adresse e-mail, nom d'utilisateur, identifiants GitHub/GitLab (si vous choisissez l'authentification OAuth), informations de facturation (adresse, identifiant TVA), et préférences de communication.
-              </p>
-
-              <h3>1.2 Projets et code source</h3>
-              <p>
-                Mindus Forge est conçu pour analyser et générer du code. Nous collectons :
-              </p>
-              <ul>
-                <li><strong>Dépôts connectés</strong> : lorsque vous autorisez l'accès à un dépôt GitHub/GitLab, nous lisons la structure, les fichiers (publics ou privés selon vos droits) pour comprendre le contexte. Nous ne stockons pas l'intégralité de votre code source sauf pour la durée nécessaire à la génération et à la synchronisation.</li>
-                <li><strong>Code généré</strong> : les fichiers créés par Forge sont stockés temporairement pour permettre la révision et le push. Vous gardez la pleine propriété de tout code généré.</li>
-                <li><strong>Métadonnées de projet</strong> : langages utilisés, frameworks, architecture détectée, pour améliorer les suggestions futures.</li>
-              </ul>
-
-              <h3>1.3 Données d'utilisation</h3>
-              <p>
-                Nous collectons des informations sur la façon dont vous interagissez avec Forge : fonctionnalités utilisées, fréquence des générations, erreurs rencontrées, performances de l'IA. Ces données sont anonymisées lorsque possible et servent à améliorer nos modèles.
-              </p>
-
-              <h3>1.4 Données techniques</h3>
-              <p>
-                Adresse IP, type de navigateur, système d'exploitation, pages visitées, horodatage, identifiants uniques de session. Ces données sont nécessaires à la sécurité et au fonctionnement du service.
-              </p>
-            </div>
-
-            {/* 2. Base légale et finalités */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.1s'}}>
-              <h2>2. Base légale et finalités du traitement</h2>
-              <p>
-                Nous traitons vos données sur les bases légales suivantes :
-              </p>
-              <ul>
-                <li><strong>Exécution du contrat</strong> : fournir le service de génération de code, analyser vos dépôts, synchroniser avec Git, facturation.</li>
-                <li><strong>Intérêt légitime</strong> : améliorer nos modèles d'IA, prévenir les fraudes, sécuriser la plateforme, analyser les performances.</li>
-                <li><strong>Consentement</strong> : pour certaines communications marketing ou l'utilisation de cookies non essentiels.</li>
-                <li><strong>Obligation légale</strong> : conservation des factures, réponse aux autorités judiciaires.</li>
-              </ul>
-              <p>
-                En clair, nous utilisons vos données pour :
-              </p>
-              <ul>
-                <li>Permettre la génération contextuelle de code dans vos dépôts</li>
-                <li>Assurer la résilience hors ligne et la synchronisation</li>
-                <li>Facturer les abonnements et gérer votre compte</li>
-                <li>Améliorer continuellement l'IA de Forge</li>
-                <li>Communiquer sur les évolutions majeures</li>
-                <li>Respecter nos obligations légales et fiscales</li>
-              </ul>
-            </div>
-
-            {/* 3. Partage des données */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.15s'}}>
-              <h2>3. Partage des données avec des tiers</h2>
-              <p>
-                Mindus Forge ne vend pas vos données personnelles. Nous pouvons partager certaines informations avec des sous-traitants sélectionnés pour la fourniture du service :
-              </p>
-              <ul>
-                <li><strong>Hébergement et infrastructure</strong> : OVHcloud (France), AWS (UE) pour les données de production, garantissant que vos données restent dans l'Union Européenne par défaut.</li>
-                <li><strong>Paiement</strong> : Stripe (certifié PCI DSS) pour le traitement des cartes bancaires. Nous ne stockons pas vos numéros de carte.</li>
-                <li><strong>Analyse et support</strong> : Sentry (erreurs), Google Analytics (anonymisé), Crisp (chat support).</li>
-                <li><strong>IA et modèles</strong> : Google Cloud (Vertex AI, Gemini) pour l'exécution des modèles. Aucun code source n'est utilisé pour entraîner les modèles publics sans anonymisation stricte.</li>
-              </ul>
-              <p>
-                Tous nos sous-traitants sont contractuellement tenus de respecter le RGPD et de garantir un niveau de sécurité équivalent au nôtre.
-              </p>
-            </div>
-
-            {/* 4. Sécurité */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.2s'}}>
-              <h2>4. Mesures de sécurité</h2>
-              <p>
-                Nous déployons des mesures techniques et organisationnelles avancées pour protéger vos données :
-              </p>
-              <ul>
-                <li>Chiffrement AES-256 au repos pour toutes les bases de données contenant du code ou des données personnelles.</li>
-                <li>Chiffrement TLS 1.3 en transit.</li>
-                <li>Authentification multi-facteurs obligatoire pour les comptes organisation.</li>
-                <li>Isolation stricte des environnements (conteneurs, réseaux privés).</li>
-                <li>Audits de sécurité réguliers et tests d'intrusion.</li>
-                <li>Politique de gestion des accès internes (moindre privilège, journalisation).</li>
-                <li>Sauvegardes chiffrées quotidiennes avec rétention limitée.</li>
-              </ul>
-              <p>
-                En cas d'incident de sécurité affectant vos données, nous nous engageons à vous notifier dans les 72 heures conformément au RGPD.
-              </p>
-            </div>
-
-            {/* 5. Conservation */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.25s'}}>
-              <h2>5. Durée de conservation</h2>
-              <p>
-                Nous conservons vos données aussi longtemps que nécessaire pour fournir le service et respecter nos obligations légales :
-              </p>
-              <ul>
-                <li><strong>Données de compte</strong> : jusqu'à la fermeture du compte, puis suppression sous 30 jours (hors contraintes légales).</li>
-                <li><strong>Projets et code généré</strong> : conservés pendant la durée de votre abonnement. Vous pouvez exporter ou supprimer vos projets à tout moment.</li>
-                <li><strong>Logs techniques</strong> : 6 mois maximum.</li>
-                <li><strong>Factures et données fiscales</strong> : 10 ans (obligation légale).</li>
-                <li><strong>Données anonymisées</strong> : indéfiniment pour améliorer nos modèles, sans possibilité de ré-identification.</li>
-              </ul>
-            </div>
-
-            {/* 6. Vos droits */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.3s'}}>
-              <h2>6. Vos droits (RGPD & CCPA)</h2>
-              <p>
-                En tant qu'utilisateur, vous disposez de droits étendus sur vos données :
-              </p>
-              <ul>
-                <li><strong>Droit d'accès</strong> : obtenir une copie de vos données personnelles.</li>
-                <li><strong>Droit de rectification</strong> : corriger des informations inexactes.</li>
-                <li><strong>Droit à l'effacement</strong> : demander la suppression de vos données (sauf conservation légale).</li>
-                <li><strong>Droit à la limitation</strong> : restreindre temporairement le traitement.</li>
-                <li><strong>Droit à la portabilité</strong> : recevoir vos données dans un format structuré (JSON).</li>
-                <li><strong>Droit d'opposition</strong> : vous opposer au traitement pour prospection ou intérêt légitime.</li>
-                <li><strong>Retrait du consentement</strong> : à tout moment pour les traitements basés sur le consentement.</li>
-              </ul>
-              <p>
-                Pour exercer ces droits, contactez notre Délégué à la Protection des Données (DPO) à <strong>dpo@mindusforge.dev</strong>. Nous répondons sous 30 jours.
-              </p>
-            </div>
-
-            {/* 7. Cookies */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.35s'}}>
-              <h2>7. Cookies et traceurs</h2>
-              <p>
-                Mindus Forge utilise des cookies strictement nécessaires au fonctionnement (authentification, session, sécurité). Nous utilisons également des cookies analytiques (Matomo auto-hébergé) pour comprendre l'utilisation, sans partage avec des tiers. Vous pouvez paramétrer vos préférences via notre bannière de cookies.
-              </p>
-              <p>
-                Aucun cookie publicitaire n'est déposé.
-              </p>
-            </div>
-
-            {/* 8. Spécificités IA */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.4s'}}>
-              <h2>8. IA générative et données d'entraînement</h2>
-              <p>
-                Mindus Forge utilise des modèles propriétaires et des modèles de fondation (Gemini, etc.). Nous tenons à clarifier :
-              </p>
-              <ul>
-                <li>Votre code source n'est pas utilisé pour entraîner les modèles publics de Google sans votre consentement explicite.</li>
-                <li>Les prompts et le code généré peuvent être analysés pour améliorer nos modèles internes, mais après anonymisation stricte (suppression des identifiants, noms de variables, commentaires sensibles).</li>
-                <li>Vous pouvez désactiver l'amélioration basée sur vos données dans les paramètres de confidentialité de votre compte.</li>
-                <li>En cas d'utilisation de votre propre clé API Gemini (plans Scale/Enterprise), aucune donnée n'est partagée avec nous ; l'échange est direct entre vous et Google.</li>
-              </ul>
-            </div>
-
-            {/* 9. Transferts hors UE */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.45s'}}>
-              <h2>9. Transferts de données hors Union Européenne</h2>
-              <p>
-                Nous privilégions des infrastructures localisées en UE. Toutefois, certains sous-traitants (ex: Stripe, Google Cloud) peuvent traiter des données en dehors de l'UE. Dans ce cas, nous nous assurons que des garanties adéquates sont prises :
-              </p>
-              <ul>
-                <li>Clauses contractuelles types de la Commission européenne.</li>
-                <li>Respect du cadre Privacy Shield (pour les transferts US-RGPD).</li>
-                <li>Engagements de confidentialité renforcés.</li>
-              </ul>
-              <p>
-                Vous pouvez obtenir une copie de ces garanties sur demande.
-              </p>
-            </div>
-
-            {/* 10. Responsabilité du traitement */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.5s'}}>
-              <h2>10. Responsable du traitement</h2>
-              <p>
-                Le responsable du traitement est Mindus AI SAS, société immatriculée au RCS de Lyon sous le numéro 928 374 837, dont le siège social est situé 15 rue de la République, 69001 Lyon, France.
-              </p>
-              <p>
-                Notre représentant légal est M. Alexandre Moreau, CEO. Pour toute question relative à la protection des données, vous pouvez également contacter notre DPO à dpo@mindusforge.dev ou par courrier à l'adresse ci-dessus (à l'attention du DPO).
-              </p>
-            </div>
-
-            {/* 11. Réclamations */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.55s'}}>
-              <h2>11. Réclamations</h2>
-              <p>
-                Si vous estimez que nous n'avons pas respecté vos droits, vous avez le droit d'introduire une réclamation auprès de la CNIL (autorité française de protection des données) : <a href="https://www.cnil.fr" target="_blank" rel="noopener" className="text-blue-600 underline">www.cnil.fr</a>.
-              </p>
-            </div>
-
-            {/* 12. Modifications */}
-            <div className="legal-section animate-enter" style={{animationDelay: '0.6s'}}>
-              <h2>12. Modifications de la politique</h2>
-              <p>
-                Nous pouvons être amenés à modifier cette politique pour refléter l'évolution de nos services ou des exigences légales. Toute modification significative vous sera notifiée par email ou via une notification dans l'application. La version en vigueur est toujours disponible sur cette page.
-              </p>
-            </div>
-
-            {/* Contact spécifique */}
-            <div className="legal-section animate-enter bg-gradient-to-br from-blue-50/50 to-indigo-50/50 border-blue-200" style={{animationDelay: '0.65s'}}>
-              <h2 className="flex items-center">
-                <i data-lucide="mail" className="w-8 h-8 text-blue-600 mr-3"></i>
-                Contacter notre DPO
-              </h2>
-              <p>
-                Pour toute question relative à vos données personnelles, à l'exercice de vos droits, ou pour signaler un problème de sécurité, notre Délégué à la Protection des Données est à votre disposition :
-              </p>
-              <div className="mt-6 p-4 bg-white rounded-xl border border-slate-200">
-                <p><strong>Email :</strong> dpo@mindusforge.dev</p>
-                <p><strong>Courrier :</strong> Mindus AI SAS - DPO, 15 rue de la République, 69001 Lyon, France</p>
-                <p><strong>Tél. (standard) :</strong> +33 4 81 68 11 22</p>
-              </div>
-              <p className="mt-4 text-sm">
-                Nous traitons toutes les demandes dans un délai maximum d'un mois.
-              </p>
-            </div>
-
-            {/* Clause de non-responsabilité */}
-            <p className="text-xs text-slate-400 mt-12 text-center italic">
-              Cette politique de confidentialité est fournie à titre informatif et ne constitue pas un conseil juridique. Pour une conformité totale, veuillez consulter votre propre conseil.
-            </p>
-          </section>
-        </main>
+          <div>
+            <h4 class="font-semibold mb-5 text-lg text-slate-900">Produit</h4>
+            <ul class="space-y-3 text-slate-600">
+              <li><a href="/" class="hover:text-blue-600 transition-colors flex items-center">Accueil</a></li>
+              <li><a href="/pricing" class="hover:text-blue-600 transition-colors flex items-center">Tarifs</a></li>
+              <li><a href="/about" class="hover:text-blue-600 transition-colors flex items-center">À propos</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-5 text-lg text-slate-900">Légal</h4>
+            <ul class="space-y-3 text-slate-600">
+              <li><a href="/privacy" class="text-blue-600 transition-colors">Confidentialité</a></li>
+              <li><a href="/terme" class="hover:text-blue-600 transition-colors">Conditions d'utilisation</a></li>
+              <li><a href="/notice" class="hover:text-blue-600 transition-colors">Mentions légales</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-5 text-lg text-slate-900">Support</h4>
+            <ul class="space-y-3 text-slate-600">
+              <li class="flex items-center">
+                <i data-lucide="mail" class="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
+                <a href="mailto:contact@mindusforge.dev" class="hover:text-blue-600 truncate">contact@mindusforge.dev</a>
+              </li>
+              <li class="flex items-center">
+                <i data-lucide="file-text" class="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
+                <a href="#" class="hover:text-blue-600">Documentation API</a>
+              </li>
+              <li class="flex items-center">
+                <i data-lucide="message-circle" class="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
+                <a href="#" class="hover:text-blue-600">Forum</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="text-center text-slate-500 text-sm pt-8 border-t border-slate-200">
+          <p>© 2025 Mindus Forge. Tous droits réservés.</p>
+          <p class="mt-3 text-xs text-slate-400">
+            Conçu avec l'IA pour les développeurs d'exception
+          </p>
+        </div>
       </div>
-    );
-  };
-
-  // Render the app
-  const rootElement = document.getElementById('root');
-  if (rootElement) {
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(<PrivacyPolicyPage />);
-  }
-</script>
+    </footer>
+  </main>
+</div>
 
 <script>
+  // Fonction pour initialiser Lucide icons
   function initLucide() {
     if (window.lucide) {
       lucide.createIcons();
     }
   }
   
-  window.addEventListener('load', initLucide);
-  setTimeout(initLucide, 100);
-  setTimeout(initLucide, 300);
-  setTimeout(initLucide, 500);
+  // Gestionnaire du menu mobile
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuIcon = document.getElementById('menuIcon');
+    
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', function() {
+        if (mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.remove('hidden');
+          menuIcon.setAttribute('data-lucide', 'x');
+        } else {
+          mobileMenu.classList.add('hidden');
+          menuIcon.setAttribute('data-lucide', 'menu');
+        }
+        initLucide();
+      });
+    }
+    
+    // Initialiser les icônes
+    initLucide();
+    setTimeout(initLucide, 100);
+    setTimeout(initLucide, 300);
+  });
   
   // Smooth scroll
   document.addEventListener('click', function(e) {
@@ -665,7 +720,6 @@
       e.preventDefault();
       const element = document.querySelector(target.hash);
       if (element) {
-        element.scrollTop = 0;
         element.scrollIntoView({ behavior: 'smooth' });
       }
     }
