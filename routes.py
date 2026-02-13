@@ -467,27 +467,55 @@ def init_routes(app):
             } if session.get('logged_in') else None
         })
     
-    # Routes de test pour le développement (à retirer en production)
-    @app.route('/test-login')
-    def test_login():
-        """Route de test pour simuler une connexion"""
-        if app.debug:
-            session['user_id'] = 1
-            session['user_email'] = 'test@example.com'
-            session['user_name'] = 'Test User'
-            session['user_platform'] = 'github'
-            session['user_avatar'] = 'https://github.com/identicons/test.png'
-            session['logged_in'] = True
-            return redirect(url_for('dashboard'))
-        return redirect(url_for('connect'))
-    
-    # Gestionnaire d'erreur 404
-    @app.errorhandler(404)
-    def page_not_found(e):
-        return render_template('index.html'), 404
-    
-    # Gestionnaire d'erreur 500
-    @app.errorhandler(500)
-    def internal_server_error(e):
-        logger.error(f"Erreur 500: {str(e)}")
-        return render_template('index.html'), 500
+# Route pour All Projects
+@app.route('/all_project')
+@login_required
+def all_project():
+    """Page de tous les projets de l'utilisateur"""
+    # Récupérer les informations utilisateur de la session
+    user_info = {
+        'email': session.get('user_email'),
+        'name': session.get('user_name'),
+        'platform': session.get('user_platform'),
+        'avatar': session.get('user_avatar')
+    }
+    return render_template('all_project.html', user=user_info)
+
+# Route pour API Keys
+@app.route('/api-keys')
+@login_required
+def api_keys():
+    """Page de gestion des clés API"""
+    user_info = {
+        'email': session.get('user_email'),
+        'name': session.get('user_name'),
+        'platform': session.get('user_platform'),
+        'avatar': session.get('user_avatar')
+    }
+    return render_template('api_keys.html', user=user_info)
+
+# Route pour Documentation
+@app.route('/documentation')
+@login_required
+def documentation():
+    """Page de documentation"""
+    user_info = {
+        'email': session.get('user_email'),
+        'name': session.get('user_name'),
+        'platform': session.get('user_platform'),
+        'avatar': session.get('user_avatar')
+    }
+    return render_template('documentation.html', user=user_info)
+
+# Route pour API Documentation
+@app.route('/api-docs')
+@login_required
+def api_docs():
+    """Page de documentation API"""
+    user_info = {
+        'email': session.get('user_email'),
+        'name': session.get('user_name'),
+        'platform': session.get('user_platform'),
+        'avatar': session.get('user_avatar')
+    }
+    return render_template('api_docs.html', user=user_info)
