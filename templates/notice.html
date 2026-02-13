@@ -15,13 +15,11 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
-  <!-- React, ReactDOM, Babel -->
-  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Alpine.js pour l'interactivité légère (remplace React) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   
   <style>
-    /* Reset & corrections mobiles (conservés) */
+    /* Reset & corrections mobiles */
     * {
       margin: 0;
       padding: 0;
@@ -39,11 +37,6 @@
       background: #ffffff;
       color: #0f172a;
       width: 100%;
-      overflow-x: hidden;
-    }
-
-    #root, .min-h-screen {
-      max-width: 100vw;
       overflow-x: hidden;
     }
 
@@ -230,11 +223,30 @@
     .legal-text-block strong {
       color: #0f172a;
     }
+
+    /* Styles pour mobile */
+    @media (max-width: 768px) {
+      .desktop-menu {
+        display: none;
+      }
+      .mobile-menu-button {
+        display: block;
+      }
+    }
+    
+    @media (min-width: 769px) {
+      .desktop-menu {
+        display: flex;
+      }
+      .mobile-menu-button {
+        display: none;
+      }
+    }
   </style>
 </head>
-<body class="bg-white text-slate-900 antialiased min-h-screen w-full overflow-x-hidden">
+<body class="bg-white text-slate-900 antialiased min-h-screen w-full overflow-x-hidden" x-data="{ mobileMenuOpen: false, openSection: null }">
 
-<!-- Particules animées en arrière-plan (conservées pour l'ambiance) -->
+<!-- Particules animées en arrière-plan -->
 <div class="bg-particles">
   <div class="particle particle-1"></div>
   <div class="particle particle-2"></div>
@@ -242,291 +254,313 @@
   <div class="particle particle-4"></div>
 </div>
 
-<div id="root"></div>
+<!-- Navigation -->
+<nav class="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
+  <div class="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
+    <!-- Logo -->
+    <div class="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
+      <a href="/" class="flex items-center space-x-2 md:space-x-3">
+        <div class="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
+          <span class="text-white font-bold text-lg md:text-xl">MF</span>
+        </div>
+        <span class="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-blue-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent whitespace-nowrap">
+          Mindus Forge • Notice
+        </span>
+      </a>
+    </div>
 
-<script type="text/babel">
-  const LegalNoticePage = () => {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-    const [openSection, setOpenSection] = React.useState(null); // pour l'accordéon légal
-    
-    React.useEffect(() => {
-      if (window.lucide) {
-        setTimeout(() => lucide.createIcons(), 10);
-      }
-    }, [isMobileMenuOpen, openSection]);
+    <!-- Desktop Menu -->
+    <div class="desktop-menu items-center space-x-8">
+      <a href="/" class="text-slate-700 hover:text-blue-600 transition-colors font-medium text-sm">Accueil</a>
+      <a href="/pricing" class="text-slate-700 hover:text-blue-600 transition-colors font-medium text-sm">Tarifs</a>
+      <a href="/about" class="text-slate-700 hover:text-blue-600 transition-colors font-medium text-sm">À propos</a>
+      <a href="/connect" class="text-slate-700 hover:text-blue-600 transition-colors font-medium text-sm">Connexion</a>
+    </div>
 
-    // Liste des sections légales (contenu très détaillé)
-    const legalChapters = [
-      { 
-        id: 'cgu', 
-        title: '📜 Conditions Générales d\'Utilisation (CGU)',
-        content: `
-          <p><strong>1. Objet :</strong> Les présentes conditions générales d'utilisation régissent l'accès et l'utilisation de la plateforme Mindus Forge, éditée par Mindus Entreprise (Haïti). La plateforme permet la génération de projets logiciels complets à partir d'un unique prompt, l'analyse de dépôts existants, et la synchronisation Git.</p>
-          <p><strong>2. Acceptation :</strong> En créant un compte et en utilisant le service, vous acceptez sans réserve les présentes CGU. Mindus Forge se réserve le droit de les modifier à tout moment ; la version en vigueur est accessible à cette adresse.</p>
-          <p><strong>3. Création de projet en un prompt :</strong> Mindus Forge est la première plateforme au monde permettant de générer une architecture complète, des tests unitaires, de la documentation et du code métier à partir d'une seule instruction en langage naturel. L'IA analyse le contexte, respecte vos conventions de nommage et génère le code dans des sous-dossiers dédiés sans jamais écraser vos fichiers existants.</p>
-          <p><strong>4. Utilisation responsable :</strong> L'utilisateur s'engage à ne pas utiliser la plateforme pour générer du code malveillant, violer des droits de propriété intellectuelle ou enfreindre les lois en vigueur. Mindus Forge se réserve le droit de suspendre tout compte en cas d'usage abusif.</p>
-          <p><strong>5. Compte et sécurité :</strong> L'utilisateur est responsable de la confidentialité de ses identifiants. Toute activité réalisée depuis son compte lui est imputable. En cas de perte ou de vol, il doit immédiatement contacter le support.</p>
-          <p><strong>6. Propriété intellectuelle :</strong> Le code généré appartient à l'utilisateur. Mindus Forge ne revendique aucune propriété sur les productions. En revanche, les algorithmes, l'interface, et les marques (Mindus Forge, le logo, etc.) sont la propriété exclusive de Mindus Entreprise.</p>
-          <p><strong>7. Résilience et hors ligne :</strong> En cas de déconnexion, Forge bascule en mode local, sauvegarde votre progression et synchronise à la reconnexion. Cette fonctionnalité est garantie sans perte de données.</p>
-          <p><strong>8. Disponibilité :</strong> Mindus Forge s'efforce de maintenir une disponibilité élevée, mais ne peut garantir une absence totale d'interruptions, notamment pour maintenance. L'hébergement est assuré par Render.com (infrastructure cloud).</p>
-          <p><strong>9. Données personnelles :</strong> Conformément à notre politique de confidentialité, nous collectons certaines données nécessaires au fonctionnement (adresse email, identifiants Git, préférences). Vous disposez d'un droit d'accès, de rectification et de suppression.</p>
-          <p><strong>10. Loi applicable et juridiction :</strong> Les présentes CGU sont soumises au droit haïtien. Tout litige relève des tribunaux de Cap-Haïtien, sauf disposition impérative contraire.</p>
-        `
-      },
-      { 
-        id: 'privacy', 
-        title: '🔒 Politique de Confidentialité',
-        content: `
-          <p><strong>1. Responsable du traitement :</strong> Mindus Entreprise, sise à Trou-du-Nord, Haïti (coordonnées ci-dessous).</p>
-          <p><strong>2. Données collectées :</strong> Nous collectons les données suivantes : nom, prénom, adresse email, identifiants de comptes GitHub/GitLab (via OAuth), informations de paiement (traitées via un prestataire sécurisé), logs d'utilisation, code généré (anonymisé pour l'amélioration du service). Aucune donnée bancaire n'est stockée sur nos serveurs.</p>
-          <p><strong>3. Finalités :</strong> Les données sont utilisées pour : fournir le service (génération de code, synchronisation Git), améliorer les modèles d'IA, assurer la sécurité, vous contacter en cas de notification légale ou de mise à jour, et établir des statistiques agrégées.</p>
-          <p><strong>4. Base légale :</strong> Le traitement repose sur l'exécution du contrat (CGU), votre consentement (pour les cookies non essentiels) et notre intérêt légitime à améliorer nos services.</p>
-          <p><strong>5. Partage des données :</strong> Nous ne vendons aucune donnée à des tiers. Les données peuvent être transmises à nos sous-traitants techniques (Render.com pour l'hébergement, Stripe pour les paiements, Google Cloud pour les services d'IA) dans le cadre strict de leurs prestations. Ces partenaires respectent le RGPD et des clauses de confidentialité strictes.</p>
-          <p><strong>6. Durée de conservation :</strong> Les données de compte sont conservées tant que le compte est actif. Les logs et données d'utilisation sont anonymisées après 13 mois. Le code généré est stocké sur vos dépôts Git et sur nos serveurs pendant la durée de votre abonnement ; à la résiliation, nous supprimons les copies internes dans un délai de 30 jours.</p>
-          <p><strong>7. Sécurité :</strong> Nous mettons en œuvre des mesures techniques et organisationnelles (chiffrement TLS, accès restreints, audits) pour protéger vos données. Cependant, aucune transmission sur Internet n'est totalement sécurisée.</p>
-          <p><strong>8. Vos droits :</strong> Vous pouvez demander l'accès, la rectification, la suppression de vos données, ou vous opposer au traitement. Pour cela, écrivez à privacy@mindusforge.dev. Vous avez également le droit d'introduire une réclamation auprès de la CNIL haïtienne (tribunal de commerce).</p>
-          <p><strong>9. Cookies :</strong> Nous utilisons des cookies techniques pour assurer la connexion et des cookies analytiques (anonymisés). Vous pouvez les paramétrer dans votre navigateur.</p>
-        `
-      },
-      { 
-        id: 'legal', 
-        title: '⚖️ Mentions Légales (Éditeur & Hébergeur)',
-        content: `
-          <p><strong>Éditeur de la plateforme :</strong><br>
-          Mindus Entreprise (Société de droit haïtien)<br>
-          Siège social : Trou-du-Nord, Département du Nord-Est, Haïti (HT 5110)<br>
-          Téléphone : +509 3579 4028<br>
-          Email : contact@mindusforge.dev<br>
-          Responsable de la publication : L'équipe Mindus, représentée par son fondateur (Juin 2025).<br>
-          Immatriculation : en cours auprès du Ministère du Commerce et de l'Industrie d'Haïti.</p>
-          
-          <p><strong>Hébergeur :</strong><br>
-          Render Services, Inc.<br>
-          525 Brannan Street, Suite 300, San Francisco, CA 94107, États-Unis<br>
-          Site web : https://render.com<br>
-          L'hébergement est assuré sur des serveurs situés aux États-Unis (région Oregon) et en Europe (Frankfurt) pour garantir une haute disponibilité et une faible latence. Render.com est conforme aux certifications SOC2 et GDPR.</p>
-          
-          <p><strong>Créateur de la plateforme :</strong> Mindus Forge a été conçue et développée par l'équipe de Mindus Entreprise à partir de juin 2025. Il s'agit de la première plateforme mondiale de génération de projet complète en un seul prompt, intégrant un agent autonome, une analyse contextuelle de dépôt Git, un mode résilient hors ligne, et un moteur d'IA basé sur des modèles propriétaires et Google Gemini.</p>
-          
-          <p><strong>Numéro de TVA :</strong> Non applicable (Haïti).</p>
-          
-          <p><strong>Propriété intellectuelle :</strong> Tous les éléments visuels, textuels, logos, et l'architecture logicielle sont protégés par le droit d'auteur et les traités internationaux. Toute reproduction non autorisée est interdite.</p>
-        `
-      },
-      { 
-        id: 'company', 
-        title: '🏢 Informations corporatives & mentions spéciales',
-        content: `
-          <p><strong>Mindus Forge : la révolution du développement assisté par IA.</strong><br>
-          Fondée en juin 2025 à Trou-du-Nord (Haïti), Mindus Entreprise a pour ambition de démocratiser la création de logiciels en permettant à tout développeur, startup ou entreprise de générer des projets complets, robustes et maintenables en une seule instruction.</p>
-          
-          <p><strong>Notre mission :</strong> Offrir une plateforme souveraine, résiliente et intelligente qui comprend l'existant et s'intègre naturellement dans les workflows Git. Mindus Forge est le fruit de mois de recherche en IA contextuelle et en synchronisation offline.</p>
-          
-          <p><strong>Pourquoi "premier au monde" ?</strong> Contrairement aux assistants de code classiques (Copilot, Codeium) qui se contentent d'autocomplétion, Mindus Forge génère l'intégralité d'une feature : arborescence, fichiers, tests, documentation, et propose un push automatique vers votre dépôt, le tout avec une analyse sémantique de votre architecture existante. Aucune autre plateforme ne propose un tel niveau d'autonomie et de résilience hors ligne.</p>
-          
-          <p><strong>Données clés :</strong><br>
-          - Date de création : juin 2025<br>
-          - Siège social : Trou-du-Nord, Haïti<br>
-          - Effectif : 12 collaborateurs (équipe entièrement distante)<br>
-          - Investissement initial : 2,5 M$ (fonds propres et subventions d'innovation)<br>
-          - Brevets : 3 brevets déposés sur l'IA contextuelle et la synchronisation offline.</p>
-          
-          <p><strong>Contact presse :</strong> press@mindusforge.dev</p>
-        `
-      }
-    ];
+    <!-- Boutons droite + Menu mobile -->
+    <div class="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
+      <a href="/" class="hidden md:flex items-center space-x-2 bg-white border border-slate-200 hover:border-blue-300 px-4 py-2 rounded-xl text-slate-700 hover:text-blue-600 transition-all shadow-sm text-sm">
+        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+        <span>Retour à l'accueil</span>
+      </a>
+      
+      <!-- Mobile menu button (burger) -->
+      <button 
+        @click="mobileMenuOpen = !mobileMenuOpen"
+        class="mobile-menu-button text-slate-700 focus:outline-none p-2 -mr-1"
+      >
+        <i x-show="!mobileMenuOpen" data-lucide="menu" class="w-6 h-6"></i>
+        <i x-show="mobileMenuOpen" data-lucide="x" class="w-6 h-6" style="display: none;"></i>
+      </button>
+    </div>
+  </div>
 
-    const toggleSection = (id) => {
-      setOpenSection(openSection === id ? null : id);
-    };
+  <!-- Mobile Menu -->
+  <div x-show="mobileMenuOpen" x-cloak class="md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg" style="display: none;">
+    <div class="flex flex-col space-y-2">
+      <a href="/" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Accueil</a>
+      <a href="/pricing" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Tarifs</a>
+      <a href="/about" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">À propos</a>
+      <a href="/connect" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Connexion</a>
+      <a href="/" class="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-xl text-white mt-2">
+        <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        <span>Accueil</span>
+      </a>
+    </div>
+  </div>
+</nav>
 
-    return (
-      <div className="min-h-screen bg-white text-slate-900 relative w-full overflow-x-hidden">
-        {/* Navigation (identique mais liens internes vers sections) */}
-        <nav className="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
-          <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
-            <div className="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
-              <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-lg md:text-xl">MF</span>
-              </div>
-              <span className="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-blue-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent whitespace-nowrap">
-                Mindus Forge • Notice
-              </span>
-            </div>
-
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#cgu" className="text-slate-700 hover:text-blue-600 transition-colors font-medium text-sm">CGU</a>
-              <a href="#privacy" className="text-slate-700 hover:text-blue-600 transition-colors font-medium text-sm">Confidentialité</a>
-              <a href="#legal" className="text-slate-700 hover:text-blue-600 transition-colors font-medium text-sm">Mentions</a>
-              <a href="#company" className="text-slate-700 hover:text-blue-600 transition-colors font-medium text-sm">Société</a>
-            </div>
-
-            <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
-              <button className="hidden md:flex items-center space-x-2 bg-white border border-slate-200 hover:border-blue-300 px-4 py-2 rounded-xl text-slate-700 hover:text-blue-600 transition-all shadow-sm text-sm">
-                <i data-lucide="chevron-left" className="w-4 h-4"></i>
-                <a href="/">Retour à l'accueil</a>
-              </button>
-              <button 
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden text-slate-700 focus:outline-none p-2 -mr-1"
-              >
-                <i data-lucide={isMobileMenuOpen ? "x" : "menu"} className="w-6 h-6"></i>
-              </button>
-            </div>
-          </div>
-
-          {isMobileMenuOpen && (
-            <div className="md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg">
-              <div className="flex flex-col space-y-2">
-                <a href="#cgu" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">CGU</a>
-                <a href="#privacy" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Confidentialité</a>
-                <a href="#legal" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Mentions légales</a>
-                <a href="#company" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Société Mindus</a>
-                <button className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-xl text-white mt-2">
-                  <i data-lucide="chevron-left" className="w-5 h-5"></i>
-                  <span>Accueil</span>
-                </button>
-              </div>
-            </div>
-          )}
-        </nav>
-
-        {/* MAIN CONTENT - PAGE DE NOTICE LÉGALE DENSE */}
-        <main className="pt-32 pb-20 relative z-10 w-full overflow-x-hidden legal-section">
-          <div className="max-w-4xl mx-auto px-4 md:px-6">
-            {/* HERO NOTICE */}
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 text-sm font-medium mb-4 border border-indigo-200">
-                <i data-lucide="scale" className="w-4 h-4 mr-2"></i>
-                Informations légales & corporatives
-              </div>
-              <h1 className="section-title font-black leading-tight text-[clamp(2rem,8vw,3.5rem)] mb-5">
-                Mentions <span className="text-gradient-modern">détaillées</span>
-              </h1>
-              <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
-                Conformément à la réglementation haïtienne et aux standards internationaux, 
-                Mindus Forge publie l'intégralité de ses informations légales, conditions, 
-                et données d'entreprise. La transparence est notre signature.
-              </p>
-            </div>
-
-            {/* ACCORDÉON LÉGAL (remplace les anciennes sections) */}
-            <div className="space-y-5 w-full">
-              {legalChapters.map((chapter) => (
-                <div key={chapter.id} id={chapter.id} className="card-corporate rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all scroll-mt-28">
-                  <button
-                    onClick={() => toggleSection(chapter.id)}
-                    className="w-full flex justify-between items-center p-6 md:p-8 text-left hover:bg-slate-50/80 transition-colors"
-                  >
-                    <span className="font-bold text-xl md:text-2xl text-slate-900">{chapter.title}</span>
-                    <div className={`w-10 h-10 rounded-lg ${openSection === chapter.id ? 'bg-blue-100' : 'bg-slate-100'} flex items-center justify-center transition-colors flex-shrink-0 ml-4`}>
-                      <i data-lucide={openSection === chapter.id ? 'chevron-up' : 'chevron-down'} className="w-6 h-6 text-slate-700"></i>
-                    </div>
-                  </button>
-                  
-                  {openSection === chapter.id && (
-                    <div className="px-6 md:px-8 pb-8 pt-2 border-t border-slate-100 bg-white">
-                      <div className="legal-text-block prose prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: chapter.content }} />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* BLOC INFORMATIONS ADDITIONNELLES (très dense) */}
-            <div className="mt-16 gradient-border bg-white p-8 md:p-10 rounded-3xl w-full">
-              <h2 className="text-2xl md:text-3xl font-bold mb-6 flex items-center">
-                <i data-lucide="info" className="w-7 h-7 mr-3 text-blue-600"></i>
-                Informations complémentaires (conformité SaaS)
-              </h2>
-              <div className="grid md:grid-cols-2 gap-8 text-slate-700">
-                <div>
-                  <h3 className="font-semibold text-lg mb-3">🔧 Hébergement & Infrastructure</h3>
-                  <p className="text-base leading-relaxed">
-                    <strong>Render.com</strong> (Render Services, Inc.) héberge l'intégralité de la plateforme. 
-                    Serveurs : États-Unis (Oregon) et Allemagne (Francfort). 
-                    Garanties de sécurité : ISO 27001, SOC 2 Type II, conformité HIPAA. 
-                    Render est également engagé dans le Privacy Shield (EU-US Data Privacy Framework). 
-                    Nos bases de données sont chiffrées au repos (AES-256) et les échanges en TLS 1.3.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg mb-3">📞 Coordonnées de l'équipe Mindus</h3>
-                  <p className="text-base leading-relaxed">
-                    <strong>Adresse postale :</strong> 23 Rue Capois, Trou-du-Nord, Haïti (bureau principal).<br/>
-                    <strong>Téléphone / WhatsApp :</strong> +509 3579 4028 (disponible 9h-17h EST).<br/>
-                    <strong>Email DPO :</strong> dpo@mindusforge.dev<br/>
-                    <strong>Email support technique :</strong> support@mindusforge.dev<br/>
-                    <strong>Registre du commerce :</strong> en attente d'immatriculation définitive (dossier déposé le 2 juin 2025).
-                  </p>
-                </div>
-                <div className="md:col-span-2 border-t border-slate-200 pt-6 mt-4">
-                  <h3 className="font-semibold text-lg mb-3">🌍 Portée internationale et reconnaissance</h3>
-                  <p className="text-base leading-relaxed">
-                    Mindus Forge est la première plateforme de génération de projet en un prompt opérant depuis Haïti avec une ambition mondiale. 
-                    Nos serveurs étant basés aux États-Unis et en Europe, nous nous conformons au RGPD pour les utilisateurs européens, et aux lois haïtiennes pour les utilisateurs locaux. 
-                    La société Mindus Entreprise est enregistrée en tant qu'entreprise innovante auprès du Ministère du Commerce et de l'Industrie d'Haïti (numéro de dossier MCI-2025-06-0012). 
-                    Le capital social initial est de 500 000 gourdes (environ 3 800 €), entièrement libéré.
-                  </p>
-                  <p className="mt-4 text-base">
-                    <strong>Date de première mise en ligne :</strong> 15 juin 2025. <br/>
-                    <strong>Version des présentes mentions :</strong> 1.0 (mise à jour le 13 février 2026).
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* PETIT RAPPEL DE RETOUR */}
-            <div className="mt-16 text-center">
-              <a href="/" className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
-                <i data-lucide="arrow-left" className="w-5 h-5 mr-2"></i>
-                Retour à la page d'accueil Mindus Forge
-              </a>
-            </div>
-          </div>
-        </main>
-
-        {/* Footer simplifié mais avec liens légaux internes */}
-        <footer className="border-t border-slate-200 mt-20 pt-12 pb-8 px-4 md:px-6 w-full">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg shadow-md"></div>
-                <span className="font-bold text-lg text-slate-800">Mindus Forge © 2025-2026</span>
-              </div>
-              <div className="flex flex-wrap justify-center gap-5 text-sm text-slate-600">
-                <a href="#cgu" className="hover:text-blue-600">CGU</a>
-                <a href="#privacy" className="hover:text-blue-600">Confidentialité</a>
-                <a href="#legal" className="hover:text-blue-600">Mentions légales</a>
-                <a href="#company" className="hover:text-blue-600">Entreprise</a>
-                <span className="text-slate-300">|</span>
-                <span className="text-slate-500">Trou-du-Nord, Haïti</span>
-                <span>+509 3579 4028</span>
-              </div>
-            </div>
-            <div className="text-center text-xs text-slate-400 mt-8">
-              <p>Première plateforme mondiale de génération de projet en un prompt • Résiliente • Contextuelle • Autonome</p>
-            </div>
-          </div>
-        </footer>
+<!-- MAIN CONTENT - PAGE DE NOTICE LÉGALE DENSE -->
+<main class="pt-32 pb-20 relative z-10 w-full overflow-x-hidden legal-section">
+  <div class="max-w-4xl mx-auto px-4 md:px-6">
+    <!-- HERO NOTICE -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 text-sm font-medium mb-4 border border-indigo-200">
+        <i data-lucide="scale" class="w-4 h-4 mr-2"></i>
+        Informations légales & corporatives
       </div>
-    );
-  };
+      <h1 class="section-title font-black leading-tight text-[clamp(2rem,8vw,3.5rem)] mb-5">
+        Mentions <span class="text-gradient-modern">détaillées</span>
+      </h1>
+      <p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
+        Conformément à la réglementation haïtienne et aux standards internationaux, 
+        Mindus Forge publie l'intégralité de ses informations légales, conditions, 
+        et données d'entreprise. La transparence est notre signature.
+      </p>
+    </div>
 
-  const rootElement = document.getElementById('root');
-  if (rootElement) {
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(<LegalNoticePage />);
-  }
-</script>
+    <!-- ACCORDÉON LÉGAL -->
+    <div class="space-y-5 w-full">
+      <!-- CGU -->
+      <div id="cgu" class="card-corporate rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all scroll-mt-28">
+        <button
+          @click="openSection = openSection === 'cgu' ? null : 'cgu'"
+          class="w-full flex justify-between items-center p-6 md:p-8 text-left hover:bg-slate-50/80 transition-colors"
+        >
+          <span class="font-bold text-xl md:text-2xl text-slate-900">📜 Conditions Générales d'Utilisation (CGU)</span>
+          <div class="w-10 h-10 rounded-lg" :class="openSection === 'cgu' ? 'bg-blue-100' : 'bg-slate-100'" class="bg-slate-100 flex items-center justify-center transition-colors flex-shrink-0 ml-4">
+            <i x-show="openSection === 'cgu'" data-lucide="chevron-up" class="w-6 h-6 text-slate-700"></i>
+            <i x-show="openSection !== 'cgu'" data-lucide="chevron-down" class="w-6 h-6 text-slate-700"></i>
+          </div>
+        </button>
+        
+        <div x-show="openSection === 'cgu'" x-cloak class="px-6 md:px-8 pb-8 pt-2 border-t border-slate-100 bg-white" style="display: none;">
+          <div class="legal-text-block prose prose-slate max-w-none">
+            <p><strong>1. Objet :</strong> Les présentes conditions générales d'utilisation régissent l'accès et l'utilisation de la plateforme Mindus Forge, éditée par Mindus Entreprise (Haïti). La plateforme permet la génération de projets logiciels complets à partir d'un unique prompt, l'analyse de dépôts existants, et la synchronisation Git.</p>
+            <p><strong>2. Acceptation :</strong> En créant un compte et en utilisant le service, vous acceptez sans réserve les présentes CGU. Mindus Forge se réserve le droit de les modifier à tout moment ; la version en vigueur est accessible à cette adresse.</p>
+            <p><strong>3. Création de projet en un prompt :</strong> Mindus Forge est la première plateforme au monde permettant de générer une architecture complète, des tests unitaires, de la documentation et du code métier à partir d'une seule instruction en langage naturel. L'IA analyse le contexte, respecte vos conventions de nommage et génère le code dans des sous-dossiers dédiés sans jamais écraser vos fichiers existants.</p>
+            <p><strong>4. Utilisation responsable :</strong> L'utilisateur s'engage à ne pas utiliser la plateforme pour générer du code malveillant, violer des droits de propriété intellectuelle ou enfreindre les lois en vigueur. Mindus Forge se réserve le droit de suspendre tout compte en cas d'usage abusif.</p>
+            <p><strong>5. Compte et sécurité :</strong> L'utilisateur est responsable de la confidentialité de ses identifiants. Toute activité réalisée depuis son compte lui est imputable. En cas de perte ou de vol, il doit immédiatement contacter le support.</p>
+            <p><strong>6. Propriété intellectuelle :</strong> Le code généré appartient à l'utilisateur. Mindus Forge ne revendique aucune propriété sur les productions. En revanche, les algorithmes, l'interface, et les marques (Mindus Forge, le logo, etc.) sont la propriété exclusive de Mindus Entreprise.</p>
+            <p><strong>7. Résilience et hors ligne :</strong> En cas de déconnexion, Forge bascule en mode local, sauvegarde votre progression et synchronise à la reconnexion. Cette fonctionnalité est garantie sans perte de données.</p>
+            <p><strong>8. Disponibilité :</strong> Mindus Forge s'efforce de maintenir une disponibilité élevée, mais ne peut garantir une absence totale d'interruptions, notamment pour maintenance. L'hébergement est assuré par Render.com (infrastructure cloud).</p>
+            <p><strong>9. Données personnelles :</strong> Conformément à notre politique de confidentialité, nous collectons certaines données nécessaires au fonctionnement (adresse email, identifiants Git, préférences). Vous disposez d'un droit d'accès, de rectification et de suppression.</p>
+            <p><strong>10. Loi applicable et juridiction :</strong> Les présentes CGU sont soumises au droit haïtien. Tout litige relève des tribunaux de Cap-Haïtien, sauf disposition impérative contraire.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Politique de Confidentialité -->
+      <div id="privacy" class="card-corporate rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all scroll-mt-28">
+        <button
+          @click="openSection = openSection === 'privacy' ? null : 'privacy'"
+          class="w-full flex justify-between items-center p-6 md:p-8 text-left hover:bg-slate-50/80 transition-colors"
+        >
+          <span class="font-bold text-xl md:text-2xl text-slate-900">🔒 Politique de Confidentialité</span>
+          <div class="w-10 h-10 rounded-lg" :class="openSection === 'privacy' ? 'bg-blue-100' : 'bg-slate-100'" class="bg-slate-100 flex items-center justify-center transition-colors flex-shrink-0 ml-4">
+            <i x-show="openSection === 'privacy'" data-lucide="chevron-up" class="w-6 h-6 text-slate-700"></i>
+            <i x-show="openSection !== 'privacy'" data-lucide="chevron-down" class="w-6 h-6 text-slate-700"></i>
+          </div>
+        </button>
+        
+        <div x-show="openSection === 'privacy'" x-cloak class="px-6 md:px-8 pb-8 pt-2 border-t border-slate-100 bg-white" style="display: none;">
+          <div class="legal-text-block prose prose-slate max-w-none">
+            <p><strong>1. Responsable du traitement :</strong> Mindus Entreprise, sise à Trou-du-Nord, Haïti (coordonnées ci-dessous).</p>
+            <p><strong>2. Données collectées :</strong> Nous collectons les données suivantes : nom, prénom, adresse email, identifiants de comptes GitHub/GitLab (via OAuth), informations de paiement (traitées via un prestataire sécurisé), logs d'utilisation, code généré (anonymisé pour l'amélioration du service). Aucune donnée bancaire n'est stockée sur nos serveurs.</p>
+            <p><strong>3. Finalités :</strong> Les données sont utilisées pour : fournir le service (génération de code, synchronisation Git), améliorer les modèles d'IA, assurer la sécurité, vous contacter en cas de notification légale ou de mise à jour, et établir des statistiques agrégées.</p>
+            <p><strong>4. Base légale :</strong> Le traitement repose sur l'exécution du contrat (CGU), votre consentement (pour les cookies non essentiels) et notre intérêt légitime à améliorer nos services.</p>
+            <p><strong>5. Partage des données :</strong> Nous ne vendons aucune donnée à des tiers. Les données peuvent être transmises à nos sous-traitants techniques (Render.com pour l'hébergement, Stripe pour les paiements, Google Cloud pour les services d'IA) dans le cadre strict de leurs prestations. Ces partenaires respectent le RGPD et des clauses de confidentialité strictes.</p>
+            <p><strong>6. Durée de conservation :</strong> Les données de compte sont conservées tant que le compte est actif. Les logs et données d'utilisation sont anonymisées après 13 mois. Le code généré est stocké sur vos dépôts Git et sur nos serveurs pendant la durée de votre abonnement ; à la résiliation, nous supprimons les copies internes dans un délai de 30 jours.</p>
+            <p><strong>7. Sécurité :</strong> Nous mettons en œuvre des mesures techniques et organisationnelles (chiffrement TLS, accès restreints, audits) pour protéger vos données. Cependant, aucune transmission sur Internet n'est totalement sécurisée.</p>
+            <p><strong>8. Vos droits :</strong> Vous pouvez demander l'accès, la rectification, la suppression de vos données, ou vous opposer au traitement. Pour cela, écrivez à privacy@mindusforge.dev. Vous avez également le droit d'introduire une réclamation auprès de la CNIL haïtienne (tribunal de commerce).</p>
+            <p><strong>9. Cookies :</strong> Nous utilisons des cookies techniques pour assurer la connexion et des cookies analytiques (anonymisés). Vous pouvez les paramétrer dans votre navigateur.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mentions Légales -->
+      <div id="legal" class="card-corporate rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all scroll-mt-28">
+        <button
+          @click="openSection = openSection === 'legal' ? null : 'legal'"
+          class="w-full flex justify-between items-center p-6 md:p-8 text-left hover:bg-slate-50/80 transition-colors"
+        >
+          <span class="font-bold text-xl md:text-2xl text-slate-900">⚖️ Mentions Légales (Éditeur & Hébergeur)</span>
+          <div class="w-10 h-10 rounded-lg" :class="openSection === 'legal' ? 'bg-blue-100' : 'bg-slate-100'" class="bg-slate-100 flex items-center justify-center transition-colors flex-shrink-0 ml-4">
+            <i x-show="openSection === 'legal'" data-lucide="chevron-up" class="w-6 h-6 text-slate-700"></i>
+            <i x-show="openSection !== 'legal'" data-lucide="chevron-down" class="w-6 h-6 text-slate-700"></i>
+          </div>
+        </button>
+        
+        <div x-show="openSection === 'legal'" x-cloak class="px-6 md:px-8 pb-8 pt-2 border-t border-slate-100 bg-white" style="display: none;">
+          <div class="legal-text-block prose prose-slate max-w-none">
+            <p><strong>Éditeur de la plateforme :</strong><br>
+            Mindus Entreprise (Société de droit haïtien)<br>
+            Siège social : Trou-du-Nord, Département du Nord-Est, Haïti (HT 5110)<br>
+            Téléphone : +509 3579 4028<br>
+            Email : contact@mindusforge.dev<br>
+            Responsable de la publication : L'équipe Mindus, représentée par son fondateur (Juin 2025).<br>
+            Immatriculation : en cours auprès du Ministère du Commerce et de l'Industrie d'Haïti.</p>
+            
+            <p><strong>Hébergeur :</strong><br>
+            Render Services, Inc.<br>
+            525 Brannan Street, Suite 300, San Francisco, CA 94107, États-Unis<br>
+            Site web : https://render.com<br>
+            L'hébergement est assuré sur des serveurs situés aux États-Unis (région Oregon) et en Europe (Frankfurt) pour garantir une haute disponibilité et une faible latence. Render.com est conforme aux certifications SOC2 et GDPR.</p>
+            
+            <p><strong>Créateur de la plateforme :</strong> Mindus Forge a été conçue et développée par l'équipe de Mindus Entreprise à partir de juin 2025. Il s'agit de la première plateforme mondiale de génération de projet complète en un seul prompt, intégrant un agent autonome, une analyse contextuelle de dépôt Git, un mode résilient hors ligne, et un moteur d'IA basé sur des modèles propriétaires et Google Gemini.</p>
+            
+            <p><strong>Numéro de TVA :</strong> Non applicable (Haïti).</p>
+            
+            <p><strong>Propriété intellectuelle :</strong> Tous les éléments visuels, textuels, logos, et l'architecture logicielle sont protégés par le droit d'auteur et les traités internationaux. Toute reproduction non autorisée est interdite.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informations corporatives -->
+      <div id="company" class="card-corporate rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all scroll-mt-28">
+        <button
+          @click="openSection = openSection === 'company' ? null : 'company'"
+          class="w-full flex justify-between items-center p-6 md:p-8 text-left hover:bg-slate-50/80 transition-colors"
+        >
+          <span class="font-bold text-xl md:text-2xl text-slate-900">🏢 Informations corporatives & mentions spéciales</span>
+          <div class="w-10 h-10 rounded-lg" :class="openSection === 'company' ? 'bg-blue-100' : 'bg-slate-100'" class="bg-slate-100 flex items-center justify-center transition-colors flex-shrink-0 ml-4">
+            <i x-show="openSection === 'company'" data-lucide="chevron-up" class="w-6 h-6 text-slate-700"></i>
+            <i x-show="openSection !== 'company'" data-lucide="chevron-down" class="w-6 h-6 text-slate-700"></i>
+          </div>
+        </button>
+        
+        <div x-show="openSection === 'company'" x-cloak class="px-6 md:px-8 pb-8 pt-2 border-t border-slate-100 bg-white" style="display: none;">
+          <div class="legal-text-block prose prose-slate max-w-none">
+            <p><strong>Mindus Forge : la révolution du développement assisté par IA.</strong><br>
+            Fondée en juin 2025 à Trou-du-Nord (Haïti), Mindus Entreprise a pour ambition de démocratiser la création de logiciels en permettant à tout développeur, startup ou entreprise de générer des projets complets, robustes et maintenables en une seule instruction.</p>
+            
+            <p><strong>Notre mission :</strong> Offrir une plateforme souveraine, résiliente et intelligente qui comprend l'existant et s'intègre naturellement dans les workflows Git. Mindus Forge est le fruit de mois de recherche en IA contextuelle et en synchronisation offline.</p>
+            
+            <p><strong>Pourquoi "premier au monde" ?</strong> Contrairement aux assistants de code classiques (Copilot, Codeium) qui se contentent d'autocomplétion, Mindus Forge génère l'intégralité d'une feature : arborescence, fichiers, tests, documentation, et propose un push automatique vers votre dépôt, le tout avec une analyse sémantique de votre architecture existante. Aucune autre plateforme ne propose un tel niveau d'autonomie et de résilience hors ligne.</p>
+            
+            <p><strong>Données clés :</strong><br>
+            - Date de création : juin 2025<br>
+            - Siège social : Trou-du-Nord, Haïti<br>
+            - Effectif : 12 collaborateurs (équipe entièrement distante)<br>
+            - Investissement initial : 2,5 M$ (fonds propres et subventions d'innovation)<br>
+            - Brevets : 3 brevets déposés sur l'IA contextuelle et la synchronisation offline.</p>
+            
+            <p><strong>Contact presse :</strong> press@mindusforge.dev</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOC INFORMATIONS ADDITIONNELLES -->
+    <div class="mt-16 gradient-border bg-white p-8 md:p-10 rounded-3xl w-full">
+      <h2 class="text-2xl md:text-3xl font-bold mb-6 flex items-center">
+        <i data-lucide="info" class="w-7 h-7 mr-3 text-blue-600"></i>
+        Informations complémentaires (conformité SaaS)
+      </h2>
+      <div class="grid md:grid-cols-2 gap-8 text-slate-700">
+        <div>
+          <h3 class="font-semibold text-lg mb-3">🔧 Hébergement & Infrastructure</h3>
+          <p class="text-base leading-relaxed">
+            <strong>Render.com</strong> (Render Services, Inc.) héberge l'intégralité de la plateforme. 
+            Serveurs : États-Unis (Oregon) et Allemagne (Francfort). 
+            Garanties de sécurité : ISO 27001, SOC 2 Type II, conformité HIPAA. 
+            Render est également engagé dans le Privacy Shield (EU-US Data Privacy Framework). 
+            Nos bases de données sont chiffrées au repos (AES-256) et les échanges en TLS 1.3.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg mb-3">📞 Coordonnées de l'équipe Mindus</h3>
+          <p class="text-base leading-relaxed">
+            <strong>Adresse postale :</strong> 23 Rue Capois, Trou-du-Nord, Haïti (bureau principal).<br/>
+            <strong>Téléphone / WhatsApp :</strong> +509 3579 4028 (disponible 9h-17h EST).<br/>
+            <strong>Email DPO :</strong> dpo@mindusforge.dev<br/>
+            <strong>Email support technique :</strong> support@mindusforge.dev<br/>
+            <strong>Registre du commerce :</strong> en attente d'immatriculation définitive (dossier déposé le 2 juin 2025).
+          </p>
+        </div>
+        <div class="md:col-span-2 border-t border-slate-200 pt-6 mt-4">
+          <h3 class="font-semibold text-lg mb-3">🌍 Portée internationale et reconnaissance</h3>
+          <p class="text-base leading-relaxed">
+            Mindus Forge est la première plateforme de génération de projet en un prompt opérant depuis Haïti avec une ambition mondiale. 
+            Nos serveurs étant basés aux États-Unis et en Europe, nous nous conformons au RGPD pour les utilisateurs européens, et aux lois haïtiennes pour les utilisateurs locaux. 
+            La société Mindus Entreprise est enregistrée en tant qu'entreprise innovante auprès du Ministère du Commerce et de l'Industrie d'Haïti (numéro de dossier MCI-2025-06-0012). 
+            Le capital social initial est de 500 000 gourdes (environ 3 800 €), entièrement libéré.
+          </p>
+          <p class="mt-4 text-base">
+            <strong>Date de première mise en ligne :</strong> 15 juin 2025. <br/>
+            <strong>Version des présentes mentions :</strong> 1.0 (mise à jour le 13 février 2026).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PETIT RAPPEL DE RETOUR -->
+    <div class="mt-16 text-center">
+      <a href="/" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+        <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
+        Retour à la page d'accueil Mindus Forge
+      </a>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-slate-200 mt-20 pt-12 pb-8 px-4 md:px-6 w-full">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg shadow-md"></div>
+        <span class="font-bold text-lg text-slate-800">Mindus Forge © 2025-2026</span>
+      </div>
+      <div class="flex flex-wrap justify-center gap-5 text-sm text-slate-600">
+        <a href="/terme" class="hover:text-blue-600">CGU</a>
+        <a href="/privacy" class="hover:text-blue-600">Confidentialité</a>
+        <a href="/notice" class="hover:text-blue-600">Mentions légales</a>
+        <a href="/about" class="hover:text-blue-600">Entreprise</a>
+        <span class="text-slate-300">|</span>
+        <span class="text-slate-500">Trou-du-Nord, Haïti</span>
+        <span>+509 3579 4028</span>
+      </div>
+    </div>
+    <div class="text-center text-xs text-slate-400 mt-8">
+      <p>Première plateforme mondiale de génération de projet en un prompt • Résiliente • Contextuelle • Autonome</p>
+    </div>
+  </div>
+</footer>
 
 <script>
+  // Initialisation des icônes Lucide
   function initLucide() {
-    if (window.lucide) lucide.createIcons();
+    if (window.lucide) {
+      lucide.createIcons();
+    }
   }
-  window.addEventListener('load', initLucide);
-  setTimeout(initLucide, 100);
-  setTimeout(initLucide, 300);
+  
+  document.addEventListener('DOMContentLoaded', initLucide);
+  
+  // Réinitialiser les icônes après les changements Alpine (quand les sections s'ouvrent/ferment)
+  document.addEventListener('alpine:init', () => {
+    // Alpine est chargé
+  });
+  
+  // Observer les changements du DOM pour réinitialiser les icônes
+  const observer = new MutationObserver(() => {
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  });
+  
+  observer.observe(document.body, { childList: true, subtree: true });
   
   // Smooth scroll pour ancres
   document.addEventListener('click', function(e) {
@@ -539,7 +573,24 @@
       }
     }
   });
+  
+  // Gestion spéciale pour le bouton du menu mobile (basculer l'icône)
+  document.addEventListener('alpine:init', () => {
+    Alpine.effect(() => {
+      // Forcer la mise à jour des icônes quand mobileMenuOpen change
+      setTimeout(() => {
+        if (window.lucide) {
+          lucide.createIcons();
+        }
+      }, 10);
+    });
+  });
 </script>
+
+<!-- Style pour x-cloak (évite le flash avant l'hydratation Alpine) -->
+<style>
+  [x-cloak] { display: none !important; }
+</style>
 
 </body>
 </html>
