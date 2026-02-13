@@ -15,11 +15,6 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
-  <!-- React, ReactDOM, Babel -->
-  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  
   <style>
     /* Reset & corrections mobiles impératives */
     * {
@@ -39,11 +34,6 @@
       background: #ffffff;
       color: #0f172a;
       width: 100%;
-      overflow-x: hidden;
-    }
-
-    #root, .min-h-screen {
-      max-width: 100vw;
       overflow-x: hidden;
     }
 
@@ -437,6 +427,16 @@
       backdrop-filter: blur(4px);
       border: 1px solid rgba(37, 99, 235, 0.2);
     }
+
+    /* Classes pour les icônes manuelles (fallback si Lucide ne charge pas) */
+    .icon-placeholder {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      background-color: currentColor;
+      mask-size: cover;
+      -webkit-mask-size: cover;
+    }
   </style>
 </head>
 <body class="bg-white text-slate-900 antialiased min-h-screen w-full overflow-x-hidden">
@@ -449,577 +449,643 @@
   <div class="particle particle-4"></div>
 </div>
 
-<div id="root"></div>
+<!-- Navigation -->
+<nav class="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
+  <div class="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
+    <!-- Logo -->
+    <div class="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
+      <div class="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
+        <span class="text-white font-bold text-lg md:text-xl">MF</span>
+      </div>
+      <span class="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-blue-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent whitespace-nowrap">
+        Mindus Forge
+      </span>
+    </div>
 
-<script type="text/babel">
-  const MindusForgeApp = () => {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-    const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
-    
-    React.useEffect(() => {
-      if (window.lucide) {
-        setTimeout(() => {
-          lucide.createIcons();
-        }, 10);
-      }
-    }, []);
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex items-center space-x-10">
+      <a href="/" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
+      <a href="/#features" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">Forge</a>
+      <a href="/#how_it_works" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">Fonctionnement</a>
+      <a href="/#faq" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">FAQ</a>
+      <a href="/pricing" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">Tarifs</a>
+      <a href="/about" class="text-slate-700 hover:text-blue-600 transition-colors font-medium">À propos</a>
+    </div>
 
-    React.useEffect(() => {
-      if (window.lucide) {
-        setTimeout(() => {
-          lucide.createIcons();
-        }, 10);
-      }
-    }, [isMobileMenuOpen, openFaqIndex]);
+    <!-- Auth Button + Burger -->
+    <div class="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
+      <a href="/connect" class="hidden md:flex items-center space-x-2 bg-white border border-slate-200 hover:border-blue-300 px-5 py-2.5 rounded-xl text-slate-700 hover:text-blue-600 transition-all shadow-sm hover:shadow">
+        <i data-lucide="github" class="w-5 h-5"></i>
+        <span class="font-medium">Connexion</span>
+      </a>
+      
+      <!-- Mobile menu button (burger) -->
+      <button id="mobile-menu-btn" class="md:hidden text-slate-700 focus:outline-none p-2 -mr-1">
+        <i data-lucide="menu" class="w-6 h-6" id="menu-icon"></i>
+      </button>
+    </div>
+  </div>
 
-    const faqItems = [
-      { 
-        q: 'Mindus Forge peut-il lire mon dépôt existant ?', 
-        a: 'Oui, Mindus Forge analyse la structure de votre dépôt GitHub/GitLab existant et génère du code contextuel dans des sous-dossiers appropriés, sans écraser vos fichiers. Notre IA comprend votre architecture et s\'y adapte.' 
-      },
-      { 
-        q: 'Comment fonctionne la résilience hors ligne ?', 
-        a: 'En cas de déconnexion, Forge passe en mode local, sauvegarde votre progression et synchronise automatiquement à la reconnexion. Zéro perte de données. Toutes vos modifications sont versionnées localement.' 
-      },
-      { 
-        q: 'Quelle est la différence avec GitHub Copilot ?', 
-        a: 'Forge ne se contente pas de compléter du code. Il génère des projets entiers, gère l’architecture, analyse votre base de code existante et s’intègre à votre workflow Git de manière autonome. C\'est un architecte logiciel, pas un autocomplétion.' 
-      },
-      { 
-        q: 'Puis-je utiliser mon propre modèle Gemini ?', 
-        a: 'Oui, les plans Scale et Enterprise permettent de connecter votre clé API Gemini personnelle pour un contrôle total. Vous bénéficiez ainsi de vos propres quotas et d\'une confidentialité maximale.' 
-      },
-      { 
-        q: 'Quels langages sont supportés ?', 
-        a: 'Mindus Forge supporte nativement JavaScript/TypeScript, Python, Java, Go, Rust, PHP, Ruby et C#. Notre adaptateur de contexte s\'enrichit continuellement.' 
-      }
-    ];
+  <!-- Mobile Menu (hidden by default) -->
+  <div id="mobile-menu" class="hidden md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg">
+    <div class="flex flex-col space-y-2">
+      <a href="/" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Accueil</a>
+      <a href="/#features" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Forge</a>
+      <a href="/#how_it_works" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Fonctionnement</a>
+      <a href="/#faq" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">FAQ</a>
+      <a href="/pricing" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700 font-medium text-blue-600">Tarifs</a>
+      <a href="/about" class="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">À propos</a>
+      <a href="/connect" class="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-xl text-white mt-2">
+        <i data-lucide="github" class="w-5 h-5"></i>
+        <span>GitHub Auth</span>
+      </a>
+    </div>
+  </div>
+</nav>
 
-    const features = [
-      { 
-        icon: 'bot', 
-        title: 'Agent Autonome', 
-        desc: 'Génère, teste et corrige sans supervision humaine. Architecture complète et tests unitaires inclus.', 
-        iconBg: 'bg-blue-100',
-        iconColor: 'text-blue-600' 
-      },
-      { 
-        icon: 'sparkles', 
-        title: 'Prompt Enhancer Gemini', 
-        desc: 'Amplifie vos requêtes avec l\'IA contextuelle de Google. Transformez une idée vague en spécifications techniques précises.', 
-        iconBg: 'bg-purple-100',
-        iconColor: 'text-purple-600' 
-      },
-      { 
-        icon: 'git-branch', 
-        title: 'Git Sync', 
-        desc: 'Push automatique vers dépôts existants ou nouveaux. Création de branches dédiées et pull requests automatisées.', 
-        iconBg: 'bg-emerald-100',
-        iconColor: 'text-emerald-600' 
-      },
-      { 
-        icon: 'refresh-cw', 
-        title: 'Bouton Continuer', 
-        desc: 'Reprenez exactement là où vous vous êtes arrêté. Historique complet et points de restauration.', 
-        iconBg: 'bg-amber-100',
-        iconColor: 'text-amber-600' 
-      }
-    ];
-
-    return (
-      <div className="min-h-screen bg-white text-slate-900 relative w-full overflow-x-hidden">
-        {/* Navigation */}
-        <nav className="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
-          <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
-            {/* Logo */}
-            <div className="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
-              <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-lg md:text-xl">MF</span>
-              </div>
-              <span className="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-blue-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent whitespace-nowrap">
-                Mindus Forge
-              </span>
+<!-- Main Content -->
+<main class="pt-28 pb-20 relative z-10 w-full overflow-x-hidden">
+  <!-- Hero Section -->
+  <section id="hero" class="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-24">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div class="animate-enter w-full">
+        <div class="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-6 border border-blue-200">
+          <i data-lucide="zap" class="w-4 h-4 mr-2 flex-shrink-0"></i>
+          IA générative nouvelle génération
+        </div>
+        <h1 class="section-title font-black leading-tight text-[clamp(2rem,8vw,3.5rem)]">
+          Forgez votre
+          <span class="text-gradient-modern block mt-2 break-words">
+            code, sans limites
+          </span>
+        </h1>
+        <p class="text-lg md:text-xl text-slate-600 mt-6 leading-relaxed max-w-2xl">
+          Mindus Forge est la première plateforme de génération de code autonome et résiliente. 
+          Analysez des dépôts existants, générez des projets complets, et ne perdez jamais une ligne, 
+          même hors ligne.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 mt-10 w-full">
+          <a href="/connect" class="btn-primary px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center justify-center shadow-lg hover:shadow-xl transition-all w-full sm:w-auto">
+            <span>Commencer gratuitement</span>
+            <i data-lucide="arrow-right" class="w-5 h-5 ml-2 flex-shrink-0"></i>
+          </a>
+          <a href="/about" class="btn-secondary px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center justify-center w-full sm:w-auto">
+            <i data-lucide="play" class="w-5 h-5 mr-2 flex-shrink-0"></i>
+            Voir la démo
+          </a>
+        </div>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-8 mt-8 text-sm text-slate-500">
+          <div class="flex items-center">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0"></i>
+            <span>Pas de carte bleue</span>
+          </div>
+          <div class="flex items-center">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0"></i>
+            <span>Annulation à tout moment</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bloc de code premium statique -->
+      <div class="relative animate-enter w-full" style="animation-delay: 0.2s">
+        <div class="code-block-premium w-full">
+          <div class="flex items-center space-x-2 mb-5">
+            <div class="w-3 h-3 bg-rose-500 rounded-full"></div>
+            <div class="w-3 h-3 bg-amber-500 rounded-full"></div>
+            <div class="w-3 h-3 bg-emerald-500 rounded-full"></div>
+            <span class="text-xs text-slate-400 ml-2 font-mono">mindus_forge_cli.py</span>
+          </div>
+          
+          <div class="space-y-3">
+            <div class="code-line">
+              <span class="code-prompt">$</span>
+              <span class="text-white">forge init --project nova-api</span>
             </div>
-
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-10">
-              <a href="#hero" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
-              <a href="#features" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Forge</a>
-              <a href="#how_it_works" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Fonctionnement</a>
-              <a href="#faq" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">FAQ</a>
-              <a href="/tarifs" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Tarifs</a>
+            <div class="code-line">
+              <span class="code-prompt">⟫</span>
+              <span class="text-cyan-400">Analyse du contexte...</span>
             </div>
-
-            {/* Auth Button + Burger */}
-            <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
-              <button className="hidden md:flex items-center space-x-2 bg-white border border-slate-200 hover:border-blue-300 px-5 py-2.5 rounded-xl text-slate-700 hover:text-blue-600 transition-all shadow-sm hover:shadow">
-                <i data-lucide="github" className="w-5 h-5"></i>
-                <span className="font-medium">Connexion</span>
-              </button>
-              
-              {/* Mobile menu button */}
-              <button 
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden text-slate-700 focus:outline-none p-2 -mr-1"
-              >
-                <i data-lucide={isMobileMenuOpen ? "x" : "menu"} className="w-6 h-6"></i>
-              </button>
+            <div class="code-line">
+              <span class="code-prompt">⟫</span>
+              <span class="text-emerald-400">Dépôt détecté · Architecture: microservices</span>
+            </div>
+            <div class="code-line">
+              <span class="code-prompt">⟫</span>
+              <span class="text-purple-400">Génération dans ./forge/auth-module/</span>
+            </div>
+            <div class="code-line mt-4">
+              <span class="code-prompt">✓</span>
+              <span class="text-white font-medium">Résilience: 3 fichiers en cache local</span>
+            </div>
+            <div class="code-line">
+              <span class="code-prompt">⚡</span>
+              <span class="text-blue-400">Prêt pour synchronisation Git</span>
             </div>
           </div>
-
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg">
-              <div className="flex flex-col space-y-2">
-                <a href="#hero" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Accueil</a>
-                <a href="#features" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Forge</a>
-                <a href="#how_it_works" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Fonctionnement</a>
-                <a href="#faq" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">FAQ</a>
-                <a href="/tarifs" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700 font-medium text-blue-600">Tarifs</a>
-                <button className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-xl text-white mt-2">
-                  <i data-lucide="github" className="w-5 h-5"></i>
-                  <span>GitHub Auth</span>
-                </button>
-              </div>
-            </div>
-          )}
-        </nav>
-
-        {/* Main Content */}
-        <main className="pt-28 pb-20 relative z-10 w-full overflow-x-hidden">
-          {/* Hero Section - Sans la carte forge_generation.tsx */}
-          <section id="hero" className="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-24">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              <div className="animate-enter w-full">
-                <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-6 border border-blue-200">
-                  <i data-lucide="zap" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                  IA générative nouvelle génération
-                </div>
-                <h1 className="section-title font-black leading-tight text-[clamp(2rem,8vw,3.5rem)]">
-                  Forgez votre
-                  <span className="text-gradient-modern block mt-2 break-words">
-                    code, sans limites
-                  </span>
-                </h1>
-                <p className="text-lg md:text-xl text-slate-600 mt-6 leading-relaxed max-w-2xl">
-                  Mindus Forge est la première plateforme de génération de code autonome et résiliente. 
-                  Analysez des dépôts existants, générez des projets complets, et ne perdez jamais une ligne, 
-                  même hors ligne.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 mt-10 w-full">
-                  <button className="btn-primary px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center justify-center shadow-lg hover:shadow-xl transition-all w-full sm:w-auto">
-                    <span>Commencer gratuitement</span>
-                    <i data-lucide="arrow-right" className="w-5 h-5 ml-2 flex-shrink-0"></i>
-                  </button>
-                  <button className="btn-secondary px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center justify-center w-full sm:w-auto">
-                    <i data-lucide="play" className="w-5 h-5 mr-2 flex-shrink-0"></i>
-                    Voir la démo
-                  </button>
-                </div>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-8 mt-8 text-sm text-slate-500">
-                  <div className="flex items-center">
-                    <i data-lucide="check-circle" className="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0"></i>
-                    <span>Pas de carte bleue</span>
-                  </div>
-                  <div className="flex items-center">
-                    <i data-lucide="check-circle" className="w-5 h-5 text-emerald-500 mr-2 flex-shrink-0"></i>
-                    <span>Annulation à tout moment</span>
-                  </div>
-                </div>
-              </div>
-              
-              {/* NOUVEAU: Bloc de code premium statique - Épuré et élégant */}
-              <div className="relative animate-enter w-full" style={{animationDelay: '0.2s'}}>
-                <div className="code-block-premium w-full">
-                  <div className="flex items-center space-x-2 mb-5">
-                    <div className="w-3 h-3 bg-rose-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                    <span className="text-xs text-slate-400 ml-2 font-mono">mindus_forge_cli.py</span>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div className="code-line">
-                      <span className="code-prompt">$</span>
-                      <span className="text-white">forge init --project nova-api</span>
-                    </div>
-                    <div className="code-line">
-                      <span className="code-prompt">⟫</span>
-                      <span className="text-cyan-400">Analyse du contexte...</span>
-                    </div>
-                    <div className="code-line">
-                      <span className="code-prompt">⟫</span>
-                      <span className="text-emerald-400">Dépôt détecté · Architecture: microservices</span>
-                    </div>
-                    <div className="code-line">
-                      <span className="code-prompt">⟫</span>
-                      <span className="text-purple-400">Génération dans ./forge/auth-module/</span>
-                    </div>
-                    <div className="code-line mt-4">
-                      <span className="code-prompt">✓</span>
-                      <span className="text-white font-medium">Résilience: 3 fichiers en cache local</span>
-                    </div>
-                    <div className="code-line">
-                      <span className="code-prompt">⚡</span>
-                      <span className="text-blue-400">Prêt pour synchronisation Git</span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between">
-                    <span className="text-xs text-slate-400 flex items-center">
-                      <i data-lucide="shield" className="w-3 h-3 mr-1"></i> Mode résilient
-                    </span>
-                    <span className="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1.5 rounded-full border border-emerald-500/20">
-                      Actif · Hors ligne
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-purple-200/30 rounded-full blur-3xl -z-10"></div>
-              </div>
-            </div>
-          </section>
-
-          {/* Features - 4 Piliers */}
-          <section id="features" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 text-sm font-medium mb-4 border border-indigo-200">
-                <i data-lucide="crown" className="w-4 h-4 mr-2"></i>
-                Architecture unique
-              </div>
-              <h2 className="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
-                Les <span className="text-gradient-modern">4 piliers</span> de Forge
-              </h2>
-              <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto px-2">
-                Une architecture pensée pour l'autonomie et la résilience
-              </p>
-            </div>
-            
-            <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-              {features.map((feature, idx) => (
-                <div 
-                  key={idx} 
-                  className="card-corporate rounded-2xl p-6 md:p-8 hover:shadow-xl transition-all duration-300 group w-full"
-                  style={{animationDelay: `${idx * 0.1}s`}}
-                >
-                  <div className={`icon-square ${feature.iconBg} mb-6 group-hover:scale-110 transition-transform`}>
-                    <i data-lucide={feature.icon} className={`w-7 h-7 ${feature.iconColor}`}></i>
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 text-slate-900">{feature.title}</h3>
-                  <p className="text-slate-600 leading-relaxed text-base">{feature.desc}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* How it works - Workflow amélioré */}
-          <section id="how_it_works" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32 bg-slate-50/50 rounded-3xl">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-4 border border-blue-200">
-                <i data-lucide="workflow" className="w-4 h-4 mr-2"></i>
-                Workflow intelligent
-              </div>
-              <h2 className="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
-                De l'<span className="text-gradient-modern">idée</span> au push
-              </h2>
-              <p className="text-lg md:text-xl text-slate-600">Un workflow sans friction, 4 étapes seulement</p>
-            </div>
-            
-            <div className="relative max-w-4xl mx-auto">
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-400 via-indigo-400 to-cyan-400 hidden md:block opacity-30"></div>
-              {[
-                { step: 1, title: 'Vous avez une idée', desc: 'Une fonctionnalité, un correctif, un nouveau module. Exprimez-la en langage naturel.', icon: 'lightbulb' },
-                { step: 2, title: 'Forge analyse votre dépôt', desc: 'Lecture complète de l’existant, compréhension du contexte, détection de l\'architecture.', icon: 'search' },
-                { step: 3, title: 'Génération dans sous-dossier', desc: 'Création de ./forge/[feature]/ avec code prêt à l\'emploi, tests et documentation.', icon: 'folder-git' },
-                { step: 4, title: 'Validation et push', desc: 'Revue rapide, commit automatique, pull request optionnelle. Intégration continue.', icon: 'git-pull-request' }
-              ].map((item) => (
-                <div key={item.step} className="flex items-start mb-12 relative group">
-                  <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl font-bold z-10 shadow-lg text-white group-hover:scale-110 transition-transform">
-                    <i data-lucide={item.icon} className="w-6 h-6 md:w-7 md:h-7"></i>
-                  </div>
-                  <div className="ml-5 md:ml-8 pt-1">
-                    <h3 className="text-xl md:text-2xl font-bold mb-2 text-slate-900">{item.title}</h3>
-                    <p className="text-base md:text-lg text-slate-600">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* SECTION REMPLACÉE: Bannière d'excellence (à la place de AI Capabilities) */}
-          <section id="excellence" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
-            <div className="gradient-border bg-white rounded-3xl p-8 md:p-16 w-full overflow-hidden">
-              <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-                <div className="max-w-2xl">
-                  <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full text-blue-700 text-sm font-medium mb-6 border border-blue-200">
-                    <i data-lucide="gem" className="w-4 h-4 mr-2"></i>
-                    Intelligence contextuelle
-                  </div>
-                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
-                    L'IA qui <span className="text-gradient-modern">comprend</span> votre existant
-                  </h2>
-                  <p className="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
-                    Mindus Forge ne part pas de zéro. Il analyse votre base de code, respecte vos conventions, 
-                    et s'intègre dans votre architecture comme un membre senior de l'équipe.
-                  </p>
-                  
-                  <div className="grid grid-cols-2 gap-5 mt-8">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="check-circle" className="w-5 h-5 text-blue-600"></i>
-                      </div>
-                      <span className="font-medium text-slate-700">Analyse sémantique</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="check-circle" className="w-5 h-5 text-indigo-600"></i>
-                      </div>
-                      <span className="font-medium text-slate-700">Sous-dossiers intelligents</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="check-circle" className="w-5 h-5 text-purple-600"></i>
-                      </div>
-                      <span className="font-medium text-slate-700">Conventions de nommage</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="check-circle" className="w-5 h-5 text-emerald-600"></i>
-                      </div>
-                      <span className="font-medium text-slate-700">Réutilisation des composants</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex-shrink-0">
-                  <div className="badge-excellence p-8 rounded-2xl text-center">
-                    <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-xl">
-                      <i data-lucide="brain" className="w-12 h-12 text-white"></i>
-                    </div>
-                    <div className="text-4xl font-bold text-gradient-modern mb-2">+340%</div>
-                    <p className="text-slate-600">de productivité</p>
-                    <div className="mt-4 pt-4 border-t border-slate-200">
-                      <span className="text-sm font-medium text-slate-500">Équipes early-access</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Resilience Demo - optimisé */}
-          <section id="resilience" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
-            <div className="card-corporate rounded-3xl p-6 md:p-10 border border-emerald-200 bg-gradient-to-br from-emerald-50/30 to-transparent hover:border-emerald-300 transition-all w-full">
-              <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
-                <div className="max-w-xl w-full">
-                  <div className="flex items-center space-x-3 mb-5">
-                    <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span className="text-emerald-700 font-semibold text-lg flex items-center">
-                      <i data-lucide="shield" className="w-5 h-5 mr-2 flex-shrink-0"></i>
-                      Résilience active
-                    </span>
-                  </div>
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-5 text-slate-900">
-                    Sauvegarde instantanée, <br className="hidden sm:block"/>même hors ligne
-                  </h2>
-                  <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-                    Déconnexion ? Pas de panique. Forge bascule en mode local, sauvegarde chaque étape, 
-                    et synchronise automatiquement à la reconnexion. Zéro perte de données, zéro frustration.
-                  </p>
-                  <div className="mt-8 flex flex-wrap items-center gap-4">
-                    <div className="flex items-center">
-                      <i data-lucide="cloud-off" className="w-5 h-5 text-slate-500 mr-2 flex-shrink-0"></i>
-                      <span className="text-slate-700">Mode local</span>
-                    </div>
-                    <div className="flex items-center">
-                      <i data-lucide="database" className="w-5 h-5 text-slate-500 mr-2 flex-shrink-0"></i>
-                      <span className="text-slate-700">Versioning auto</span>
-                    </div>
-                    <div className="flex items-center">
-                      <i data-lucide="refresh-cw" className="w-5 h-5 text-slate-500 mr-2 flex-shrink-0"></i>
-                      <span className="text-slate-700">Sync différée</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white p-5 md:p-6 rounded-xl w-full lg:w-96 border border-slate-200 shadow-md">
-                  <div className="flex justify-between items-center mb-5">
-                    <span className="text-sm font-medium text-slate-700">État synchronisation</span>
-                    <span className="text-emerald-700 text-sm flex items-center bg-emerald-50 px-3 py-1.5 rounded-full">
-                      <i data-lucide="wifi-off" className="w-4 h-4 mr-1.5 flex-shrink-0"></i> Mode local
-                    </span>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                      <div className="flex items-center truncate max-w-[180px] md:max-w-[200px]">
-                        <i data-lucide="file-text" className="w-4 h-4 text-slate-500 mr-2 flex-shrink-0"></i>
-                        <span className="text-sm text-slate-700 truncate">forge/auth-module/index.js</span>
-                      </div>
-                      <span className="text-emerald-600 text-sm flex items-center bg-emerald-50 px-2 py-1 rounded-md ml-2 flex-shrink-0">
-                        <i data-lucide="check" className="w-3 h-3 mr-1"></i> Sauvegardé
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                      <div className="flex items-center truncate max-w-[180px] md:max-w-[200px]">
-                        <i data-lucide="file-text" className="w-4 h-4 text-slate-500 mr-2 flex-shrink-0"></i>
-                        <span className="text-sm text-slate-700 truncate">forge/auth-module/handler.py</span>
-                      </div>
-                      <span className="text-emerald-600 text-sm flex items-center bg-emerald-50 px-2 py-1 rounded-md ml-2 flex-shrink-0">
-                        <i data-lucide="check" className="w-3 h-3 mr-1"></i> Sauvegardé
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2">
-                      <div className="flex items-center truncate max-w-[180px] md:max-w-[200px]">
-                        <i data-lucide="file-text" className="w-4 h-4 text-slate-500 mr-2 flex-shrink-0"></i>
-                        <span className="text-sm text-slate-700 truncate">forge/auth-module/tests.js</span>
-                      </div>
-                      <span className="text-amber-600 text-sm flex items-center bg-amber-50 px-2 py-1 rounded-md ml-2 flex-shrink-0">
-                        <i data-lucide="clock" className="w-3 h-3 mr-1"></i> En attente
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* FAQ */}
-          <section id="faq" className="max-w-4xl mx-auto px-4 md:px-6 py-20 md:py-32">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center px-4 py-2 bg-slate-100 rounded-full text-slate-700 text-sm font-medium mb-4 border border-slate-200">
-                <i data-lucide="help-circle" className="w-4 h-4 mr-2"></i>
-                Questions fréquentes
-              </div>
-              <h2 className="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
-                Questions <span className="text-gradient-modern">techniques</span>
-              </h2>
-              <p className="text-lg md:text-xl text-slate-600">Tout ce que vous devez savoir</p>
-            </div>
-            
-            <div className="space-y-4 w-full">
-              {faqItems.map((item, idx) => (
-                <div key={idx} className="card-corporate rounded-xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all w-full">
-                  <button
-                    onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
-                    className="w-full flex justify-between items-center p-5 md:p-6 text-left hover:bg-slate-50 transition-colors"
-                  >
-                    <span className="font-semibold text-base md:text-lg text-slate-900 pr-4">{item.q}</span>
-                    <div className={`w-8 h-8 rounded-lg ${openFaqIndex === idx ? 'bg-blue-100' : 'bg-slate-100'} flex items-center justify-center transition-colors flex-shrink-0`}>
-                      <i data-lucide={openFaqIndex === idx ? 'chevron-up' : 'chevron-down'} className="w-5 h-5 text-slate-700"></i>
-                    </div>
-                  </button>
-                  {openFaqIndex === idx && (
-                    <div className="px-5 md:px-6 pb-6 pt-2 text-slate-600 border-t border-slate-100 bg-slate-50/50 leading-relaxed text-base">
-                      {item.a}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* CTA Final */}
-          <section className="max-w-5xl mx-auto px-4 md:px-6 py-16 md:py-20">
-            <div className="gradient-border bg-white p-8 md:p-16 rounded-3xl text-center w-full">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
-                Prêt à <span className="text-gradient-modern">forger</span> votre avenir ?
-              </h2>
-              <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
-                Rejoignez les équipes qui utilisent déjà Mindus Forge pour accélérer leur développement.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4 w-full">
-                <button className="btn-primary px-8 md:px-10 py-4 rounded-xl font-semibold text-base md:text-lg inline-flex items-center justify-center shadow-lg w-full sm:w-auto">
-                  <i data-lucide="zap" className="w-5 h-5 mr-2 flex-shrink-0"></i>
-                  Commencer gratuitement
-                </button>
-                <button className="btn-secondary px-8 md:px-10 py-4 rounded-xl font-semibold text-base md:text-lg inline-flex items-center justify-center w-full sm:w-auto">
-                  <i data-lucide="calendar" className="w-5 h-5 mr-2 flex-shrink-0"></i>
-                  Planifier une démo
-                </button>
-              </div>
-              <p className="text-sm text-slate-500 mt-8 flex items-center justify-center">
-                <i data-lucide="shield" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                Sans engagement, annulation à tout moment
-              </p>
-            </div>
-          </section>
-
-          {/* Footer */}
-          <footer id="footer" className="border-t border-slate-200 mt-20 pt-16 pb-8 px-4 md:px-6 w-full">
-            <div className="max-w-7xl mx-auto">
-              <div className="grid md:grid-cols-4 gap-10 md:gap-12 mb-16">
-                <div className="w-full">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-md flex-shrink-0"></div>
-                    <span className="font-bold text-xl bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-                      Mindus Forge
-                    </span>
-                  </div>
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    Génération de code autonome, résiliente et contextuelle. L'IA qui comprend votre existant.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-5 text-lg text-slate-900">Produit</h4>
-                  <ul className="space-y-3 text-slate-600">
-                    <li><a href="#features" className="hover:text-blue-600 transition-colors flex items-center">Fonctionnalités</a></li>
-                    <li><a href="#how_it_works" className="hover:text-blue-600 transition-colors flex items-center">Comment ça marche</a></li>
-                    <li><a href="#excellence" className="hover:text-blue-600 transition-colors flex items-center">Intelligence IA</a></li>
-                    <li><a href="/tarifs" className="hover:text-blue-600 transition-colors flex items-center font-medium text-blue-600">Tarifs</a></li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-5 text-lg text-slate-900">Légal</h4>
-                  <ul className="space-y-3 text-slate-600">
-                    <li><a href="#" className="hover:text-blue-600 transition-colors">Confidentialité</a></li>
-                    <li><a href="#" className="hover:text-blue-600 transition-colors">Conditions d'utilisation</a></li>
-                    <li><a href="#" className="hover:text-blue-600 transition-colors">Sécurité</a></li>
-                    <li><a href="#" className="hover:text-blue-600 transition-colors">RGPD</a></li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-5 text-lg text-slate-900">Support</h4>
-                  <ul className="space-y-3 text-slate-600">
-                    <li className="flex items-center">
-                      <i data-lucide="mail" className="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
-                      <a href="mailto:contact@mindusforge.dev" className="hover:text-blue-600 truncate">contact@mindusforge.dev</a>
-                    </li>
-                    <li className="flex items-center">
-                      <i data-lucide="file-text" className="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
-                      <a href="#" className="hover:text-blue-600">Documentation API</a>
-                    </li>
-                    <li className="flex items-center">
-                      <i data-lucide="message-circle" className="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
-                      <a href="#" className="hover:text-blue-600">Forum</a>
-                    </li>
-                    <li className="flex items-center">
-                      <i data-lucide="book-open" className="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
-                      <a href="#" className="hover:text-blue-600">Guide</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="text-center text-slate-500 text-sm pt-8 border-t border-slate-200">
-                <p>© {new Date().getFullYear()} Mindus Forge. Tous droits réservés.</p>
-                <p className="mt-3 text-xs text-slate-400">
-                  Conçu avec l'IA pour les développeurs d'exception
-                </p>
-              </div>
-            </div>
-          </footer>
-        </main>
+          
+          <div class="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between">
+            <span class="text-xs text-slate-400 flex items-center">
+              <i data-lucide="shield" class="w-3 h-3 mr-1"></i> Mode résilient
+            </span>
+            <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1.5 rounded-full border border-emerald-500/20">
+              Actif · Hors ligne
+            </span>
+          </div>
+        </div>
+        
+        <div class="absolute -bottom-8 -left-8 w-40 h-40 bg-purple-200/30 rounded-full blur-3xl -z-10"></div>
       </div>
-    );
-  };
+    </div>
+  </section>
 
-  // Render the app
-  const rootElement = document.getElementById('root');
-  if (rootElement) {
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(<MindusForgeApp />);
-  }
+  <!-- Features - 4 Piliers -->
+  <section id="features" class="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 text-sm font-medium mb-4 border border-indigo-200">
+        <i data-lucide="crown" class="w-4 h-4 mr-2"></i>
+        Architecture unique
+      </div>
+      <h2 class="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
+        Les <span class="text-gradient-modern">4 piliers</span> de Forge
+      </h2>
+      <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto px-2">
+        Une architecture pensée pour l'autonomie et la résilience
+      </p>
+    </div>
+    
+    <div class="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      <!-- Feature 1 -->
+      <div class="card-corporate rounded-2xl p-6 md:p-8 hover:shadow-xl transition-all duration-300 group w-full">
+        <div class="icon-square bg-blue-100 mb-6 group-hover:scale-110 transition-transform">
+          <i data-lucide="bot" class="w-7 h-7 text-blue-600"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-slate-900">Agent Autonome</h3>
+        <p class="text-slate-600 leading-relaxed text-base">Génère, teste et corrige sans supervision humaine. Architecture complète et tests unitaires inclus.</p>
+      </div>
+      <!-- Feature 2 -->
+      <div class="card-corporate rounded-2xl p-6 md:p-8 hover:shadow-xl transition-all duration-300 group w-full">
+        <div class="icon-square bg-purple-100 mb-6 group-hover:scale-110 transition-transform">
+          <i data-lucide="sparkles" class="w-7 h-7 text-purple-600"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-slate-900">Prompt Enhancer Gemini</h3>
+        <p class="text-slate-600 leading-relaxed text-base">Amplifie vos requêtes avec l'IA contextuelle de Google. Transformez une idée vague en spécifications techniques précises.</p>
+      </div>
+      <!-- Feature 3 -->
+      <div class="card-corporate rounded-2xl p-6 md:p-8 hover:shadow-xl transition-all duration-300 group w-full">
+        <div class="icon-square bg-emerald-100 mb-6 group-hover:scale-110 transition-transform">
+          <i data-lucide="git-branch" class="w-7 h-7 text-emerald-600"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-slate-900">Git Sync</h3>
+        <p class="text-slate-600 leading-relaxed text-base">Push automatique vers dépôts existants ou nouveaux. Création de branches dédiées et pull requests automatisées.</p>
+      </div>
+      <!-- Feature 4 -->
+      <div class="card-corporate rounded-2xl p-6 md:p-8 hover:shadow-xl transition-all duration-300 group w-full">
+        <div class="icon-square bg-amber-100 mb-6 group-hover:scale-110 transition-transform">
+          <i data-lucide="refresh-cw" class="w-7 h-7 text-amber-600"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-slate-900">Bouton Continuer</h3>
+        <p class="text-slate-600 leading-relaxed text-base">Reprenez exactement là où vous vous êtes arrêté. Historique complet et points de restauration.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works - Workflow amélioré -->
+  <section id="how_it_works" class="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32 bg-slate-50/50 rounded-3xl">
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-4 border border-blue-200">
+        <i data-lucide="workflow" class="w-4 h-4 mr-2"></i>
+        Workflow intelligent
+      </div>
+      <h2 class="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
+        De l'<span class="text-gradient-modern">idée</span> au push
+      </h2>
+      <p class="text-lg md:text-xl text-slate-600">Un workflow sans friction, 4 étapes seulement</p>
+    </div>
+    
+    <div class="relative max-w-4xl mx-auto">
+      <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-400 via-indigo-400 to-cyan-400 hidden md:block opacity-30"></div>
+      <!-- Étape 1 -->
+      <div class="flex items-start mb-12 relative group">
+        <div class="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl font-bold z-10 shadow-lg text-white group-hover:scale-110 transition-transform">
+          <i data-lucide="lightbulb" class="w-6 h-6 md:w-7 md:h-7"></i>
+        </div>
+        <div class="ml-5 md:ml-8 pt-1">
+          <h3 class="text-xl md:text-2xl font-bold mb-2 text-slate-900">Vous avez une idée</h3>
+          <p class="text-base md:text-lg text-slate-600">Une fonctionnalité, un correctif, un nouveau module. Exprimez-la en langage naturel.</p>
+        </div>
+      </div>
+      <!-- Étape 2 -->
+      <div class="flex items-start mb-12 relative group">
+        <div class="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl font-bold z-10 shadow-lg text-white group-hover:scale-110 transition-transform">
+          <i data-lucide="search" class="w-6 h-6 md:w-7 md:h-7"></i>
+        </div>
+        <div class="ml-5 md:ml-8 pt-1">
+          <h3 class="text-xl md:text-2xl font-bold mb-2 text-slate-900">Forge analyse votre dépôt</h3>
+          <p class="text-base md:text-lg text-slate-600">Lecture complète de l'existant, compréhension du contexte, détection de l'architecture.</p>
+        </div>
+      </div>
+      <!-- Étape 3 -->
+      <div class="flex items-start mb-12 relative group">
+        <div class="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl font-bold z-10 shadow-lg text-white group-hover:scale-110 transition-transform">
+          <i data-lucide="folder-git" class="w-6 h-6 md:w-7 md:h-7"></i>
+        </div>
+        <div class="ml-5 md:ml-8 pt-1">
+          <h3 class="text-xl md:text-2xl font-bold mb-2 text-slate-900">Génération dans sous-dossier</h3>
+          <p class="text-base md:text-lg text-slate-600">Création de ./forge/[feature]/ avec code prêt à l'emploi, tests et documentation.</p>
+        </div>
+      </div>
+      <!-- Étape 4 -->
+      <div class="flex items-start mb-12 relative group">
+        <div class="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl font-bold z-10 shadow-lg text-white group-hover:scale-110 transition-transform">
+          <i data-lucide="git-pull-request" class="w-6 h-6 md:w-7 md:h-7"></i>
+        </div>
+        <div class="ml-5 md:ml-8 pt-1">
+          <h3 class="text-xl md:text-2xl font-bold mb-2 text-slate-900">Validation et push</h3>
+          <p class="text-base md:text-lg text-slate-600">Revue rapide, commit automatique, pull request optionnelle. Intégration continue.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: Bannière d'excellence -->
+  <section id="excellence" class="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
+    <div class="gradient-border bg-white rounded-3xl p-8 md:p-16 w-full overflow-hidden">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full text-blue-700 text-sm font-medium mb-6 border border-blue-200">
+            <i data-lucide="gem" class="w-4 h-4 mr-2"></i>
+            Intelligence contextuelle
+          </div>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
+            L'IA qui <span class="text-gradient-modern">comprend</span> votre existant
+          </h2>
+          <p class="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
+            Mindus Forge ne part pas de zéro. Il analyse votre base de code, respecte vos conventions, 
+            et s'intègre dans votre architecture comme un membre senior de l'équipe.
+          </p>
+          
+          <div class="grid grid-cols-2 gap-5 mt-8">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <i data-lucide="check-circle" class="w-5 h-5 text-blue-600"></i>
+              </div>
+              <span class="font-medium text-slate-700">Analyse sémantique</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <i data-lucide="check-circle" class="w-5 h-5 text-indigo-600"></i>
+              </div>
+              <span class="font-medium text-slate-700">Sous-dossiers intelligents</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                <i data-lucide="check-circle" class="w-5 h-5 text-purple-600"></i>
+              </div>
+              <span class="font-medium text-slate-700">Conventions de nommage</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600"></i>
+              </div>
+              <span class="font-medium text-slate-700">Réutilisation des composants</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex-shrink-0">
+          <div class="badge-excellence p-8 rounded-2xl text-center">
+            <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-xl">
+              <i data-lucide="brain" class="w-12 h-12 text-white"></i>
+            </div>
+            <div class="text-4xl font-bold text-gradient-modern mb-2">+340%</div>
+            <p class="text-slate-600">de productivité</p>
+            <div class="mt-4 pt-4 border-t border-slate-200">
+              <span class="text-sm font-medium text-slate-500">Équipes early-access</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resilience Demo -->
+  <section id="resilience" class="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
+    <div class="card-corporate rounded-3xl p-6 md:p-10 border border-emerald-200 bg-gradient-to-br from-emerald-50/30 to-transparent hover:border-emerald-300 transition-all w-full">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
+        <div class="max-w-xl w-full">
+          <div class="flex items-center space-x-3 mb-5">
+            <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+            <span class="text-emerald-700 font-semibold text-lg flex items-center">
+              <i data-lucide="shield" class="w-5 h-5 mr-2 flex-shrink-0"></i>
+              Résilience active
+            </span>
+          </div>
+          <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-5 text-slate-900">
+            Sauvegarde instantanée, <br class="hidden sm:block"/>même hors ligne
+          </h2>
+          <p class="text-slate-600 text-base md:text-lg leading-relaxed">
+            Déconnexion ? Pas de panique. Forge bascule en mode local, sauvegarde chaque étape, 
+            et synchronise automatiquement à la reconnexion. Zéro perte de données, zéro frustration.
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-4">
+            <div class="flex items-center">
+              <i data-lucide="cloud-off" class="w-5 h-5 text-slate-500 mr-2 flex-shrink-0"></i>
+              <span class="text-slate-700">Mode local</span>
+            </div>
+            <div class="flex items-center">
+              <i data-lucide="database" class="w-5 h-5 text-slate-500 mr-2 flex-shrink-0"></i>
+              <span class="text-slate-700">Versioning auto</span>
+            </div>
+            <div class="flex items-center">
+              <i data-lucide="refresh-cw" class="w-5 h-5 text-slate-500 mr-2 flex-shrink-0"></i>
+              <span class="text-slate-700">Sync différée</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-5 md:p-6 rounded-xl w-full lg:w-96 border border-slate-200 shadow-md">
+          <div class="flex justify-between items-center mb-5">
+            <span class="text-sm font-medium text-slate-700">État synchronisation</span>
+            <span class="text-emerald-700 text-sm flex items-center bg-emerald-50 px-3 py-1.5 rounded-full">
+              <i data-lucide="wifi-off" class="w-4 h-4 mr-1.5 flex-shrink-0"></i> Mode local
+            </span>
+          </div>
+          <div class="space-y-4">
+            <div class="flex justify-between items-center py-2 border-b border-slate-100">
+              <div class="flex items-center truncate max-w-[180px] md:max-w-[200px]">
+                <i data-lucide="file-text" class="w-4 h-4 text-slate-500 mr-2 flex-shrink-0"></i>
+                <span class="text-sm text-slate-700 truncate">forge/auth-module/index.js</span>
+              </div>
+              <span class="text-emerald-600 text-sm flex items-center bg-emerald-50 px-2 py-1 rounded-md ml-2 flex-shrink-0">
+                <i data-lucide="check" class="w-3 h-3 mr-1"></i> Sauvegardé
+              </span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-slate-100">
+              <div class="flex items-center truncate max-w-[180px] md:max-w-[200px]">
+                <i data-lucide="file-text" class="w-4 h-4 text-slate-500 mr-2 flex-shrink-0"></i>
+                <span class="text-sm text-slate-700 truncate">forge/auth-module/handler.py</span>
+              </div>
+              <span class="text-emerald-600 text-sm flex items-center bg-emerald-50 px-2 py-1 rounded-md ml-2 flex-shrink-0">
+                <i data-lucide="check" class="w-3 h-3 mr-1"></i> Sauvegardé
+              </span>
+            </div>
+            <div class="flex justify-between items-center py-2">
+              <div class="flex items-center truncate max-w-[180px] md:max-w-[200px]">
+                <i data-lucide="file-text" class="w-4 h-4 text-slate-500 mr-2 flex-shrink-0"></i>
+                <span class="text-sm text-slate-700 truncate">forge/auth-module/tests.js</span>
+              </div>
+              <span class="text-amber-600 text-sm flex items-center bg-amber-50 px-2 py-1 rounded-md ml-2 flex-shrink-0">
+                <i data-lucide="clock" class="w-3 h-3 mr-1"></i> En attente
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="max-w-4xl mx-auto px-4 md:px-6 py-20 md:py-32">
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center px-4 py-2 bg-slate-100 rounded-full text-slate-700 text-sm font-medium mb-4 border border-slate-200">
+        <i data-lucide="help-circle" class="w-4 h-4 mr-2"></i>
+        Questions fréquentes
+      </div>
+      <h2 class="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
+        Questions <span class="text-gradient-modern">techniques</span>
+      </h2>
+      <p class="text-lg md:text-xl text-slate-600">Tout ce que vous devez savoir</p>
+    </div>
+    
+    <div class="space-y-4 w-full">
+      <!-- FAQ Item 1 -->
+      <div class="card-corporate rounded-xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all w-full">
+        <button class="faq-question w-full flex justify-between items-center p-5 md:p-6 text-left hover:bg-slate-50 transition-colors" data-index="0">
+          <span class="font-semibold text-base md:text-lg text-slate-900 pr-4">Mindus Forge peut-il lire mon dépôt existant ?</span>
+          <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center transition-colors flex-shrink-0 faq-icon">
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-700"></i>
+          </div>
+        </button>
+        <div class="faq-answer hidden px-5 md:px-6 pb-6 pt-2 text-slate-600 border-t border-slate-100 bg-slate-50/50 leading-relaxed text-base" data-index="0">
+          Oui, Mindus Forge analyse la structure de votre dépôt GitHub/GitLab existant et génère du code contextuel dans des sous-dossiers appropriés, sans écraser vos fichiers. Notre IA comprend votre architecture et s'y adapte.
+        </div>
+      </div>
+      <!-- FAQ Item 2 -->
+      <div class="card-corporate rounded-xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all w-full">
+        <button class="faq-question w-full flex justify-between items-center p-5 md:p-6 text-left hover:bg-slate-50 transition-colors" data-index="1">
+          <span class="font-semibold text-base md:text-lg text-slate-900 pr-4">Comment fonctionne la résilience hors ligne ?</span>
+          <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center transition-colors flex-shrink-0 faq-icon">
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-700"></i>
+          </div>
+        </button>
+        <div class="faq-answer hidden px-5 md:px-6 pb-6 pt-2 text-slate-600 border-t border-slate-100 bg-slate-50/50 leading-relaxed text-base" data-index="1">
+          En cas de déconnexion, Forge passe en mode local, sauvegarde votre progression et synchronise automatiquement à la reconnexion. Zéro perte de données. Toutes vos modifications sont versionnées localement.
+        </div>
+      </div>
+      <!-- FAQ Item 3 -->
+      <div class="card-corporate rounded-xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all w-full">
+        <button class="faq-question w-full flex justify-between items-center p-5 md:p-6 text-left hover:bg-slate-50 transition-colors" data-index="2">
+          <span class="font-semibold text-base md:text-lg text-slate-900 pr-4">Quelle est la différence avec GitHub Copilot ?</span>
+          <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center transition-colors flex-shrink-0 faq-icon">
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-700"></i>
+          </div>
+        </button>
+        <div class="faq-answer hidden px-5 md:px-6 pb-6 pt-2 text-slate-600 border-t border-slate-100 bg-slate-50/50 leading-relaxed text-base" data-index="2">
+          Forge ne se contente pas de compléter du code. Il génère des projets entiers, gère l'architecture, analyse votre base de code existante et s'intègre à votre workflow Git de manière autonome. C'est un architecte logiciel, pas un autocomplétion.
+        </div>
+      </div>
+      <!-- FAQ Item 4 -->
+      <div class="card-corporate rounded-xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all w-full">
+        <button class="faq-question w-full flex justify-between items-center p-5 md:p-6 text-left hover:bg-slate-50 transition-colors" data-index="3">
+          <span class="font-semibold text-base md:text-lg text-slate-900 pr-4">Puis-je utiliser mon propre modèle Gemini ?</span>
+          <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center transition-colors flex-shrink-0 faq-icon">
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-700"></i>
+          </div>
+        </button>
+        <div class="faq-answer hidden px-5 md:px-6 pb-6 pt-2 text-slate-600 border-t border-slate-100 bg-slate-50/50 leading-relaxed text-base" data-index="3">
+          Oui, les plans Scale et Enterprise permettent de connecter votre clé API Gemini personnelle pour un contrôle total. Vous bénéficiez ainsi de vos propres quotas et d'une confidentialité maximale.
+        </div>
+      </div>
+      <!-- FAQ Item 5 -->
+      <div class="card-corporate rounded-xl overflow-hidden border border-slate-200 hover:border-blue-200 transition-all w-full">
+        <button class="faq-question w-full flex justify-between items-center p-5 md:p-6 text-left hover:bg-slate-50 transition-colors" data-index="4">
+          <span class="font-semibold text-base md:text-lg text-slate-900 pr-4">Quels langages sont supportés ?</span>
+          <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center transition-colors flex-shrink-0 faq-icon">
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-700"></i>
+          </div>
+        </button>
+        <div class="faq-answer hidden px-5 md:px-6 pb-6 pt-2 text-slate-600 border-t border-slate-100 bg-slate-50/50 leading-relaxed text-base" data-index="4">
+          Mindus Forge supporte nativement JavaScript/TypeScript, Python, Java, Go, Rust, PHP, Ruby et C#. Notre adaptateur de contexte s'enrichit continuellement.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Final -->
+  <section class="max-w-5xl mx-auto px-4 md:px-6 py-16 md:py-20">
+    <div class="gradient-border bg-white p-8 md:p-16 rounded-3xl text-center w-full">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
+        Prêt à <span class="text-gradient-modern">forger</span> votre avenir ?
+      </h2>
+      <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
+        Rejoignez les équipes qui utilisent déjà Mindus Forge pour accélérer leur développement.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4 w-full">
+        <a href="/connect" class="btn-primary px-8 md:px-10 py-4 rounded-xl font-semibold text-base md:text-lg inline-flex items-center justify-center shadow-lg w-full sm:w-auto">
+          <i data-lucide="zap" class="w-5 h-5 mr-2 flex-shrink-0"></i>
+          Commencer gratuitement
+        </a>
+        <a href="/about" class="btn-secondary px-8 md:px-10 py-4 rounded-xl font-semibold text-base md:text-lg inline-flex items-center justify-center w-full sm:w-auto">
+          <i data-lucide="calendar" class="w-5 h-5 mr-2 flex-shrink-0"></i>
+          Planifier une démo
+        </a>
+      </div>
+      <p class="text-sm text-slate-500 mt-8 flex items-center justify-center">
+        <i data-lucide="shield" class="w-4 h-4 mr-2 flex-shrink-0"></i>
+        Sans engagement, annulation à tout moment
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer" class="border-t border-slate-200 mt-20 pt-16 pb-8 px-4 md:px-6 w-full">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-10 md:gap-12 mb-16">
+        <div class="w-full">
+          <div class="flex items-center space-x-3 mb-6">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-md flex-shrink-0"></div>
+            <span class="font-bold text-xl bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+              Mindus Forge
+            </span>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Génération de code autonome, résiliente et contextuelle. L'IA qui comprend votre existant.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-5 text-lg text-slate-900">Produit</h4>
+          <ul class="space-y-3 text-slate-600">
+            <li><a href="/#features" class="hover:text-blue-600 transition-colors flex items-center">Fonctionnalités</a></li>
+            <li><a href="/#how_it_works" class="hover:text-blue-600 transition-colors flex items-center">Comment ça marche</a></li>
+            <li><a href="/#excellence" class="hover:text-blue-600 transition-colors flex items-center">Intelligence IA</a></li>
+            <li><a href="/pricing" class="hover:text-blue-600 transition-colors flex items-center font-medium text-blue-600">Tarifs</a></li>
+            <li><a href="/about" class="hover:text-blue-600 transition-colors flex items-center">À propos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-5 text-lg text-slate-900">Légal</h4>
+          <ul class="space-y-3 text-slate-600">
+            <li><a href="/privacy" class="hover:text-blue-600 transition-colors">Confidentialité</a></li>
+            <li><a href="/terme" class="hover:text-blue-600 transition-colors">Conditions d'utilisation</a></li>
+            <li><a href="/notice" class="hover:text-blue-600 transition-colors">Sécurité</a></li>
+            <li><a href="/privacy" class="hover:text-blue-600 transition-colors">RGPD</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-5 text-lg text-slate-900">Support</h4>
+          <ul class="space-y-3 text-slate-600">
+            <li class="flex items-center">
+              <i data-lucide="mail" class="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
+              <a href="mailto:contact@mindusforge.dev" class="hover:text-blue-600 truncate">contact@mindusforge.dev</a>
+            </li>
+            <li class="flex items-center">
+              <i data-lucide="file-text" class="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
+              <a href="/notice" class="hover:text-blue-600">Documentation API</a>
+            </li>
+            <li class="flex items-center">
+              <i data-lucide="message-circle" class="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
+              <a href="/about" class="hover:text-blue-600">Forum</a>
+            </li>
+            <li class="flex items-center">
+              <i data-lucide="book-open" class="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i>
+              <a href="/notice" class="hover:text-blue-600">Guide</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center text-slate-500 text-sm pt-8 border-t border-slate-200">
+        <p>© 2025 Mindus Forge. Tous droits réservés.</p>
+        <p class="mt-3 text-xs text-slate-400">
+          Conçu avec l'IA pour les développeurs d'exception
+        </p>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<script>
+  // Script pour gérer le menu mobile et les FAQs sans React
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialiser Lucide icons
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+    
+    // Menu mobile toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', function() {
+        if (mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.remove('hidden');
+          if (menuIcon) {
+            menuIcon.setAttribute('data-lucide', 'x');
+            if (window.lucide) lucide.createIcons();
+          }
+        } else {
+          mobileMenu.classList.add('hidden');
+          if (menuIcon) {
+            menuIcon.setAttribute('data-lucide', 'menu');
+            if (window.lucide) lucide.createIcons();
+          }
+        }
+      });
+    }
+    
+    // FAQ accordéon
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', function() {
+        const index = this.getAttribute('data-index');
+        const answer = document.querySelector(`.faq-answer[data-index="${index}"]`);
+        const icon = this.querySelector('.faq-icon i');
+        
+        if (answer) {
+          if (answer.classList.contains('hidden')) {
+            answer.classList.remove('hidden');
+            if (icon) {
+              icon.setAttribute('data-lucide', 'chevron-up');
+            }
+          } else {
+            answer.classList.add('hidden');
+            if (icon) {
+              icon.setAttribute('data-lucide', 'chevron-down');
+            }
+          }
+          if (window.lucide) lucide.createIcons();
+        }
+      });
+    });
+    
+    // Smooth scroll pour les ancres
+    document.querySelectorAll('a[href^="/#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const hash = this.getAttribute('href').substring(1); // enlève le /
+        const targetId = hash;
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  });
 </script>
 
 <script>
+  // Fallback pour s'assurer que les icônes s'affichent toujours
   function initLucide() {
     if (window.lucide) {
       lucide.createIcons();
@@ -1030,19 +1096,6 @@
   setTimeout(initLucide, 100);
   setTimeout(initLucide, 300);
   setTimeout(initLucide, 500);
-  
-  // Smooth scroll
-  document.addEventListener('click', function(e) {
-    const target = e.target.closest('a');
-    if (target && target.hash && target.hash.startsWith('#')) {
-      e.preventDefault();
-      const element = document.querySelector(target.hash);
-      if (element) {
-        element.scrollTop = 0; // Fix pour Firefox
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  });
 </script>
 
 </body>
