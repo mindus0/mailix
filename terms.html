@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Mindus Forge · Conditions d'utilisation | Plateforme de génération IA résiliente</title>
+  <meta name="description" content="Conditions générales d'utilisation de Mindus Forge – SaaS de génération de code contextuelle, autonome et résiliente. Lisez nos engagements, vos droits, et les modalités légales.">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- React, ReactDOM, Babel (conservés par cohérence mais page statique) -->
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <style>
+    /* Reset & corrections mobiles – identique à l'original */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { max-width: 100%; overflow-x: hidden; position: relative; }
+    body { font-family: 'Inter', sans-serif; background: #ffffff; color: #0f172a; width: 100%; overflow-x: hidden; }
+    #root, .min-h-screen { max-width: 100vw; overflow-x: hidden; }
+    .container-safe { width: 100%; max-width: 100%; padding-left: 20px !important; padding-right: 20px !important; margin-left: auto; margin-right: auto; }
+    .max-w-7xl { max-width: 1280px; width: 100%; margin-left: auto; margin-right: auto; padding-left: 20px; padding-right: 20px; }
+    img, video, iframe, canvas, svg, i, .lucide { max-width: 100%; height: auto; }
+    h1, .section-title, h2, h3 { word-break: break-word; overflow-wrap: break-word; hyphens: auto; }
+    .section-title { font-size: clamp(2rem, 8vw, 3.5rem); line-height: 1.1; letter-spacing: -0.02em; }
+    h1 span, h2 span { display: inline-block; max-width: 100%; }
+    .glass-white, .glass-card-white, .card-corporate, .gradient-border { max-width: 100%; box-sizing: border-box; }
+    .card-corporate { width: 100%; margin-left: 0; margin-right: 0; }
+
+    @media (max-width: 768px) {
+      .grid.md\:grid-cols-2.lg\:grid-cols-4 { display: flex; flex-direction: column; gap: 1.5rem; }
+      .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+      .flex.flex-wrap.gap-5 { flex-direction: column; width: 100%; }
+      .flex.items-center.space-x-8 { flex-direction: column; align-items: flex-start; gap: 0.75rem; margin-top: 1.5rem; }
+      .flex.items-center.space-x-8 > div { width: 100%; }
+      .glass-white.fixed .flex.justify-between { padding-left: 4px; padding-right: 4px; }
+      .floating-slow { max-width: 100%; }
+      footer .grid { gap: 2rem; }
+      .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-7 { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .max-w-7xl { padding-left: 16px; padding-right: 16px; }
+      h1 { font-size: clamp(1.8rem, 7vw, 2.2rem); }
+    }
+
+    /* Élégance conservée */
+    .glass-white { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(37, 99, 235, 0.15); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02); }
+    .glass-card-white { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(37, 99, 235, 0.1); box-shadow: 0 8px 32px rgba(0, 79, 254, 0.05); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .glass-card-white:hover { background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(37, 99, 235, 0.25); box-shadow: 0 12px 48px rgba(37, 99, 235, 0.12); transform: translateY(-4px); }
+    .card-corporate { background: white; border: 1px solid #eef2f6; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .card-corporate:hover { border: 1px solid #3b82f6; box-shadow: 0 20px 40px rgba(59, 130, 246, 0.08); }
+    .gradient-border { position: relative; border: 1px solid transparent; background: white; background-clip: padding-box; border-radius: 1rem; }
+    .gradient-border::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0; margin: -1px; border-radius: inherit; background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6); background-size: 300% 300%; animation: borderFlow 8s ease infinite; z-index: -1; }
+    @keyframes borderFlow { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+    .text-gradient-modern { background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #0891b2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .bg-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+    .particle { position: absolute; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%; opacity: 0.03; animation: floatParticle 20s infinite; }
+    .particle-1 { width: 400px; height: 400px; top: -100px; left: -100px; filter: blur(80px); }
+    .particle-2 { width: 500px; height: 500px; bottom: -150px; right: -100px; background: linear-gradient(135deg, #06b6d4, #3b82f6); opacity: 0.02; filter: blur(100px); animation-delay: -5s; }
+    .particle-3 { width: 300px; height: 300px; top: 40%; left: 20%; background: linear-gradient(135deg, #8b5cf6, #ec4899); opacity: 0.02; filter: blur(70px); animation-delay: -10s; }
+    .particle-4 { width: 450px; height: 450px; top: 60%; right: 15%; background: linear-gradient(135deg, #0ea5e9, #2563eb); opacity: 0.02; filter: blur(90px); animation-delay: -15s; }
+    @keyframes floatParticle { 0%,100% { transform: translate(0, 0); } 25% { transform: translate(50px, 30px); } 50% { transform: translate(20px, 80px); } 75% { transform: translate(-30px, 20px); } }
+    .floating-slow { animation: floating 8s ease-in-out infinite; }
+    @keyframes floating { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+    .pulse-subtle { animation: pulseSubtle 3s ease-in-out infinite; }
+    @keyframes pulseSubtle { 0%,100% { opacity: 0.3; } 50% { opacity: 0.4; } }
+    h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f8fafc; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3b82f6, #8b5cf6); border-radius: 4px; }
+    .btn-primary { background: linear-gradient(135deg, #2563eb, #4f46e5); color: white; border: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); transition: all 0.3s; }
+    .btn-primary:hover { background: linear-gradient(135deg, #3b82f6, #6366f1); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3); transform: translateY(-2px); }
+    .btn-secondary { background: white; border: 1px solid #e2e8f0; color: #1e293b; transition: all 0.3s; }
+    .btn-secondary:hover { background: #f8fafc; border-color: #3b82f6; color: #2563eb; transform: translateY(-2px); }
+    .icon-square { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border-radius: 12px; transition: all 0.3s; flex-shrink: 0; }
+    .animate-enter { animation: fadeInUp 0.6s ease-out; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    section, footer, nav > div, .gradient-border, .card-corporate { max-width: 100%; }
+
+    /* Style pour les blocs de texte juridique (lisibilité maximum) */
+    .legal-text p {
+      margin-bottom: 1.2rem;
+      line-height: 1.7;
+      color: #334155;
+      font-size: 1.05rem;
+    }
+    .legal-text h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      color: #0f172a;
+    }
+    .legal-text h4 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-top: 1.8rem;
+      margin-bottom: 0.75rem;
+      color: #1e293b;
+    }
+    .legal-text ul, .legal-text ol {
+      margin-bottom: 1.5rem;
+      padding-left: 1.8rem;
+      color: #334155;
+    }
+    .legal-text li {
+      margin-bottom: 0.5rem;
+    }
+    .legal-text hr {
+      margin: 2.5rem 0;
+      border-color: #e2e8f0;
+    }
+    .badge-excellence {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1));
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(37, 99, 235, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 antialiased min-h-screen w-full overflow-x-hidden">
+
+<!-- Particules animées en arrière-plan (identiques à l'original) -->
+<div class="bg-particles">
+  <div class="particle particle-1"></div>
+  <div class="particle particle-2"></div>
+  <div class="particle particle-3"></div>
+  <div class="particle particle-4"></div>
+</div>
+
+<div id="root"></div>
+
+<script type="text/babel">
+  const MindusTermsPage = () => {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+    
+    React.useEffect(() => {
+      if (window.lucide) {
+        setTimeout(() => lucide.createIcons(), 10);
+      }
+    }, [isMobileMenuOpen]);
+
+    // Date de dernière mise à jour
+    const lastUpdate = "15 février 2025";
+
+    return (
+      <div className="min-h-screen bg-white text-slate-900 relative w-full overflow-x-hidden">
+
+        {/* Navigation identique au style original, liens ajustés */}
+        <nav className="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
+          <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
+            {/* Logo */}
+            <div className="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
+              <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
+                <span className="text-white font-bold text-lg md:text-xl">MF</span>
+              </div>
+              <span className="font-bold text-xl md:text-2xl tracking-tight bg-gradient-to-r from-blue-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent whitespace-nowrap">
+                Mindus Forge
+              </span>
+            </div>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center space-x-10">
+              <a href="/" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
+              <a href="/tarifs" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Tarifs</a>
+              <a href="/terms.html" className="text-blue-700 font-semibold border-b-2 border-blue-600 pb-1">CGU</a>
+              <a href="/privacy" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Confidentialité</a>
+            </div>
+
+            {/* Auth Button + Burger */}
+            <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
+              <button className="hidden md:flex items-center space-x-2 bg-white border border-slate-200 hover:border-blue-300 px-5 py-2.5 rounded-xl text-slate-700 hover:text-blue-600 transition-all shadow-sm hover:shadow">
+                <i data-lucide="github" className="w-5 h-5"></i>
+                <span className="font-medium">Connexion</span>
+              </button>
+              
+              {/* Mobile menu button */}
+              <button 
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden text-slate-700 focus:outline-none p-2 -mr-1"
+              >
+                <i data-lucide={isMobileMenuOpen ? "x" : "menu"} className="w-6 h-6"></i>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg">
+              <div className="flex flex-col space-y-2">
+                <a href="/" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Accueil</a>
+                <a href="/tarifs" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Tarifs</a>
+                <a href="/terms.html" className="py-3 px-3 bg-blue-50 text-blue-700 font-medium rounded-lg">CGU</a>
+                <a href="/privacy" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Confidentialité</a>
+                <button className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-xl text-white mt-2">
+                  <i data-lucide="github" className="w-5 h-5"></i>
+                  <span>GitHub Auth</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </nav>
+
+        {/* MAIN CONTENT - CONDITIONS JURIDIQUES EXHAUSTIVES */}
+        <main className="pt-32 pb-20 relative z-10 w-full overflow-x-hidden">
+
+          {/* En-tête de la page conditions (style hero léger) */}
+          <section className="max-w-4xl mx-auto px-4 md:px-6 text-center mb-12">
+            <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-4 border border-blue-200">
+              <i data-lucide="scale" className="w-4 h-4 mr-2"></i>
+              Cadre légal Mindus Forge
+            </div>
+            <h1 className="section-title font-black leading-tight text-[clamp(2.2rem,8vw,4rem)]">
+              Conditions générales <br/><span className="text-gradient-modern">d'utilisation</span>
+            </h1>
+            <p className="text-lg text-slate-600 mt-6 max-w-2xl mx-auto">
+              Dernière mise à jour : <span className="font-semibold text-slate-900">{lastUpdate}</span>
+            </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto mt-8 rounded-full"></div>
+          </section>
+
+          {/* Contenu principal – texte abondant, structuré, pas de cartes/features */}
+          <div className="max-w-4xl mx-auto px-4 md:px-6 legal-text">
+            
+            {/* Préambule */}
+            <div className="card-corporate rounded-2xl p-8 md:p-10 mb-10 border-slate-200">
+              <p className="text-slate-700 text-lg leading-relaxed">
+                <span className="font-bold text-slate-900">Mindus Forge</span> (ci-après « la Plateforme ») est une solution SaaS de génération de code assistée par intelligence artificielle, éditée par Mindus SAS, entreprise immatriculée au RCS de Paris sous le numéro 912 345 678. 
+                Les présentes conditions régissent l'accès et l'utilisation de la Plateforme, de ses API, interfaces en ligne et outils associés. 
+                En utilisant Mindus Forge, vous reconnaissez avoir pris connaissance et accepter intégralement les clauses ci-après.
+              </p>
+            </div>
+
+            <h3>1. Définitions</h3>
+            <p><strong>Utilisateur :</strong> toute personne physique ou morale accédant à la Plateforme, qu'il s'agisse d'un compte gratuit ou payant.<br/>
+            <strong>Code généré :</strong> tout fichier, fragment, script, configuration ou documentation produit par l'IA de Mindus Forge à la demande de l'Utilisateur.<br/>
+            <strong>Dépôt :</strong> espace de stockage de code source (GitHub, GitLab, etc.) que l'Utilisateur choisit de connecter à la Plateforme.<br/>
+            <strong>Résilience :</strong> fonctionnalité permettant la poursuite des opérations en mode hors ligne avec synchronisation ultérieure.</p>
+
+            <h3>2. Acceptation des conditions</h3>
+            <p>L'utilisation de Mindus Forge implique l'acceptation pleine et entière des présentes CGU. Si vous utilisez la Plateforme au nom d'une entité légale, vous déclarez disposer de l'autorité nécessaire pour lier cette entité. Mindus SAS se réserve le droit de modifier ces conditions à tout moment ; les Utilisateurs seront informés par notification sur la Plateforme ou par courriel. La version applicable est celle en vigueur au moment de l'utilisation.</p>
+
+            <h3>3. Création de compte et sécurité</h3>
+            <p>L'accès à la Plateforme nécessite l'enregistrement via GitHub OAuth ou par email. L'Utilisateur est responsable de la confidentialité de ses identifiants. Toute activité réalisée depuis son compte est réputée effectuée par lui. En cas de perte, d'utilisation non autorisée ou de faille de sécurité, l'Utilisateur doit immédiatement contacter support@mindusforge.dev. Mindus SAS ne pourra être tenue responsable des préjudices résultant d'une usurpation d'identité.</p>
+
+            <h3>4. Abonnements, facturation et tarifs</h3>
+            <p>Mindus Forge propose des offres gratuites (limitées en volume de génération) et payantes (mensuelles ou annuelles). Les tarifs sont indiqués sur la page /tarifs, en euros hors taxes. Le paiement est exigible à l'avance, par carte bancaire ou virement. En cas d'échec de prélèvement, l'accès peut être suspendu. L'Utilisateur peut résilier à tout moment depuis son espace ; la résiliation prend effet à la fin de la période en cours. Aucun remboursement partiel n'est accordé en cas de résiliation anticipée, sauf disposition légale impérative.</p>
+
+            <h4>4.1 Offre Scale et Enterprise</h4>
+            <p>Les plans Scale et Enterprise permettent l'utilisation d'une clé API Gemini personnelle. L'Utilisateur est seul responsable de l'usage de cette clé et du respect des conditions de Google. Mindus SAS n'a pas accès à la clé en clair après configuration. La facturation des plans Enterprise est établie sur devis et fait l'objet d'un contrat séparé.</p>
+
+            <h3>5. Accès à la Plateforme et résilience</h3>
+            <p>Mindus Forge est accessible 24h/24 et 7j/7 sous réserve des opérations de maintenance. La fonctionnalité de résilience permet à l'Utilisateur de continuer à générer du code même en cas de déconnexion : les données sont stockées localement (cache sécurisé) et synchronisées automatiquement lors du retour en ligne. Mindus SAS met en œuvre des sauvegardes chiffrées, mais ne peut garantir une absence totale de perte en cas de défaillance matérielle extrême. L'Utilisateur est invité à conserver des copies de ses travaux via Git.</p>
+
+            <h3>6. Utilisation de l'IA – génération de code</h3>
+            <p>La Plateforme utilise des modèles d'intelligence artificielle (dont Gemini de Google) pour produire du code à partir des instructions de l'Utilisateur. L'Utilisateur reconnaît que le code généré peut contenir des erreurs, des incohérences ou des vulnérabilités. Il lui incombe de vérifier, tester et valider tout code avant de le déployer en production. Mindus SAS ne saurait être tenue responsable des dommages directs ou indirects résultant de l'utilisation du code généré.</p>
+
+            <h4>6.1 Analyse de dépôts existants</h4>
+            <p>Lorsque l'Utilisateur autorise Mindus Forge à analyser un dépôt (GitHub, GitLab, etc.), la Plateforme lit les fichiers pour comprendre l'architecture, les conventions et les dépendances. Ces données sont utilisées uniquement pour améliorer la pertinence du code généré et ne sont pas réutilisées à d'autres fins. L'Utilisateur garantit qu'il dispose des droits nécessaires pour autoriser cette analyse.</p>
+
+            <h4>6.2 Sous-dossiers /forge/</h4>
+            <p>Par défaut, Mindus Forge génère le code dans un sous-dossier <code>/forge/</code> ou <code>/forge-[feature]/</code> à la racine du dépôt ou dans l'espace de travail. Cette convention permet d'éviter tout écrasement involontaire de code existant. L'Utilisateur peut modifier ce comportement via les paramètres avancés, sous sa responsabilité.</p>
+
+            <h3>7. Propriété intellectuelle</h3>
+            <p><strong>7.1 Code généré :</strong> Mindus SAS cède à l'Utilisateur tous les droits patrimoniaux sur le code généré, à l'exception des morceaux de code génériques ou des templates réutilisables (licence MIT inclus dans la Plateforme). L'Utilisateur est libre d'exploiter ce code comme il le souhaite.</p>
+            <p><strong>7.2 Plateforme et IA :</strong> Les logiciels, algorithmes, modèles, interfaces et marques de Mindus Forge restent la propriété exclusive de Mindus SAS. Les présentes conditions n'emportent aucune cession de droits sur ces éléments.</p>
+
+            <h3>8. Données personnelles et confidentialité</h3>
+            <p>Le traitement des données à caractère personnel est régi par notre Politique de confidentialité, accessible depuis le site. Conformément au RGPD, l'Utilisateur dispose d'un droit d'accès, de rectification et de suppression de ses données. Les données de code (dépôts, fichiers) ne sont pas considérées comme des données personnelles, mais elles sont traitées avec la même rigueur : chiffrement en transit, accès restreint, non-utilisation pour l'entraînement des modèles sans anonymisation préalable.</p>
+
+            <h3>9. Obligations et conduite de l'Utilisateur</h3>
+            <p>L'Utilisateur s'engage à ne pas utiliser Mindus Forge pour :</p>
+            <ul>
+              <li>générer du code malveillant, illégal, ou contraire à l'ordre public ;</li>
+              <li>tenter de contourner les limites techniques, de mener des attaques par force brute ou de reverser les modèles ;</li>
+              <li>enfreindre les droits de propriété intellectuelle de tiers ;</li>
+              <li>héberger ou partager du code contenant des informations sensibles (mots de passe, clés privées) sans précaution ;</li>
+              <li>utiliser la Plateforme pour des activités de développement liées à des armes, à la surveillance de masse ou à la violation des droits humains.</li>
+            </ul>
+            <p>Tout manquement peut entraîner la suspension immédiate du compte sans préavis ni remboursement.</p>
+
+            <h3>10. Garanties et responsabilité</h3>
+            <p>Mindus Forge est fourni « en l'état », sans garantie expresse ou implicite d'adéquation à un usage particulier. Nous nous efforçons de maintenir un service de qualité, mais ne garantissons pas l'absence totale d'erreurs, d'interruptions ou de bugs. Dans la limite autorisée par la loi, la responsabilité de Mindus SAS est limitée au montant des sommes versées par l'Utilisateur au cours des douze mois précédant le sinistre.</p>
+
+            <h4>10.1 Cas des générations critiques</h4>
+            <p>L'Utilisateur reconnaît que le code généré peut servir de base à des applications critiques (santé, finance, infrastructure). Il lui appartient de mettre en œuvre tous les tests nécessaires. Mindus SAS ne pourra être tenue responsable en cas de dysfonctionnement, perte de données, interruption d'activité ou préjudice commercial.</p>
+
+            <h3>11. Force majeure</h3>
+            <p>La responsabilité de Mindus SAS ne pourra être engagée en cas d'inexécution ou de retard d'exécution dû à un cas de force majeure tel que défini par la jurisprudence française (événement imprévisible, irrésistible et extérieur).</p>
+
+            <h3>12. Durée et résiliation</h3>
+            <p>Les présentes conditions sont valables pour une durée indéterminée à compter de l'acceptation par l'Utilisateur. L'Utilisateur peut résilier son compte à tout moment depuis l'interface. Mindus SAS peut résilier le compte d'un Utilisateur en cas de manquement grave après mise en demeure restée infructueuse. La résiliation entraîne la suppression des données de l'Utilisateur dans un délai de 30 jours, sauf obligation légale de conservation.</p>
+
+            <h3>13. Support et assistance</h3>
+            <p>Le support est assuré par email à l'adresse support@mindusforge.dev, avec un délai de réponse variable selon le plan souscrit (48h pour les comptes gratuits, 12h pour les comptes payants, prioritaire pour Enterprise). Un centre d'aide et une documentation sont disponibles en ligne.</p>
+
+            <h3>14. Dispositions diverses</h3>
+            <p><strong>Langue :</strong> Les présentes CGU sont rédigées en français. En cas de traduction, seule la version française fait foi.<br/>
+            <strong>Nullité partielle :</strong> Si une clause est jugée invalide, les autres restent pleinement applicables.<br/>
+            <strong>Non renonciation :</strong> Le fait pour Mindus SAS de ne pas se prévaloir d'un manquement ne vaut pas renonciation à s'en prévaloir ultérieurement.</p>
+
+            <h3>15. Loi applicable et attribution de juridiction</h3>
+            <p>Les présentes CGU sont soumises au droit français. En cas de litige, les tribunaux de Paris seront compétents, sauf disposition impérative contraire. Pour tout litige avec un professionnel, cette clause attributive de juridiction est pleinement applicable.</p>
+
+            <hr className="my-12" />
+
+            {/* Annexe ou petit bloc de contact */}
+            <div className="bg-slate-50 rounded-xl p-8 border border-slate-200 text-center">
+              <i data-lucide="mail" className="w-10 h-10 text-blue-500 mx-auto mb-4"></i>
+              <h4 className="text-xl font-bold mb-2">Une question juridique ?</h4>
+              <p className="text-slate-600">Notre équipe légale est joignable à l'adresse <span className="font-mono text-blue-700 bg-blue-50 px-3 py-1 rounded-full text-sm">legal@mindusforge.dev</span>.<br/>Nous vous répondrons sous 48 heures ouvrées.</p>
+            </div>
+
+            {/* Bloc "mentions légales" simplifiées */}
+            <div className="mt-12 text-sm text-slate-400 text-center border-t border-slate-100 pt-8">
+              <p>Mindus SAS – 12 rue de la Fonderie, 75011 Paris – RCS Paris 912 345 678 – TVA FR23912345678</p>
+              <p className="mt-2">Directeur de la publication : Claire Delacroix, Présidente</p>
+            </div>
+
+          </div> {/* fin legal-text */}
+
+          {/* Section rappel "pour en savoir plus" mais sans carte */}
+          <div className="max-w-4xl mx-auto px-4 md:px-6 mt-20">
+            <div className="border-t border-slate-200 pt-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-5">
+              <div>
+                <span className="text-slate-500 text-sm">Version consolidée au {lastUpdate}</span>
+                <p className="text-slate-600 mt-1">Consultez également notre <a href="#" className="text-blue-600 underline decoration-blue-300">Politique de confidentialité</a>.</p>
+              </div>
+              <a href="/" className="btn-secondary px-6 py-3 rounded-xl inline-flex items-center gap-2">
+                <i data-lucide="arrow-left" className="w-5 h-5"></i> Retour à l'accueil
+              </a>
+            </div>
+          </div>
+
+        </main>
+
+        {/* Footer identique à l'original (liens adaptés) */}
+        <footer className="border-t border-slate-200 mt-20 pt-16 pb-8 px-4 md:px-6 w-full">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-4 gap-10 md:gap-12 mb-16">
+              <div className="w-full">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-md flex-shrink-0"></div>
+                  <span className="font-bold text-xl bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+                    Mindus Forge
+                  </span>
+                </div>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Génération de code autonome, résiliente et contextuelle. L'IA qui comprend votre existant.
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-5 text-lg text-slate-900">Produit</h4>
+                <ul className="space-y-3 text-slate-600">
+                  <li><a href="/" className="hover:text-blue-600 transition-colors flex items-center">Accueil</a></li>
+                  <li><a href="/tarifs" className="hover:text-blue-600 transition-colors flex items-center">Tarifs</a></li>
+                  <li><a href="/terms.html" className="text-blue-600 font-medium">CGU</a></li>
+                  <li><a href="/privacy" className="hover:text-blue-600 transition-colors flex items-center">Confidentialité</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-5 text-lg text-slate-900">Légal</h4>
+                <ul className="space-y-3 text-slate-600">
+                  <li><a href="/terms.html" className="hover:text-blue-600 transition-colors">Conditions d'utilisation</a></li>
+                  <li><a href="/privacy" className="hover:text-blue-600 transition-colors">Confidentialité</a></li>
+                  <li><a href="/cookies" className="hover:text-blue-600 transition-colors">Cookies</a></li>
+                  <li><a href="/legal" className="hover:text-blue-600 transition-colors">Mentions légales</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-5 text-lg text-slate-900">Support</h4>
+                <ul className="space-y-3 text-slate-600">
+                  <li className="flex items-center"><i data-lucide="mail" className="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i><a href="mailto:contact@mindusforge.dev" className="hover:text-blue-600 truncate">contact@mindusforge.dev</a></li>
+                  <li className="flex items-center"><i data-lucide="file-text" className="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i><a href="#" className="hover:text-blue-600">Documentation API</a></li>
+                  <li className="flex items-center"><i data-lucide="message-circle" className="w-4 h-4 mr-2 text-slate-500 flex-shrink-0"></i><a href="#" className="hover:text-blue-600">Forum</a></li>
+                </ul>
+              </div>
+            </div>
+            <div className="text-center text-slate-500 text-sm pt-8 border-t border-slate-200">
+              <p>© {new Date().getFullYear()} Mindus Forge (Mindus SAS). Tous droits réservés.</p>
+              <p className="mt-3 text-xs text-slate-400">Conçu avec l'IA pour les développeurs d'exception</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    );
+  };
+
+  // Render
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<MindusTermsPage />);
+  }
+</script>
+
+<script>
+  function initLucide() { if (window.lucide) lucide.createIcons(); }
+  window.addEventListener('load', initLucide);
+  setTimeout(initLucide, 100);
+  setTimeout(initLucide, 300);
+  setTimeout(initLucide, 500);
+  
+  // Smooth scroll (pour les ancres éventuelles)
+  document.addEventListener('click', function(e) {
+    const target = e.target.closest('a');
+    if (target && target.hash && target.hash.startsWith('#') && target.pathname === window.location.pathname) {
+      e.preventDefault();
+      const element = document.querySelector(target.hash);
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+</script>
+
+</body>
+</html>
