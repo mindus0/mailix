@@ -21,7 +21,7 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   
   <style>
-    /* Reset & corrections mobiles impératives */
+    /* ===== RESET & CORRECTIONS RESPONSIVE CRITIQUES ===== */
     * {
       margin: 0;
       padding: 0;
@@ -32,6 +32,7 @@
       max-width: 100%;
       overflow-x: hidden;
       position: relative;
+      width: 100%;
     }
 
     body {
@@ -40,6 +41,7 @@
       color: #0f172a;
       width: 100%;
       overflow-x: hidden;
+      padding: 0 !important; /* Géré par les conteneurs */
     }
 
     #root, .min-h-screen {
@@ -47,129 +49,234 @@
       overflow-x: hidden;
     }
 
-    /* Conteneurs sécurisés */
-    .container-safe {
+    /* ===== CONTENEURS SÉCURISÉS AVEC PADDINGS FIXES ===== */
+    .container-safe, 
+    .max-w-7xl, 
+    section > div:not(.bg-particles),
+    footer > div {
       width: 100%;
       max-width: 100%;
-      padding-left: 20px !important;
-      padding-right: 20px !important;
+      padding-left: 24px !important;
+      padding-right: 24px !important;
       margin-left: auto;
       margin-right: auto;
     }
 
-    /* Tous les conteneurs majeurs héritent du padding sécurisé */
-    .max-w-7xl {
-      max-width: 1280px;
-      width: 100%;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 20px;
-      padding-right: 20px;
+    /* Padding spécifique selon breakpoints */
+    @media (min-width: 640px) {
+      .container-safe, 
+      .max-w-7xl, 
+      section > div:not(.bg-particles) {
+        padding-left: 32px !important;
+        padding-right: 32px !important;
+      }
     }
 
-    /* Suppression scroll horizontal forcé */
-    img, video, iframe, canvas, svg, i, .lucide {
-      max-width: 100%;
-      height: auto;
+    @media (min-width: 1280px) {
+      .container-safe, 
+      .max-w-7xl {
+        max-width: 1280px;
+        padding-left: 48px !important;
+        padding-right: 48px !important;
+      }
     }
 
-    /* Titres fluides – correction mobile */
-    h1, .section-title, h2, h3 {
+    /* ===== TYPOGRAPHIE FLUIDE CORRIGÉE ===== */
+    h1, .section-title, h2, h3, h4 {
       word-break: break-word;
       overflow-wrap: break-word;
       hyphens: auto;
+      max-width: 100%;
     }
 
     .section-title {
-      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-size: clamp(1.8rem, 7vw, 3.5rem);
       line-height: 1.1;
       letter-spacing: -0.02em;
     }
 
-    h1 span, h2 span {
-      display: inline-block;
-      max-width: 100%;
+    h1 {
+      font-size: clamp(1.8rem, 8vw, 3.5rem);
     }
 
-    /* Glass card sans débordement */
-    .glass-white, .glass-card-white, .card-corporate, .gradient-border {
-      max-width: 100%;
-      box-sizing: border-box;
+    h2 {
+      font-size: clamp(1.6rem, 6vw, 2.8rem);
     }
 
-    .card-corporate {
+    /* Titre spécifique "Comprend votre existant" - correction coupure */
+    .text-gradient-modern {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #0891b2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline;
+      white-space: normal;
+      word-break: keep-all;
+    }
+
+    /* ===== LISTES À PUCES PERFECT ALIGNMENT ===== */
+    .check-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
       width: 100%;
-      margin-left: 0;
-      margin-right: 0;
     }
 
-    /* Pile verticale sur mobile pour les features */
-    @media (max-width: 768px) {
-      .grid.md\:grid-cols-2.lg\:grid-cols-4 {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-      }
+    .check-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      width: 100%;
+    }
 
-      /* Boutons pleine largeur */
-      .btn-primary, .btn-secondary {
+    .check-list-icon {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #d1fae5;
+      border-radius: 9999px;
+      margin-top: 0.125rem;
+    }
+
+    .check-list-text {
+      flex: 1;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #334155;
+      word-break: break-word;
+    }
+
+    @media (max-width: 640px) {
+      .check-list-item {
+        gap: 0.625rem;
+      }
+      .check-list-text {
+        font-size: 0.95rem;
+      }
+    }
+
+    /* ===== BLOCS DE CODE SCROLLABLES - CORRECTION ULTRA ===== */
+    .code-block-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 0.75rem;
+      background: #f8fafc;
+    }
+
+    .code-block {
+      display: inline-block;
+      min-width: 100%;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      line-height: 1.6;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+
+    .code-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.125rem 0;
+    }
+
+    /* Nom de fichier lisible */
+    .filename-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.375rem 0.75rem;
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    @media (min-width: 768px) {
+      .code-block {
+        font-size: 0.875rem;
+        padding: 1.25rem;
+      }
+      .filename-badge {
+        font-size: 0.8rem;
+      }
+    }
+
+    /* ===== BOUTONS TACTILES OPTIMISÉS ===== */
+    .btn-primary, 
+    .btn-secondary,
+    button[class*="btn"] {
+      min-height: 48px;
+      padding: 0.75rem 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      border-radius: 0.75rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    @media (max-width: 640px) {
+      .btn-primary, 
+      .btn-secondary {
         width: 100%;
-        justify-content: center;
-      }
-
-      .flex.flex-wrap.gap-5 {
-        flex-direction: column;
-        width: 100%;
-      }
-
-      /* Éléments réassurance en colonne */
-      .flex.items-center.space-x-8 {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-        margin-top: 1.5rem;
-      }
-
-      .flex.items-center.space-x-8 > div {
-        width: 100%;
-      }
-
-      /* Logo et navigation mieux centrés */
-      .glass-white.fixed .flex.justify-between {
-        padding-left: 4px;
-        padding-right: 4px;
-      }
-
-      /* Éviter chevauchement code visualizer */
-      .floating-slow {
-        max-width: 100%;
-      }
-
-      /* Footer mobile */
-      footer .grid {
-        gap: 2rem;
+        min-height: 52px;
+        font-size: 1rem;
+        padding: 0.875rem 1.25rem;
       }
       
-      /* Tech stack en grille plus serrée */
-      .grid.grid-cols-2.md\:grid-cols-3.lg\:grid-cols-7 {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
+      .flex-col\:sm\:flex-row {
+        flex-direction: column;
+        gap: 0.75rem;
       }
     }
 
-    /* Très petits écrans */
+    /* ===== BADGES - PAS DE CHEVAUCHEMENT ===== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 9999px;
+      color: #1e40af;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      white-space: nowrap;
+    }
+
     @media (max-width: 480px) {
-      .max-w-7xl {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      h1 {
-        font-size: clamp(1.8rem, 7vw, 2.2rem);
+      .badge {
+        font-size: 0.7rem;
+        padding: 0.375rem 0.75rem;
+        white-space: normal;
+        word-break: break-word;
+        text-align: left;
       }
     }
 
-    /* Reste du style inchangé */
+    /* ===== GLASS & CARTES SANS DÉBORDEMENT ===== */
+    .glass-white,
+    .glass-card-white,
+    .card-corporate,
+    .gradient-border {
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* ===== STYLES EXISTANTS CONSERVÉS ===== */
     .glass-white {
       background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(12px);
@@ -232,13 +339,6 @@
     @keyframes borderFlow {
       0%, 100% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
-    }
-    
-    .text-gradient-modern {
-      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #0891b2 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
     
     .bg-particles {
@@ -362,7 +462,6 @@
       color: white;
       border: none;
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-      transition: all 0.3s;
     }
     
     .btn-primary:hover {
@@ -375,7 +474,6 @@
       background: white;
       border: 1px solid #e2e8f0;
       color: #1e293b;
-      transition: all 0.3s;
     }
     
     .btn-secondary:hover {
@@ -411,9 +509,69 @@
       }
     }
 
-    /* Force safe padding sur tous les conteneurs principaux */
+    /* ===== CORRECTIONS SPÉCIFIQUES MOBILE ===== */
+    @media (max-width: 768px) {
+      /* Pile verticale pour les features */
+      .grid.md\:grid-cols-2.lg\:grid-cols-4 {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      /* Navigation mobile */
+      .glass-white.fixed .flex.justify-between {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      /* Footer en colonne */
+      footer .grid {
+        gap: 2rem;
+      }
+
+      /* Icônes + texte alignement */
+      .flex.items-center.space-x-8 {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+      
+      /* Animation flottante réduite */
+      .floating-slow {
+        animation: floating 6s ease-in-out infinite;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .max-w-7xl,
+      section > div:not(.bg-particles) {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+      }
+
+      h1 {
+        font-size: clamp(1.6rem, 7vw, 2rem);
+      }
+      
+      h2 {
+        font-size: clamp(1.4rem, 5.5vw, 1.8rem);
+      }
+      
+      .section-title {
+        font-size: clamp(1.5rem, 6vw, 2rem);
+      }
+    }
+
+    /* Suppression du scroll horizontal forcé */
+    img, video, iframe, canvas, svg, i, .lucide {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Force safe padding sur tous les conteneurs */
     section, footer, nav > div, .gradient-border, .card-corporate {
       max-width: 100%;
+      overflow-x: hidden;
     }
   </style>
 </head>
@@ -433,7 +591,6 @@
   const MindusForgeApp = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
     const [openFaqIndex, setOpenFaqIndex] = React.useState(null);
-    const [activeTab, setActiveTab] = React.useState('features');
     
     React.useEffect(() => {
       if (window.lucide) {
@@ -513,21 +670,11 @@
       }
     ];
 
-    const techStack = [
-      { name: 'Gemini', icon: 'sparkles', bgColor: 'bg-blue-50', iconColor: 'text-blue-600', borderColor: 'border-blue-200' },
-      { name: 'Python', icon: 'terminal', bgColor: 'bg-yellow-50', iconColor: 'text-yellow-600', borderColor: 'border-yellow-200' },
-      { name: 'React', icon: 'code-2', bgColor: 'bg-cyan-50', iconColor: 'text-cyan-600', borderColor: 'border-cyan-200' },
-      { name: 'Baserow', icon: 'database', bgColor: 'bg-emerald-50', iconColor: 'text-emerald-600', borderColor: 'border-emerald-200' },
-      { name: 'Git', icon: 'git-branch', bgColor: 'bg-orange-50', iconColor: 'text-orange-600', borderColor: 'border-orange-200' },
-      { name: 'TypeScript', icon: 'file-code', bgColor: 'bg-blue-50', iconColor: 'text-blue-600', borderColor: 'border-blue-200' },
-      { name: 'Docker', icon: 'container', bgColor: 'bg-sky-50', iconColor: 'text-sky-600', borderColor: 'border-sky-200' }
-    ];
-
     return (
       <div className="min-h-screen bg-white text-slate-900 relative w-full overflow-x-hidden">
-        {/* Navigation - avec padding sécurisé */}
-        <nav className="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
-          <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
+        {/* ===== NAVIGATION - PADDINGS SÉCURISÉS ===== */}
+        <nav className="glass-white fixed top-0 left-0 right-0 z-50 py-3 md:py-4 border-b border-slate-200/50 w-full">
+          <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-5 md:px-8">
             {/* Logo */}
             <div className="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
               <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
@@ -564,35 +711,36 @@
             </div>
           </div>
 
-          {/* Mobile Menu - AJOUT DU LIEN TARIFS */}
+          {/* Mobile Menu */}
           {isMobileMenuOpen && (
-            <div className="md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg">
-              <div className="flex flex-col space-y-2">
+            <div className="md:hidden glass-white mt-4 mx-5 p-5 rounded-xl border border-slate-200 shadow-lg">
+              <div className="flex flex-col space-y-3">
                 <a href="#hero" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Accueil</a>
                 <a href="#features" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Forge</a>
                 <a href="#how_it_works" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">Fonctionnement</a>
                 <a href="#faq" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700">FAQ</a>
                 <a href="/tarifs" className="py-3 px-3 hover:bg-slate-100 rounded-lg text-slate-700 font-medium text-blue-600">Tarifs</a>
-                <button className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-xl text-white mt-2">
+                <button className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-3.5 rounded-xl text-white mt-2 min-h-[52px]">
                   <i data-lucide="github" className="w-5 h-5"></i>
-                  <span>GitHub Auth</span>
+                  <span>Connexion avec GitHub</span>
                 </button>
               </div>
             </div>
           )}
         </nav>
 
-        {/* Main Content - padding global sécurisé */}
+        {/* ===== MAIN CONTENT - PADDINGS GLOBAUX ===== */}
         <main className="pt-28 pb-20 relative z-10 w-full overflow-x-hidden">
-          {/* Hero Section */}
-          <section id="hero" className="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-24">
+          
+          {/* ===== HERO SECTION ===== */}
+          <section id="hero" className="max-w-7xl mx-auto px-5 md:px-8 py-12 md:py-24">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
               <div className="animate-enter w-full">
-                <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-6 border border-blue-200">
+                <div className="badge">
                   <i data-lucide="zap" className="w-4 h-4 mr-2 flex-shrink-0"></i>
                   IA générative nouvelle génération
                 </div>
-                <h1 className="section-title font-black leading-tight text-[clamp(2rem,8vw,3.5rem)]">
+                <h1 className="font-black leading-tight">
                   Forgez votre
                   <span className="text-gradient-modern block mt-2 break-words">
                     code, sans limites
@@ -604,11 +752,11 @@
                   même hors ligne.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mt-10 w-full">
-                  <button className="btn-primary px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center justify-center shadow-lg hover:shadow-xl transition-all w-full sm:w-auto">
+                  <button className="btn-primary px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center justify-center shadow-lg hover:shadow-xl transition-all w-full sm:w-auto min-h-[52px] sm:min-h-[56px]">
                     <span>Commencer gratuitement</span>
                     <i data-lucide="arrow-right" className="w-5 h-5 ml-2 flex-shrink-0"></i>
                   </button>
-                  <button className="btn-secondary px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center justify-center w-full sm:w-auto">
+                  <button className="btn-secondary px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center justify-center w-full sm:w-auto min-h-[52px] sm:min-h-[56px]">
                     <i data-lucide="play" className="w-5 h-5 mr-2 flex-shrink-0"></i>
                     Voir la démo
                   </button>
@@ -632,16 +780,20 @@
                     <div className="w-3 h-3 bg-rose-500 rounded-full"></div>
                     <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
                     <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                    <span className="text-xs text-slate-500 ml-2 font-mono truncate">forge_generation.tsx</span>
+                    <span className="filename-badge ml-2 truncate max-w-[180px]">
+                      forge_generation.tsx
+                    </span>
                   </div>
-                  <div className="font-mono text-xs md:text-sm space-y-3 bg-slate-50 p-4 rounded-xl overflow-x-auto">
-                    <div className="text-blue-700 whitespace-nowrap">const MindusForge = async (repo: Repository) =&gt; {'{'}</div>
-                    <div className="ml-4 text-slate-700 whitespace-nowrap">const analysis = <span className="text-purple-700 font-semibold">await Gemini.analyze</span>(repo);</div>
-                    <div className="ml-4 text-slate-700 whitespace-nowrap">const newModule = <span className="text-emerald-700 font-semibold">generate.architecture</span>(analysis);</div>
-                    <div className="ml-4 text-slate-700 whitespace-nowrap">await <span className="text-blue-700 font-semibold">Git.sync</span>(newModule, 'forge/new-feature');</div>
-                    <div className="text-blue-700 whitespace-nowrap">{'}'}</div>
-                    <div className="text-emerald-700 mt-4 code-visualizer bg-emerald-50 p-2 rounded-lg text-xs md:text-sm w-full overflow-hidden">
-                      &gt; Résilience activée · Sauvegarde locale · Prêt pour déploiement
+                  <div className="code-block-container">
+                    <div className="code-block">
+                      <div className="code-line text-blue-700">const MindusForge = async (repo: Repository) =&gt; {'{'}</div>
+                      <div className="code-line ml-4 text-slate-700">const analysis = <span className="text-purple-700 font-semibold">await Gemini.analyze</span>(repo);</div>
+                      <div className="code-line ml-4 text-slate-700">const newModule = <span className="text-emerald-700 font-semibold">generate.architecture</span>(analysis);</div>
+                      <div className="code-line ml-4 text-slate-700">await <span className="text-blue-700 font-semibold">Git.sync</span>(newModule, 'forge/new-feature');</div>
+                      <div className="code-line text-blue-700">{'}'}</div>
+                      <div className="code-line text-emerald-700 mt-4 bg-emerald-50 p-2 rounded-lg w-full">
+                        &gt; Résilience activée · Sauvegarde locale · Prêt pour déploiement
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -651,14 +803,14 @@
             </div>
           </section>
 
-          {/* Features - 4 Piliers (empilés sur mobile) */}
-          <section id="features" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
+          {/* ===== FEATURES - 4 PILIERS ===== */}
+          <section id="features" className="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-32">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 text-sm font-medium mb-4 border border-indigo-200">
+              <div className="badge bg-indigo-50 text-indigo-700 border-indigo-200 mx-auto">
                 <i data-lucide="crown" className="w-4 h-4 mr-2"></i>
                 Architecture unique
               </div>
-              <h2 className="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
+              <h2 className="section-title font-bold mb-4">
                 Les <span className="text-gradient-modern">4 piliers</span> de Forge
               </h2>
               <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto px-2">
@@ -666,7 +818,7 @@
               </p>
             </div>
             
-            {/* Force l'empilement vertical sur mobile */}
+            {/* Empilement vertical sur mobile */}
             <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               {features.map((feature, idx) => (
                 <div 
@@ -684,14 +836,14 @@
             </div>
           </section>
 
-          {/* How it works */}
-          <section id="how_it_works" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32 bg-slate-50/50 rounded-3xl">
+          {/* ===== HOW IT WORKS ===== */}
+          <section id="how_it_works" className="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-32 bg-slate-50/50 rounded-3xl">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-4 border border-blue-200">
+              <div className="badge bg-blue-50 text-blue-700 border-blue-200 mx-auto">
                 <i data-lucide="workflow" className="w-4 h-4 mr-2"></i>
                 Workflow intelligent
               </div>
-              <h2 className="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
+              <h2 className="section-title font-bold mb-4">
                 De l'<span className="text-gradient-modern">idée</span> au push
               </h2>
               <p className="text-lg md:text-xl text-slate-600">Un workflow sans friction, 4 étapes seulement</p>
@@ -718,12 +870,12 @@
             </div>
           </section>
 
-          {/* AI Capabilities */}
-          <section id="ai_capabilities" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
+          {/* ===== AI CAPABILITIES - CORRECTION LISTE À PUCES ===== */}
+          <section id="ai_capabilities" className="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-32">
             <div className="gradient-border bg-white rounded-3xl p-6 md:p-12 w-full">
               <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
                 <div>
-                  <div className="inline-flex items-center px-4 py-2 bg-purple-50 rounded-full text-purple-700 text-sm font-medium mb-6 border border-purple-200">
+                  <div className="badge bg-purple-50 text-purple-700 border-purple-200">
                     <i data-lucide="brain" className="w-4 h-4 mr-2"></i>
                     IA contextuelle
                   </div>
@@ -733,7 +885,9 @@
                   <p className="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
                     Mindus Forge ne part pas de zéro. Il lit, analyse et s'adapte à votre base de code comme le ferait un architecte logiciel expérimenté.
                   </p>
-                  <ul className="space-y-4">
+                  
+                  {/* LISTE À PUCES PERFECT ALIGNMENT - CORRIGÉ */}
+                  <div className="check-list">
                     {[
                       'Analyse sémantique des dépôts Git', 
                       'Création de sous-dossiers intelligents', 
@@ -741,15 +895,17 @@
                       'Réutilisation des composants existants',
                       'Détection automatique des dépendances'
                     ].map((item, idx) => (
-                      <li key={idx} className="flex items-start space-x-3">
-                        <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-0.5">
+                      <div key={idx} className="check-list-item">
+                        <div className="check-list-icon">
                           <i data-lucide="check" className="w-4 h-4 text-emerald-600"></i>
                         </div>
-                        <span className="text-slate-700 text-base md:text-lg">{item}</span>
-                      </li>
+                        <span className="check-list-text">{item}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
+                
+                {/* BLOC DE CODE SCROLLABLE - CORRIGÉ */}
                 <div className="relative w-full">
                   <div className="bg-white p-5 md:p-6 rounded-2xl border border-slate-200 shadow-lg w-full">
                     <div className="flex items-center space-x-3 mb-6">
@@ -758,32 +914,33 @@
                       </div>
                       <span className="font-semibold text-lg text-slate-900">Gemini Analysis Engine</span>
                     </div>
-                    <div className="space-y-3 text-xs md:text-sm font-mono bg-slate-50 p-4 md:p-5 rounded-xl overflow-x-auto">
-                      <div className="text-slate-500 flex items-center whitespace-nowrap">
-                        <i data-lucide="terminal" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                        git clone https://github.com/techcorp/legacy-portal
-                      </div>
-                      <div className="text-blue-600 flex items-center whitespace-nowrap">
-                        <i data-lucide="zap" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                        forge analyze --deep --context
-                      </div>
-                      <div className="text-emerald-600 mt-3 space-y-1">
-                        <div className="flex items-center whitespace-nowrap">
+                    
+                    <div className="code-block-container bg-slate-50 rounded-xl">
+                      <div className="code-block">
+                        <div className="code-line text-slate-500">
+                          <i data-lucide="terminal" className="w-4 h-4 mr-2 flex-shrink-0"></i>
+                          git clone https://github.com/techcorp/legacy-portal
+                        </div>
+                        <div className="code-line text-blue-600">
+                          <i data-lucide="zap" className="w-4 h-4 mr-2 flex-shrink-0"></i>
+                          forge analyze --deep --context
+                        </div>
+                        <div className="code-line text-emerald-600 mt-3">
                           <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
                           ✓ 2,847 fichiers analysés
                         </div>
-                        <div className="flex items-center whitespace-nowrap">
+                        <div className="code-line text-emerald-600">
                           <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
                           ✓ Architecture: Next.js + Express + MongoDB
                         </div>
-                        <div className="flex items-center whitespace-nowrap">
+                        <div className="code-line text-emerald-600">
                           <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
                           ✓ Création de /forge/api-optimization-v2/
                         </div>
-                      </div>
-                      <div className="text-purple-700 mt-4 bg-purple-50 p-3 rounded-lg border border-purple-200 whitespace-nowrap">
-                        <i data-lucide="message-square" className="w-4 h-4 inline mr-2"></i>
-                        "Nouveaux endpoints REST générés avec validation JWT"
+                        <div className="code-line text-purple-700 mt-4 bg-purple-50 p-3 rounded-lg border border-purple-200">
+                          <i data-lucide="message-square" className="w-4 h-4 mr-2 flex-shrink-0"></i>
+                          "Nouveaux endpoints REST générés avec validation JWT"
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -792,8 +949,8 @@
             </div>
           </section>
 
-          {/* Resilience Demo - version mobile optimisée */}
-          <section id="resilience" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
+          {/* ===== RESILIENCE DEMO ===== */}
+          <section id="resilience" className="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-32">
             <div className="card-corporate rounded-3xl p-6 md:p-10 border border-emerald-200 bg-gradient-to-br from-emerald-50/30 to-transparent hover:border-emerald-300 transition-all w-full">
               <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
                 <div className="max-w-xl w-full">
@@ -835,7 +992,7 @@
                   </div>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                      <div className="flex items-center truncate max-w-[180px] md:max-w-[200px]">
+                      <div className="flex items-center truncate max-w-[160px] sm:max-w-[200px]">
                         <i data-lucide="file-text" className="w-4 h-4 text-slate-500 mr-2 flex-shrink-0"></i>
                         <span className="text-sm text-slate-700 truncate">forge/auth-module/index.js</span>
                       </div>
@@ -844,7 +1001,7 @@
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                      <div className="flex items-center truncate max-w-[180px] md:max-w-[200px]">
+                      <div className="flex items-center truncate max-w-[160px] sm:max-w-[200px]">
                         <i data-lucide="file-text" className="w-4 h-4 text-slate-500 mr-2 flex-shrink-0"></i>
                         <span className="text-sm text-slate-700 truncate">forge/auth-module/handler.py</span>
                       </div>
@@ -853,7 +1010,7 @@
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-2">
-                      <div className="flex items-center truncate max-w-[180px] md:max-w-[200px]">
+                      <div className="flex items-center truncate max-w-[160px] sm:max-w-[200px]">
                         <i data-lucide="file-text" className="w-4 h-4 text-slate-500 mr-2 flex-shrink-0"></i>
                         <span className="text-sm text-slate-700 truncate">forge/auth-module/tests.js</span>
                       </div>
@@ -867,14 +1024,14 @@
             </div>
           </section>
 
-          {/* FAQ */}
-          <section id="faq" className="max-w-4xl mx-auto px-4 md:px-6 py-20 md:py-32">
+          {/* ===== FAQ ===== */}
+          <section id="faq" className="max-w-4xl mx-auto px-5 md:px-8 py-20 md:py-32">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center px-4 py-2 bg-slate-100 rounded-full text-slate-700 text-sm font-medium mb-4 border border-slate-200">
+              <div className="badge bg-slate-100 text-slate-700 border-slate-200 mx-auto">
                 <i data-lucide="help-circle" className="w-4 h-4 mr-2"></i>
                 Questions fréquentes
               </div>
-              <h2 className="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
+              <h2 className="section-title font-bold mb-4">
                 Questions <span className="text-gradient-modern">techniques</span>
               </h2>
               <p className="text-lg md:text-xl text-slate-600">Tout ce que vous devez savoir</p>
@@ -902,8 +1059,8 @@
             </div>
           </section>
 
-          {/* CTA Final */}
-          <section className="max-w-5xl mx-auto px-4 md:px-6 py-16 md:py-20">
+          {/* ===== CTA FINAL ===== */}
+          <section className="max-w-5xl mx-auto px-5 md:px-8 py-16 md:py-20">
             <div className="gradient-border bg-white p-8 md:p-16 rounded-3xl text-center w-full">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
                 Prêt à <span className="text-gradient-modern">forger</span> votre avenir ?
@@ -912,11 +1069,11 @@
                 Rejoignez les équipes qui utilisent déjà Mindus Forge pour accélérer leur développement.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 w-full">
-                <button className="btn-primary px-8 md:px-10 py-4 rounded-xl font-semibold text-base md:text-lg inline-flex items-center justify-center shadow-lg w-full sm:w-auto">
+                <button className="btn-primary px-8 md:px-10 py-4 rounded-xl font-semibold text-base md:text-lg inline-flex items-center justify-center shadow-lg w-full sm:w-auto min-h-[52px]">
                   <i data-lucide="zap" className="w-5 h-5 mr-2 flex-shrink-0"></i>
                   Commencer gratuitement
                 </button>
-                <button className="btn-secondary px-8 md:px-10 py-4 rounded-xl font-semibold text-base md:text-lg inline-flex items-center justify-center w-full sm:w-auto">
+                <button className="btn-secondary px-8 md:px-10 py-4 rounded-xl font-semibold text-base md:text-lg inline-flex items-center justify-center w-full sm:w-auto min-h-[52px]">
                   <i data-lucide="calendar" className="w-5 h-5 mr-2 flex-shrink-0"></i>
                   Planifier une démo
                 </button>
@@ -928,8 +1085,8 @@
             </div>
           </section>
 
-          {/* Footer - AJOUT LIEN TARIFS */}
-          <footer id="footer" className="border-t border-slate-200 mt-20 pt-16 pb-8 px-4 md:px-6 w-full">
+          {/* ===== FOOTER ===== */}
+          <footer id="footer" className="border-t border-slate-200 mt-20 pt-16 pb-8 px-5 md:px-8 w-full">
             <div className="max-w-7xl mx-auto">
               <div className="grid md:grid-cols-4 gap-10 md:gap-12 mb-16">
                 <div className="w-full">
@@ -948,7 +1105,7 @@
                   <ul className="space-y-3 text-slate-600">
                     <li><a href="#features" className="hover:text-blue-600 transition-colors flex items-center">Fonctionnalités</a></li>
                     <li><a href="#how_it_works" className="hover:text-blue-600 transition-colors flex items-center">Comment ça marche</a></li>
-                    <li><a href="#tech_stack" className="hover:text-blue-600 transition-colors flex items-center">Technologies</a></li>
+                    <li><a href="#faq" className="hover:text-blue-600 transition-colors flex items-center">FAQ</a></li>
                     <li><a href="/tarifs" className="hover:text-blue-600 transition-colors flex items-center font-medium text-blue-600">Tarifs</a></li>
                   </ul>
                 </div>
