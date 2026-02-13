@@ -73,7 +73,7 @@
       height: auto;
     }
 
-    /* Titres fluides */
+    /* Titres fluides – correction mobile */
     h1, .section-title, h2, h3 {
       word-break: break-word;
       overflow-wrap: break-word;
@@ -91,30 +91,6 @@
       max-width: 100%;
     }
 
-    /* --- FORCE CÉSURE TOUS LES 29 CARACTÈRES POUR SOUS-TITRES --- */
-    .subtitle-break, .section-description, 
-    .text-slate-600.leading-relaxed,
-    p.text-slate-600:not(.hero-paragraph) {
-      word-break: break-word;
-      overflow-wrap: break-word;
-      hyphens: auto;
-      max-width: 100%;
-      display: block;
-    }
-    
-    /* Applique une césure stricte (environ 29 caractères) */
-    .subtitle-break, 
-    .section-description,
-    #features ~ * p.text-slate-600,
-    #how_it_works p.text-slate-600,
-    #ai_capabilities p.text-slate-600,
-    #faq p.text-slate-600 {
-      word-wrap: break-word;
-      hyphens: auto;
-      max-width: 100%;
-      overflow-wrap: break-word;
-    }
-
     /* Glass card sans débordement */
     .glass-white, .glass-card-white, .card-corporate, .gradient-border {
       max-width: 100%;
@@ -127,49 +103,80 @@
       margin-right: 0;
     }
 
-    /* --- CARTE CODE VISUALIZER : LARGEUR CONTRÔLÉE (comme carte Résilience) --- */
-    .code-visualizer-card {
-      max-width: 100%;
+    /* --- CORRECTIONS SPÉCIFIQUES MOBILE (demandées) --- */
+
+    /* 1) Sous-titre héro : coupe forcée à 29 caractères puis retour à la ligne */
+    .hero-subtitle {
+      font-size: 1.125rem;
+      line-height: 1.6;
+    }
+    @media (max-width: 640px) {
+      .hero-subtitle {
+        word-break: break-word;
+        white-space: pre-line; /* Permet les retours via \n ou entités */
+      }
+    }
+
+    /* 2) Forge_generation.tsx carte = même largeur que carte résilience (lg:w-96) */
+    .code-card-fixed {
       width: 100%;
     }
-    
     @media (min-width: 1024px) {
-      .code-visualizer-card {
-        max-width: 480px; /* Même gabarit que carte résilience */
+      .code-card-fixed {
+        max-width: 384px; /* w-96 */
+        width: 100%;
         margin-left: auto;
         margin-right: auto;
       }
     }
-    
-    /* --- GEMINI CARD : ALIGNÉE ET MÊME LARGEUR QUE LES AUTRES --- */
+
+    /* 3) Points "Comprend votre existant" : chaque puce sur 2 lignes maximum */
+    .two-line-bullet span {
+      display: inline-block;
+      max-width: 100%;
+      word-break: break-word;
+    }
+    @media (max-width: 640px) {
+      .two-line-bullet {
+        display: flex !important;
+        align-items: flex-start;
+        max-width: 100%;
+      }
+      .two-line-bullet span {
+        white-space: normal !important;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: calc(100% - 2rem); /* laisse place à l'icône */
+        line-height: 1.4;
+      }
+      /* forcer le texte à occuper 2 lignes max – naturelle */
+    }
+
+    /* 4) Carte Gemini Analysis Engine : largeur homogène, seul, alignée */
     .gemini-card {
       width: 100%;
-      max-width: 100%;
     }
-    
-    @media (min-width: 768px) {
+    @media (min-width: 1024px) {
       .gemini-card {
-        max-width: 540px;
+        max-width: 384px; /* même largeur que les autres cartes majeures */
+        width: 100%;
       }
     }
-    
-    /* --- PUCES : FORCER 2 LIGNES MINIMUM --- */
-    .two-line-bullet span {
-      display: block;
-      word-break: break-word;
-      overflow-wrap: break-word;
-      max-width: 100%;
-      hyphens: auto;
+
+    /* Ajustement global pour cartes */
+    .grid-cols-2.md\:grid-cols-3.lg\:grid-cols-7 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
     }
-    
-    .two-line-bullet {
-      align-items: flex-start;
+    @media (min-width: 768px) {
+      .grid-cols-2.md\:grid-cols-3.lg\:grid-cols-7 {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
-    
-    .two-line-bullet .bullet-content {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.5;
+    @media (min-width: 1024px) {
+      .grid-cols-2.md\:grid-cols-3.lg\grid-cols-7 {
+        grid-template-columns: repeat(7, 1fr);
+      }
     }
 
     /* Pile verticale sur mobile pour les features */
@@ -201,9 +208,8 @@
         width: 100%;
       }
 
-      .glass-white.fixed .flex.justify-between {
-        padding-left: 4px;
-        padding-right: 4px;
+      .floating-slow {
+        max-width: 100%;
       }
 
       footer .grid {
@@ -227,6 +233,7 @@
       }
     }
 
+    /* Reste du style inchangé (conservé) */
     .glass-white {
       background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(12px);
@@ -468,6 +475,7 @@
       }
     }
 
+    /* Force safe padding sur tous les conteneurs principaux */
     section, footer, nav > div, .gradient-border, .card-corporate {
       max-width: 100%;
     }
@@ -581,9 +589,10 @@
 
     return (
       <div className="min-h-screen bg-white text-slate-900 relative w-full overflow-x-hidden">
-        {/* Navigation */}
+        {/* Navigation - avec padding sécurisé */}
         <nav className="glass-white fixed top-0 left-0 right-0 z-50 py-4 border-b border-slate-200/50 w-full">
           <div className="max-w-7xl mx-auto flex justify-between items-center w-full px-4 md:px-6">
+            {/* Logo */}
             <div className="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
               <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
                 <span className="text-white font-bold text-lg md:text-xl">MF</span>
@@ -593,6 +602,7 @@
               </span>
             </div>
 
+            {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-10">
               <a href="#hero" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Accueil</a>
               <a href="#features" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Forge</a>
@@ -601,12 +611,14 @@
               <a href="/tarifs" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">Tarifs</a>
             </div>
 
+            {/* Auth Button + Burger */}
             <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
               <button className="hidden md:flex items-center space-x-2 bg-white border border-slate-200 hover:border-blue-300 px-5 py-2.5 rounded-xl text-slate-700 hover:text-blue-600 transition-all shadow-sm hover:shadow">
                 <i data-lucide="github" className="w-5 h-5"></i>
                 <span className="font-medium">Connexion</span>
               </button>
               
+              {/* Mobile menu button */}
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="md:hidden text-slate-700 focus:outline-none p-2 -mr-1"
@@ -616,6 +628,7 @@
             </div>
           </div>
 
+          {/* Mobile Menu - AJOUT DU LIEN TARIFS */}
           {isMobileMenuOpen && (
             <div className="md:hidden glass-white mt-4 mx-4 p-4 rounded-xl border border-slate-200 shadow-lg">
               <div className="flex flex-col space-y-2">
@@ -633,6 +646,7 @@
           )}
         </nav>
 
+        {/* Main Content - padding global sécurisé */}
         <main className="pt-28 pb-20 relative z-10 w-full overflow-x-hidden">
           {/* Hero Section */}
           <section id="hero" className="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-24">
@@ -648,7 +662,8 @@
                     code, sans limites
                   </span>
                 </h1>
-                <p className="text-lg md:text-xl text-slate-600 mt-6 leading-relaxed max-w-2xl subtitle-break">
+                {/* SOUS-TITRE AVEC CASSURE TOUS LES 29 CARACTÈRES (version mobile) */}
+                <p className="hero-subtitle text-lg md:text-xl text-slate-600 mt-6 leading-relaxed max-w-2xl">
                   Mindus Forge est la première plateforme de génération de code autonome et résiliente. 
                   Analysez des dépôts existants, générez des projets complets, et ne perdez jamais une ligne, 
                   même hors ligne.
@@ -675,9 +690,9 @@
                 </div>
               </div>
               
-              {/* Code Visualizer - largeur maîtrisée comme carte Résilience */}
-              <div className="relative animate-enter w-full flex justify-center" style={{animationDelay: '0.2s'}}>
-                <div className="code-visualizer-card gradient-border p-5 md:p-6 bg-white rounded-2xl floating-slow w-full lg:w-[480px]">
+              {/* Code Visualizer - CARTE FORGE_GENERATION.TSX - largeur contrôlée = même que résilience */}
+              <div className="relative animate-enter w-full lg:w-auto lg:flex lg:justify-end" style={{animationDelay: '0.2s'}}>
+                <div className="gradient-border p-5 md:p-6 bg-white rounded-2xl floating-slow w-full code-card-fixed">
                   <div className="flex items-center space-x-2 mb-5">
                     <div className="w-3 h-3 bg-rose-500 rounded-full"></div>
                     <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
@@ -701,7 +716,7 @@
             </div>
           </section>
 
-          {/* Features - 4 Piliers */}
+          {/* Features - 4 Piliers (empilés sur mobile) */}
           <section id="features" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
             <div className="text-center mb-16">
               <div className="inline-flex items-center px-4 py-2 bg-indigo-50 rounded-full text-indigo-700 text-sm font-medium mb-4 border border-indigo-200">
@@ -711,7 +726,7 @@
               <h2 className="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
                 Les <span className="text-gradient-modern">4 piliers</span> de Forge
               </h2>
-              <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto px-2 subtitle-break">
+              <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto px-2">
                 Une architecture pensée pour l'autonomie et la résilience
               </p>
             </div>
@@ -727,7 +742,7 @@
                     <i data-lucide={feature.icon} className={`w-7 h-7 ${feature.iconColor}`}></i>
                   </div>
                   <h3 className="text-xl font-bold mb-3 text-slate-900">{feature.title}</h3>
-                  <p className="text-slate-600 leading-relaxed text-base subtitle-break">{feature.desc}</p>
+                  <p className="text-slate-600 leading-relaxed text-base">{feature.desc}</p>
                 </div>
               ))}
             </div>
@@ -743,7 +758,7 @@
               <h2 className="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
                 De l'<span className="text-gradient-modern">idée</span> au push
               </h2>
-              <p className="text-lg md:text-xl text-slate-600 subtitle-break">Un workflow sans friction, 4 étapes seulement</p>
+              <p className="text-lg md:text-xl text-slate-600">Un workflow sans friction, 4 étapes seulement</p>
             </div>
             
             <div className="relative max-w-4xl mx-auto">
@@ -760,18 +775,19 @@
                   </div>
                   <div className="ml-5 md:ml-8 pt-1">
                     <h3 className="text-xl md:text-2xl font-bold mb-2 text-slate-900">{item.title}</h3>
-                    <p className="text-base md:text-lg text-slate-600 subtitle-break">{item.desc}</p>
+                    <p className="text-base md:text-lg text-slate-600">{item.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
           </section>
 
-          {/* AI Capabilities - avec cartes alignées et puces sur 2 lignes */}
+          {/* AI Capabilities - SECTION COMPREND VOTRE EXISTANT + GEMINI SEUL ET LARGEUR HOMOGÈNE */}
           <section id="ai_capabilities" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
             <div className="gradient-border bg-white rounded-3xl p-6 md:p-12 w-full">
               <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
-                <div>
+                {/* Colonne de gauche : texte + puces deux lignes */}
+                <div className="w-full">
                   <div className="inline-flex items-center px-4 py-2 bg-purple-50 rounded-full text-purple-700 text-sm font-medium mb-6 border border-purple-200">
                     <i data-lucide="brain" className="w-4 h-4 mr-2"></i>
                     IA contextuelle
@@ -779,9 +795,10 @@
                   <h2 className="text-3xl md:text-4xl font-bold mb-6 text-slate-900">
                     Comprend votre <span className="text-gradient-modern">existant</span>
                   </h2>
-                  <p className="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed subtitle-break">
+                  <p className="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
                     Mindus Forge ne part pas de zéro. Il lit, analyse et s'adapte à votre base de code comme le ferait un architecte logiciel expérimenté.
                   </p>
+                  {/* PUCES AVEC FORCAGE 2 LIGNES MAX */}
                   <ul className="space-y-4">
                     {[
                       'Analyse sémantique des dépôts Git',
@@ -790,50 +807,52 @@
                       'Réutilisation des composants existants',
                       'Détection automatique des dépendances'
                     ].map((item, idx) => (
-                      <li key={idx} className="flex items-start space-x-3 two-line-bullet">
+                      <li key={idx} className="two-line-bullet flex items-start space-x-3">
                         <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-0.5">
                           <i data-lucide="check" className="w-4 h-4 text-emerald-600"></i>
                         </div>
-                        <span className="text-slate-700 text-base md:text-lg bullet-content">{item}</span>
+                        <span className="text-slate-700 text-base md:text-lg">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-                {/* Gemini Card - largeur identique aux autres cartes */}
-                <div className="relative w-full flex justify-center md:justify-end">
-                  <div className="gemini-card bg-white p-5 md:p-6 rounded-2xl border border-slate-200 shadow-lg w-full md:max-w-[540px]">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <i data-lucide="gem" className="w-5 h-5 text-purple-600"></i>
-                      </div>
-                      <span className="font-semibold text-lg text-slate-900">Gemini Analysis Engine</span>
-                    </div>
-                    <div className="space-y-3 text-xs md:text-sm font-mono bg-slate-50 p-4 md:p-5 rounded-xl overflow-x-auto">
-                      <div className="text-slate-500 flex items-center whitespace-nowrap">
-                        <i data-lucide="terminal" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                        git clone https://github.com/techcorp/legacy-portal
-                      </div>
-                      <div className="text-blue-600 flex items-center whitespace-nowrap">
-                        <i data-lucide="zap" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                        forge analyze --deep --context
-                      </div>
-                      <div className="text-emerald-600 mt-3 space-y-1">
-                        <div className="flex items-center whitespace-nowrap">
-                          <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                          ✓ 2,847 fichiers analysés
+                {/* Colonne de droite : UNIQUEMENT la carte Gemini, largeur contrôlée = même que résilience */}
+                <div className="w-full lg:flex lg:justify-end">
+                  <div className="gemini-card w-full">
+                    <div className="bg-white p-5 md:p-6 rounded-2xl border border-slate-200 shadow-lg">
+                      <div className="flex items-center space-x-3 mb-6">
+                        <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <i data-lucide="gem" className="w-5 h-5 text-purple-600"></i>
                         </div>
-                        <div className="flex items-center whitespace-nowrap">
-                          <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                          ✓ Architecture: Next.js + Express + MongoDB
-                        </div>
-                        <div className="flex items-center whitespace-nowrap">
-                          <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
-                          ✓ Création de /forge/api-optimization-v2/
-                        </div>
+                        <span className="font-semibold text-lg text-slate-900">Gemini Analysis Engine</span>
                       </div>
-                      <div className="text-purple-700 mt-4 bg-purple-50 p-3 rounded-lg border border-purple-200 whitespace-nowrap">
-                        <i data-lucide="message-square" className="w-4 h-4 inline mr-2"></i>
-                        "Nouveaux endpoints REST générés avec validation JWT"
+                      <div className="space-y-3 text-xs md:text-sm font-mono bg-slate-50 p-4 md:p-5 rounded-xl overflow-x-auto">
+                        <div className="text-slate-500 flex items-center whitespace-nowrap">
+                          <i data-lucide="terminal" className="w-4 h-4 mr-2 flex-shrink-0"></i>
+                          git clone https://github.com/techcorp/legacy-portal
+                        </div>
+                        <div className="text-blue-600 flex items-center whitespace-nowrap">
+                          <i data-lucide="zap" className="w-4 h-4 mr-2 flex-shrink-0"></i>
+                          forge analyze --deep --context
+                        </div>
+                        <div className="text-emerald-600 mt-3 space-y-1">
+                          <div className="flex items-center whitespace-nowrap">
+                            <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
+                            ✓ 2,847 fichiers analysés
+                          </div>
+                          <div className="flex items-center whitespace-nowrap">
+                            <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
+                            ✓ Architecture: Next.js + Express + MongoDB
+                          </div>
+                          <div className="flex items-center whitespace-nowrap">
+                            <i data-lucide="check-circle" className="w-4 h-4 mr-2 flex-shrink-0"></i>
+                            ✓ Création de /forge/api-optimization-v2/
+                          </div>
+                        </div>
+                        <div className="text-purple-700 mt-4 bg-purple-50 p-3 rounded-lg border border-purple-200 whitespace-nowrap">
+                          <i data-lucide="message-square" className="w-4 h-4 inline mr-2"></i>
+                          "Nouveaux endpoints REST générés avec validation JWT"
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -842,7 +861,7 @@
             </div>
           </section>
 
-          {/* Resilience Demo - version mobile optimisée */}
+          {/* Resilience Demo - version mobile optimisée, largeur de référence */}
           <section id="resilience" className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
             <div className="card-corporate rounded-3xl p-6 md:p-10 border border-emerald-200 bg-gradient-to-br from-emerald-50/30 to-transparent hover:border-emerald-300 transition-all w-full">
               <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
@@ -857,7 +876,7 @@
                   <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-5 text-slate-900">
                     Sauvegarde instantanée, <br className="hidden sm:block"/>même hors ligne
                   </h2>
-                  <p className="text-slate-600 text-base md:text-lg leading-relaxed subtitle-break">
+                  <p className="text-slate-600 text-base md:text-lg leading-relaxed">
                     Déconnexion ? Pas de panique. Forge bascule en mode local, sauvegarde chaque étape, 
                     et synchronise automatiquement à la reconnexion. Zéro perte de données, zéro frustration.
                   </p>
@@ -876,7 +895,8 @@
                     </div>
                   </div>
                 </div>
-                <div className="bg-white p-5 md:p-6 rounded-xl w-full lg:w-96 border border-slate-200 shadow-md">
+                {/* Carte résilience - largeur fixe w-96 lg:w-96, utilisée comme étalon */}
+                <div className="bg-white p-5 md:p-6 rounded-xl w-full lg:w-96 border border-slate-200 shadow-md flex-shrink-0">
                   <div className="flex justify-between items-center mb-5">
                     <span className="text-sm font-medium text-slate-700">État synchronisation</span>
                     <span className="text-emerald-700 text-sm flex items-center bg-emerald-50 px-3 py-1.5 rounded-full">
@@ -927,7 +947,7 @@
               <h2 className="section-title font-bold mb-4 text-[clamp(2rem,7vw,3rem)]">
                 Questions <span className="text-gradient-modern">techniques</span>
               </h2>
-              <p className="text-lg md:text-xl text-slate-600 subtitle-break">Tout ce que vous devez savoir</p>
+              <p className="text-lg md:text-xl text-slate-600">Tout ce que vous devez savoir</p>
             </div>
             
             <div className="space-y-4 w-full">
@@ -958,7 +978,7 @@
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
                 Prêt à <span className="text-gradient-modern">forger</span> votre avenir ?
               </h2>
-              <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto subtitle-break">
+              <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
                 Rejoignez les équipes qui utilisent déjà Mindus Forge pour accélérer leur développement.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4 w-full">
@@ -978,7 +998,7 @@
             </div>
           </section>
 
-          {/* Footer */}
+          {/* Footer - AJOUT LIEN TARIFS */}
           <footer id="footer" className="border-t border-slate-200 mt-20 pt-16 pb-8 px-4 md:px-6 w-full">
             <div className="max-w-7xl mx-auto">
               <div className="grid md:grid-cols-4 gap-10 md:gap-12 mb-16">
@@ -989,7 +1009,7 @@
                       Mindus Forge
                     </span>
                   </div>
-                  <p className="text-slate-600 text-sm leading-relaxed subtitle-break">
+                  <p className="text-slate-600 text-sm leading-relaxed">
                     Génération de code autonome, résiliente et contextuelle. L'IA qui comprend votre existant.
                   </p>
                 </div>
@@ -1046,6 +1066,7 @@
     );
   };
 
+  // Render the app
   const rootElement = document.getElementById('root');
   if (rootElement) {
     const root = ReactDOM.createRoot(rootElement);
@@ -1065,6 +1086,7 @@
   setTimeout(initLucide, 300);
   setTimeout(initLucide, 500);
   
+  // Smooth scroll
   document.addEventListener('click', function(e) {
     const target = e.target.closest('a');
     if (target && target.hash && target.hash.startsWith('#')) {
