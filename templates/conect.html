@@ -111,6 +111,17 @@
     .particle-1 { width: 400px; height: 400px; top: -100px; left: -100px; }
     .particle-2 { width: 500px; height: 500px; bottom: -150px; right: -100px; background: #06b6d4; opacity: 0.02; }
     .particle-3 { width: 350px; height: 350px; top: 20%; right: 10%; background: #8b5cf6; opacity: 0.02; }
+
+    /* Style pour les messages d'erreur */
+    .error-message {
+      background: #fee2e2;
+      border: 1px solid #ef4444;
+      color: #b91c1c;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
   </style>
 </head>
 <body class="antialiased">
@@ -123,7 +134,7 @@
 </div>
 
 <div class="auth-container animate-content">
-  <!-- Logo + titre (directement dans l'interface) -->
+  <!-- Logo + titre -->
   <div class="text-center mb-8">
     <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-lg mb-4 mx-auto">
       <span class="text-white font-bold text-2xl">MF</span>
@@ -136,7 +147,26 @@
     </p>
   </div>
 
-  <!-- BOUTONS DIRECTEMENT DANS L'INTERFACE (sans carte) -->
+  <!-- Message d'erreur si présent -->
+  {% if request.args.get('error') %}
+  <div class="error-message" id="error-message">
+    {% if request.args.get('error') == 'access_denied' %}
+      Connexion annulée. Veuillez réessayer.
+    {% elif request.args.get('error') == 'token_error' %}
+      Erreur lors de l'authentification. Veuillez réessayer.
+    {% elif request.args.get('error') == 'userinfo_error' %}
+      Impossible de récupérer vos informations. Veuillez réessayer.
+    {% elif request.args.get('error') == 'database_error' %}
+      Erreur de sauvegarde. Veuillez contacter le support.
+    {% elif request.args.get('error') == 'server_error' %}
+      Erreur serveur. Veuillez réessayer plus tard.
+    {% else %}
+      Une erreur est survenue. Veuillez réessayer.
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- BOUTONS DIRECTEMENT DANS L'INTERFACE -->
   <div class="space-y-3">
     <!-- GitHub -->
     <a href="/auth/github" class="btn-oauth group no-underline">
@@ -199,6 +229,18 @@
   window.addEventListener('load', initLucide);
   setTimeout(initLucide, 50);
   setTimeout(initLucide, 150);
+
+  // Auto-cacher le message d'erreur après 5 secondes
+  const errorMessage = document.getElementById('error-message');
+  if (errorMessage) {
+    setTimeout(() => {
+      errorMessage.style.opacity = '0';
+      errorMessage.style.transition = 'opacity 0.5s ease';
+      setTimeout(() => {
+        errorMessage.style.display = 'none';
+      }, 500);
+    }, 5000);
+  }
 </script>
 
 </body>
