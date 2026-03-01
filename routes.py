@@ -65,23 +65,17 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-def get_baserow_headers():
+def get_baserow_headers(app):
     """Retourne les headers pour l'API Baserow"""
-    from flask import current_app
     return {
-        'Authorization': f"Token {current_app.config['BASEROW_TOKEN']}",
+        'Authorization': f"Token {app.config['BASEROW_TOKEN']}",
         'Content-Type': 'application/json'
     }
 
-def find_user_by_platform_id(platform, platform_id):
+def find_user_by_platform_id(app, platform, platform_id):
     """Recherche un utilisateur dans Baserow par sa plateforme et son ID"""
-    from flask import current_app
-    
     try:
-        url = current_app.config['BASEROW_API_URL'].replace(
-            str(current_app.config['BASEROW_TABLE_ID']), 
-            current_app.config['BASEROW_TABLE_ID']
-        )
+        url = app.config['BASEROW_API_URL']
         
         # Construire l'URL de recherche
         params = {
@@ -91,7 +85,7 @@ def find_user_by_platform_id(platform, platform_id):
         
         response = requests.get(
             url,
-            headers=get_baserow_headers(),
+            headers=get_baserow_headers(app),
             params=params
         )
         
@@ -107,16 +101,14 @@ def find_user_by_platform_id(platform, platform_id):
         logger.error(f"Exception recherche utilisateur: {str(e)}")
         return None
 
-def create_or_update_user(user_data, platform):
+def create_or_update_user(app, user_data, platform):
     """Crée ou met à jour un utilisateur dans Baserow"""
-    from flask import current_app
-    
     try:
         # Vérifier si l'utilisateur existe déjà
-        existing_user = find_user_by_platform_id(platform, user_data.get('platform_id'))
+        existing_user = find_user_by_platform_id(app, platform, user_data.get('platform_id'))
         
         # URL de l'API Baserow
-        base_url = current_app.config['BASEROW_API_URL']
+        base_url = app.config['BASEROW_API_URL']
         
         # Préparer les données pour Baserow
         baserow_data = {
@@ -140,11 +132,11 @@ def create_or_update_user(user_data, platform):
         if existing_user:
             # Mise à jour
             row_id = existing_user['id']
-            update_url = f"{base_url}/{row_id}/"
+            update_url = f"{base_url}{row_id}/"
             
             response = requests.patch(
                 update_url,
-                headers=get_baserow_headers(),
+                headers=get_baserow_headers(app),
                 json=baserow_data
             )
             
@@ -157,7 +149,7 @@ def create_or_update_user(user_data, platform):
             # Création
             response = requests.post(
                 base_url,
-                headers=get_baserow_headers(),
+                headers=get_baserow_headers(app),
                 json=baserow_data
             )
             
@@ -206,6 +198,127 @@ def get_user_email(platform, access_token):
     except Exception as e:
         logger.error(f"Erreur récupération email {platform}: {str(e)}")
         return None
+
+def get_user_repositories(platform, access_token, username):
+    """Récupère tous les dépôts de l'utilisateur selon la plateforme"""
+    try:
+        repositories = []
+        
+        if platform == 'github':
+            # Récupérer les dépôts GitHub (y compris ceux où l'utilisateur contribue)
+            repos_url = 'https://api.github.com/user/repos'
+            headers = {
+                'Authorization': f'token {access_token}',
+                'Accept': 'application/vnd.github.v3+json'
+            }
+            params = {
+                'sort': 'updated',
+                'per_page': 100,
+                'affiliation': 'owner,collaborator,organization_member'
+            }
+            
+            response = requests.get(repos_url, headers=headers, params=params)
+            if response.status_code == 200:
+                repos = response.json()
+                for repo in repos:
+                    repositories.append({
+                        'id': repo['id'],
+                        'name': repo['name'],
+                        'full_name': repo['full_name'],
+                        'description': repo['description'],
+                        'url': repo['html_url'],
+                        'private': repo['private'],
+                        'fork': repo['fork'],
+                        'language': repo['language'],
+                        'stars': repo['stargazers_count'],
+                        'forks': repo['forks_count'],
+                        'updated_at': repo['updated_at'],
+                        'created_at': repo['created_at'],
+                        'default_branch': repo['default_branch'],
+                        'size': repo['size'],
+                        'platform': 'github',
+                        'avatar_url': repo.get('owner', {}).get('avatar_url', '')
+                    })
+                    
+        elif platform == 'gitlab':
+            # Récupérer les projets GitLab
+            repos_url = 'https://gitlab.com/api/v4/projects'
+            headers = {'Authorization': f'Bearer {access_token}'}
+            params = {
+                'membership': True,
+                'per_page': 100,
+                'order_by': 'updated_at',
+                'sort': 'desc'
+            }
+            
+            response = requests.get(repos_url, headers=headers, params=params)
+            if response.status_code == 200:
+                repos = response.json()
+                for repo in repos:
+                    repositories.append({
+                        'id': repo['id'],
+                        'name': repo['name'],
+                        'full_name': repo['path_with_namespace'],
+                        'description': repo['description'],
+                        'url': repo['web_url'],
+                        'private': repo['visibility'] == 'private',
+                        'fork': repo.get('forked_from_project', False),
+                        'language': repo.get('primary_language', 'N/A'),
+                        'stars': repo['star_count'],
+                        'forks': repo['forks_count'],
+                        'updated_at': repo['last_activity_at'],
+                        'created_at': repo['created_at'],
+                        'default_branch': repo.get('default_branch', 'main'),
+                        'size': repo.get('statistics', {}).get('repository_size', 0),
+                        'platform': 'gitlab',
+                        'avatar_url': repo.get('avatar_url', '')
+                    })
+                    
+        elif platform == 'bitbucket':
+            # Récupérer les dépôts Bitbucket
+            repos_url = 'https://api.bitbucket.org/2.0/repositories'
+            params = {
+                'role': 'member',
+                'pagelen': 100,
+                'sort': '-updated_on'
+            }
+            headers = {'Authorization': f'Bearer {access_token}'}
+            
+            response = requests.get(repos_url, headers=headers, params=params)
+            if response.status_code == 200:
+                data = response.json()
+                for repo in data.get('values', []):
+                    # Récupérer le language principal
+                    main_language = 'N/A'
+                    if repo.get('language'):
+                        main_language = repo['language']
+                    elif repo.get('mainbranch', {}).get('name'):
+                        main_language = repo['mainbranch']['name']
+                    
+                    repositories.append({
+                        'id': repo['uuid'],
+                        'name': repo['name'],
+                        'full_name': repo['full_name'],
+                        'description': repo.get('description', ''),
+                        'url': repo['links']['html']['href'],
+                        'private': repo.get('is_private', False),
+                        'fork': False,
+                        'language': main_language,
+                        'stars': 0,  # Bitbucket n'a pas de stars
+                        'forks': 0,
+                        'updated_at': repo.get('updated_on'),
+                        'created_at': repo.get('created_on'),
+                        'default_branch': repo.get('mainbranch', {}).get('name', 'main'),
+                        'size': repo.get('size', 0),
+                        'platform': 'bitbucket',
+                        'avatar_url': repo.get('owner', {}).get('links', {}).get('avatar', {}).get('href', '')
+                    })
+        
+        return repositories
+        
+    except Exception as e:
+        logger.error(f"Erreur récupération dépôts {platform}: {str(e)}")
+        return []
 
 def init_routes(app):
     """Initialise toutes les routes de l'application"""
@@ -405,7 +518,7 @@ def init_routes(app):
                 user_data['email'] = get_user_email(platform, access_token)
             
             # Créer ou mettre à jour l'utilisateur dans Baserow
-            baserow_user = create_or_update_user(user_data, platform)
+            baserow_user = create_or_update_user(app, user_data, platform)
             
             if baserow_user:
                 # Stocker les informations dans la session
@@ -453,6 +566,112 @@ def init_routes(app):
     def mindus_forge():
         return render_template('mindus_forge.html')
     
+    @app.route('/all_project')
+    @login_required
+    def all_project():
+        """Page affichant tous les dépôts de l'utilisateur"""
+        try:
+            # Récupérer les informations utilisateur de la session
+            user_info = {
+                'email': session.get('user_email'),
+                'name': session.get('user_name'),
+                'platform': session.get('user_platform'),
+                'avatar': session.get('user_avatar'),
+                'username': session.get('username')
+            }
+            
+            # Récupérer l'utilisateur de Baserow pour obtenir le token
+            baserow_url = app.config['BASEROW_API_URL']
+            headers = {'Authorization': f"Token {app.config['BASEROW_TOKEN']}"}
+            
+            # Chercher l'utilisateur dans Baserow
+            params = {
+                'filters__Email__equal': user_info['email'],
+                'filters__Plateforme__equal': user_info['platform']
+            }
+            
+            response = requests.get(baserow_url, headers=headers, params=params)
+            access_token = None
+            
+            if response.status_code == 200:
+                data = response.json()
+                results = data.get('results', [])
+                if results:
+                    access_token = results[0].get('Access_Token')
+            
+            if access_token:
+                # Récupérer les dépôts
+                repositories = get_user_repositories(
+                    user_info['platform'], 
+                    access_token,
+                    user_info.get('username')
+                )
+            else:
+                repositories = []
+                logger.warning(f"Token non trouvé pour {user_info['email']}")
+            
+            # Statistiques
+            stats = {
+                'total': len(repositories),
+                'public': len([r for r in repositories if not r.get('private', True)]),
+                'private': len([r for r in repositories if r.get('private', False)]),
+                'languages': {}
+            }
+            
+            # Compter les languages
+            for repo in repositories:
+                lang = repo.get('language', 'N/A')
+                if lang not in stats['languages']:
+                    stats['languages'][lang] = 0
+                stats['languages'][lang] += 1
+            
+            return render_template(
+                'all_project.html', 
+                user=user_info,
+                repositories=repositories,
+                stats=stats
+            )
+            
+        except Exception as e:
+            logger.error(f"Erreur dans all_project: {str(e)}")
+            return render_template('all_project.html', user=user_info, repositories=[], stats={'total': 0, 'public': 0, 'private': 0, 'languages': {}})
+    
+    @app.route('/api-keys')
+    @login_required
+    def api_keys():
+        """Page de gestion des clés API"""
+        user_info = {
+            'email': session.get('user_email'),
+            'name': session.get('user_name'),
+            'platform': session.get('user_platform'),
+            'avatar': session.get('user_avatar')
+        }
+        return render_template('api_keys.html', user=user_info)
+    
+    @app.route('/documentation')
+    @login_required
+    def documentation():
+        """Page de documentation"""
+        user_info = {
+            'email': session.get('user_email'),
+            'name': session.get('user_name'),
+            'platform': session.get('user_platform'),
+            'avatar': session.get('user_avatar')
+        }
+        return render_template('documentation.html', user=user_info)
+    
+    @app.route('/api-docs')
+    @login_required
+    def api_docs():
+        """Page de documentation API"""
+        user_info = {
+            'email': session.get('user_email'),
+            'name': session.get('user_name'),
+            'platform': session.get('user_platform'),
+            'avatar': session.get('user_avatar')
+        }
+        return render_template('api_docs.html', user=user_info)
+    
     # Route pour vérifier l'état de la session (API)
     @app.route('/api/session-status')
     def session_status():
@@ -466,239 +685,3 @@ def init_routes(app):
                 'avatar': session.get('user_avatar')
             } if session.get('logged_in') else None
         })
-
-# Ajoutez ces fonctions dans routes.py
-
-def get_user_repositories(platform, access_token, username):
-    """Récupère tous les dépôts de l'utilisateur selon la plateforme"""
-    try:
-        repositories = []
-        
-        if platform == 'github':
-            # Récupérer les dépôts GitHub (y compris ceux où l'utilisateur contribue)
-            repos_url = 'https://api.github.com/user/repos'
-            headers = {
-                'Authorization': f'token {access_token}',
-                'Accept': 'application/vnd.github.v3+json'
-            }
-            params = {
-                'sort': 'updated',
-                'per_page': 100,
-                'affiliation': 'owner,collaborator,organization_member'
-            }
-            
-            response = requests.get(repos_url, headers=headers, params=params)
-            if response.status_code == 200:
-                repos = response.json()
-                for repo in repos:
-                    repositories.append({
-                        'id': repo['id'],
-                        'name': repo['name'],
-                        'full_name': repo['full_name'],
-                        'description': repo['description'],
-                        'url': repo['html_url'],
-                        'private': repo['private'],
-                        'fork': repo['fork'],
-                        'language': repo['language'],
-                        'stars': repo['stargazers_count'],
-                        'forks': repo['forks_count'],
-                        'updated_at': repo['updated_at'],
-                        'created_at': repo['created_at'],
-                        'default_branch': repo['default_branch'],
-                        'size': repo['size'],
-                        'platform': 'github',
-                        'avatar_url': repo.get('owner', {}).get('avatar_url', '')
-                    })
-                    
-        elif platform == 'gitlab':
-            # Récupérer les projets GitLab
-            repos_url = 'https://gitlab.com/api/v4/projects'
-            headers = {'Authorization': f'Bearer {access_token}'}
-            params = {
-                'membership': True,
-                'per_page': 100,
-                'order_by': 'updated_at',
-                'sort': 'desc'
-            }
-            
-            response = requests.get(repos_url, headers=headers, params=params)
-            if response.status_code == 200:
-                repos = response.json()
-                for repo in repos:
-                    repositories.append({
-                        'id': repo['id'],
-                        'name': repo['name'],
-                        'full_name': repo['path_with_namespace'],
-                        'description': repo['description'],
-                        'url': repo['web_url'],
-                        'private': repo['visibility'] == 'private',
-                        'fork': repo.get('forked_from_project', False),
-                        'language': repo.get('primary_language', 'N/A'),
-                        'stars': repo['star_count'],
-                        'forks': repo['forks_count'],
-                        'updated_at': repo['last_activity_at'],
-                        'created_at': repo['created_at'],
-                        'default_branch': repo.get('default_branch', 'main'),
-                        'size': repo.get('statistics', {}).get('repository_size', 0),
-                        'platform': 'gitlab',
-                        'avatar_url': repo.get('avatar_url', '')
-                    })
-                    
-        elif platform == 'bitbucket':
-            # Récupérer les dépôts Bitbucket
-            repos_url = 'https://api.bitbucket.org/2.0/repositories'
-            params = {
-                'role': 'member',
-                'pagelen': 100,
-                'sort': '-updated_on'
-            }
-            headers = {'Authorization': f'Bearer {access_token}'}
-            
-            response = requests.get(repos_url, headers=headers, params=params)
-            if response.status_code == 200:
-                data = response.json()
-                for repo in data.get('values', []):
-                    # Récupérer le language principal
-                    main_language = 'N/A'
-                    if repo.get('language'):
-                        main_language = repo['language']
-                    elif repo.get('mainbranch', {}).get('name'):
-                        main_language = repo['mainbranch']['name']
-                    
-                    repositories.append({
-                        'id': repo['uuid'],
-                        'name': repo['name'],
-                        'full_name': repo['full_name'],
-                        'description': repo.get('description', ''),
-                        'url': repo['links']['html']['href'],
-                        'private': repo.get('is_private', False),
-                        'fork': False,
-                        'language': main_language,
-                        'stars': 0,  # Bitbucket n'a pas de stars
-                        'forks': 0,
-                        'updated_at': repo.get('updated_on'),
-                        'created_at': repo.get('created_on'),
-                        'default_branch': repo.get('mainbranch', {}).get('name', 'main'),
-                        'size': repo.get('size', 0),
-                        'platform': 'bitbucket',
-                        'avatar_url': repo.get('owner', {}).get('links', {}).get('avatar', {}).get('href', '')
-                    })
-        
-        return repositories
-        
-    except Exception as e:
-        logger.error(f"Erreur récupération dépôts {platform}: {str(e)}")
-        return []
-
-# Route pour All Projects avec dépôts
-@app.route('/all_project')
-@login_required
-def all_project():
-    """Page affichant tous les dépôts de l'utilisateur"""
-    try:
-        # Récupérer les informations utilisateur de la session
-        user_info = {
-            'email': session.get('user_email'),
-            'name': session.get('user_name'),
-            'platform': session.get('user_platform'),
-            'avatar': session.get('user_avatar'),
-            'username': session.get('username')
-        }
-        
-        # Récupérer l'utilisateur de Baserow pour obtenir le token
-        from flask import current_app
-        baserow_url = current_app.config['BASEROW_API_URL']
-        headers = {'Authorization': f"Token {current_app.config['BASEROW_TOKEN']}"}
-        
-        # Chercher l'utilisateur dans Baserow
-        params = {
-            'filters__Email__equal': user_info['email'],
-            'filters__Plateforme__equal': user_info['platform']
-        }
-        
-        response = requests.get(baserow_url, headers=headers, params=params)
-        access_token = None
-        
-        if response.status_code == 200:
-            data = response.json()
-            results = data.get('results', [])
-            if results:
-                access_token = results[0].get('Access_Token')
-        
-        if access_token:
-            # Récupérer les dépôts
-            repositories = get_user_repositories(
-                user_info['platform'], 
-                access_token,
-                user_info.get('username')
-            )
-        else:
-            repositories = []
-            logger.warning(f"Token non trouvé pour {user_info['email']}")
-        
-        # Statistiques
-        stats = {
-            'total': len(repositories),
-            'public': len([r for r in repositories if not r.get('private', True)]),
-            'private': len([r for r in repositories if r.get('private', False)]),
-            'languages': {}
-        }
-        
-        # Compter les languages
-        for repo in repositories:
-            lang = repo.get('language', 'N/A')
-            if lang not in stats['languages']:
-                stats['languages'][lang] = 0
-            stats['languages'][lang] += 1
-        
-        return render_template(
-            'all_project.html', 
-            user=user_info,
-            repositories=repositories,
-            stats=stats
-        )
-        
-    except Exception as e:
-        logger.error(f"Erreur dans all_project: {str(e)}")
-        return render_template('all_project.html', user=user_info, repositories=[], stats={'total': 0, 'public': 0, 'private': 0, 'languages': {}})
-
-# Route pour API Keys
-@app.route('/api-keys')
-@login_required
-def api_keys():
-    """Page de gestion des clés API"""
-    user_info = {
-        'email': session.get('user_email'),
-        'name': session.get('user_name'),
-        'platform': session.get('user_platform'),
-        'avatar': session.get('user_avatar')
-    }
-    return render_template('api_keys.html', user=user_info)
-
-# Route pour Documentation
-@app.route('/documentation')
-@login_required
-def documentation():
-    """Page de documentation"""
-    user_info = {
-        'email': session.get('user_email'),
-        'name': session.get('user_name'),
-        'platform': session.get('user_platform'),
-        'avatar': session.get('user_avatar')
-    }
-    return render_template('documentation.html', user=user_info)
-
-# Route pour API Documentation
-@app.route('/api-docs')
-@login_required
-def api_docs():
-    """Page de documentation API"""
-    user_info = {
-        'email': session.get('user_email'),
-        'name': session.get('user_name'),
-        'platform': session.get('user_platform'),
-        'avatar': session.get('user_avatar')
-    }
-    return render_template('api_docs.html', user=user_info)
-
-
